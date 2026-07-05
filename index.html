@@ -1,0 +1,2727 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Tako na hora Empréstimos - Solução Rápida</title>
+    <style>
+        /* ============================================================
+           ESTILOS COMPLETOS - TEMA VODACOM VERMELHO (SEM PRETO)
+           ============================================================ */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Poppins', sans-serif;
+        }
+
+        :root {
+            --vodacom-red: #E2001A;
+            --vodacom-red-dark: #B30014;
+            --vodacom-red-light: #FF1A33;
+            --vodacom-red-glow: rgba(226, 0, 26, 0.3);
+            --vodacom-gradient: linear-gradient(135deg, #E2001A, #B30014);
+            --vodacom-gradient-hover: linear-gradient(135deg, #FF1A33, #E2001A);
+            --red-main: #E2001A;
+            --red-dark: #B30014;
+            --red-light: #FF1A33;
+            --red-glow: rgba(226, 0, 26, 0.3);
+            --white: #ffffff;
+            --light-gray: #f5f5f5;
+            --shadow: 0 8px 32px rgba(226,0,26,0.12);
+            --shadow-hover: 0 12px 48px rgba(226,0,26,0.18);
+            --radius: 32px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fff5f5; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--vodacom-red); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--vodacom-red-dark); }
+
+        body {
+            background: #ffffff;
+            color: #333333;
+        }
+
+        /* ===== LOADER COM ANIMAÇÃO ===== */
+        #loader-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(145deg, #ffffff 0%, #fff5f5 50%, #ffffff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        #loader-wrapper.hide {
+            opacity: 0;
+            transform: scale(1.05);
+            pointer-events: none;
+        }
+        .tako-loader { text-align: center; color: var(--vodacom-red); }
+        .tako-loader h1 {
+            font-size: 3.5rem;
+            letter-spacing: 6px;
+            margin-bottom: 20px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--vodacom-red), var(--vodacom-red-light), var(--vodacom-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientShift 3s ease-in-out infinite;
+            filter: drop-shadow(0 0 30px var(--vodacom-red-glow));
+        }
+        @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .spinner {
+            width: 70px;
+            height: 70px;
+            border: 5px solid rgba(226,0,26,0.15);
+            border-top: 5px solid var(--vodacom-red);
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            margin: 0 auto 20px;
+            box-shadow: 0 0 40px rgba(226,0,26,0.1);
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .loader-text {
+            font-size: 1.2rem;
+            color: #cc5555;
+            animation: fadeInOut 1.8s ease-in-out infinite;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+        @keyframes fadeInOut { 0%, 100% { opacity: 0.5; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
+
+        /* ===== PARTICLES ===== */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            animation: floatParticle 8s ease-in-out infinite;
+            opacity: 0.3;
+        }
+        @keyframes floatParticle {
+            0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
+            25% { transform: translateY(-100px) translateX(50px) scale(1.5); opacity: 0.6; }
+            50% { transform: translateY(-200px) translateX(-30px) scale(1); opacity: 0.3; }
+            75% { transform: translateY(-100px) translateX(40px) scale(0.8); opacity: 0.5; }
+        }
+
+        /* ===== MAIN APP ===== */
+        #main-app {
+            display: none;
+            background: #ffffff;
+            min-height: 100vh;
+            padding-bottom: 80px;
+            animation: fadeInApp 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 1;
+            color: #333333;
+        }
+        @keyframes fadeInApp { from { opacity: 0; transform: translateY(30px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+        /* ===== HEADER ===== */
+        .app-header {
+            background: linear-gradient(135deg, #E2001A 0%, #B30014 50%, #E2001A 100%);
+            padding: 30px 20px 40px;
+            border-radius: 0 0 40px 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(226,0,26,0.2);
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--vodacom-red);
+        }
+        .app-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -30%;
+            width: 80%;
+            height: 200%;
+            background: radial-gradient(ellipse, rgba(255,255,255,0.15) 0%, transparent 70%);
+            pointer-events: none;
+            animation: headerGlow 6s ease-in-out infinite;
+        }
+        @keyframes headerGlow { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-20px, 20px) scale(1.1); } }
+        .app-header .header-content { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .app-header .logo-area { display: flex; align-items: center; gap: 12px; }
+        .app-header .logo-icon { font-size: 2.5rem; }
+        .app-header .logo-text { color: var(--white); font-size: 1.5rem; font-weight: 800; letter-spacing: 2px; }
+        .app-header .logo-text span { color: rgba(255,255,255,0.85); display: block; font-size: 0.7rem; font-weight: 300; letter-spacing: 4px; opacity: 0.9; }
+        .app-header .header-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: var(--white);
+            font-size: 0.8rem;
+            border: 1px solid rgba(255,255,255,0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .app-header .header-badge .dot { 
+            width: 8px; 
+            height: 8px; 
+            border-radius: 50%; 
+            background: #ffffff; 
+            animation: dotPulse 1.5s ease-in-out infinite; 
+        }
+        @keyframes dotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } }
+
+        /* ===== CONTAINER E CARDS ===== */
+        .container { max-width: 500px; margin: 0 auto; padding: 0 16px 40px; position: relative; z-index: 1; }
+        .card {
+            background: #ffffff;
+            border-radius: var(--radius);
+            padding: 24px 20px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(226,0,26,0.15);
+            transition: var(--transition);
+            animation: cardSlideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) both;
+            position: relative;
+            overflow: hidden;
+            color: #333333;
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--vodacom-red), var(--vodacom-red-light), var(--vodacom-red));
+            background-size: 200% 100%;
+            animation: cardStripe 3s linear infinite;
+        }
+        @keyframes cardStripe { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .card:hover { transform: translateY(-5px) scale(1.01); box-shadow: var(--shadow-hover); border-color: var(--vodacom-red); }
+        .card.red-border::before { background: linear-gradient(90deg, var(--red-main), var(--red-light), var(--red-main)); background-size: 200% 100%; }
+        .card.gold-border::before { background: linear-gradient(90deg, var(--vodacom-red), var(--vodacom-red-light), var(--vodacom-red)); background-size: 200% 100%; }
+        @keyframes cardSlideUp { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .card:nth-child(2) { animation-delay: 0.08s; }
+        .card:nth-child(3) { animation-delay: 0.16s; }
+        .card:nth-child(4) { animation-delay: 0.24s; }
+
+        .card h2, .card h3, .card h4 {
+            color: #333333;
+        }
+        .card p, .card span, .card label {
+            color: #555555;
+        }
+
+        /* ===== FORMULÁRIO ===== */
+        .form-group { margin-bottom: 18px; position: relative; }
+        .form-group label { font-weight: 600; color: #333333; display: block; margin-bottom: 6px; font-size: 0.9rem; transition: var(--transition); }
+        .form-group label .required { color: var(--vodacom-red); margin-left: 2px; }
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 28px;
+            border: 2px solid #e0d0d0;
+            background: #ffffff;
+            font-size: 1rem;
+            transition: var(--transition);
+            min-height: 48px;
+            -webkit-appearance: none;
+            appearance: none;
+            color: #333333;
+        }
+        input::placeholder, select::placeholder, textarea::placeholder {
+            color: #999999;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--vodacom-red);
+            outline: none;
+            box-shadow: 0 0 0 4px var(--vodacom-red-glow);
+            transform: scale(1.02);
+        }
+        input.error, select.error, textarea.error {
+            border-color: var(--red-main);
+            box-shadow: 0 0 0 4px var(--red-glow);
+            animation: errorShake 0.5s ease;
+        }
+        @keyframes errorShake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-10px); } 40% { transform: translateX(10px); } 60% { transform: translateX(-6px); } 80% { transform: translateX(6px); } }
+        .validation-error { color: var(--red-main); font-size: 0.8rem; margin-top: 4px; display: none; animation: errorShake 0.5s ease; }
+        .validation-error.show { display: block; }
+
+        /* ===== BOTÕES ===== */
+        button {
+            background: var(--vodacom-gradient);
+            color: var(--white);
+            border: none;
+            padding: 12px 20px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: 30px;
+            width: auto;
+            min-height: 44px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px var(--vodacom-red-glow);
+            position: relative;
+            overflow: hidden;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            user-select: none;
+            letter-spacing: 0.3px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        button::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: width 0.8s ease, height 0.8s ease, top 0.8s ease, left 0.8s ease;
+            pointer-events: none;
+        }
+        button:active::after { width: 300px; height: 300px; top: -100px; left: -100px; }
+        button:active { transform: scale(0.96); }
+        button:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 6px 20px rgba(226,0,26,0.4); background: var(--vodacom-gradient-hover); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
+        
+        .btn-danger { background: var(--vodacom-gradient); color: var(--white); box-shadow: 0 4px 15px var(--red-glow); }
+        .btn-danger:hover { box-shadow: 0 6px 20px rgba(226,0,26,0.5); }
+        .btn-whatsapp { background: linear-gradient(135deg, #25D366, #1da85c); color: var(--white); box-shadow: 0 4px 15px rgba(37,211,102,0.3); }
+        .btn-whatsapp:hover { box-shadow: 0 6px 20px rgba(37,211,102,0.5); }
+        .btn-success { background: linear-gradient(135deg, #28a745, #218838); color: var(--white); box-shadow: 0 4px 15px rgba(40,167,69,0.3); }
+        .btn-success:hover { box-shadow: 0 6px 20px rgba(40,167,69,0.5); }
+        .btn-cancel { background: #e0d0d0; color: #333333; box-shadow: none; }
+        .btn-cancel:hover { background: #d0c0c0; box-shadow: 0 4px 15px rgba(0,0,0,0.1); transform: translateY(-2px); }
+        .btn-outline { background: transparent; color: var(--vodacom-red); border: 2px solid var(--vodacom-red); box-shadow: none; }
+        .btn-outline:hover { background: var(--vodacom-red); color: #fff; }
+
+        .btn-full { width: 100%; justify-content: center; }
+        .btn-sm { padding: 8px 16px; font-size: 0.85rem; min-height: 36px; border-radius: 24px; }
+        .btn-xs { padding: 6px 12px; font-size: 0.75rem; min-height: 30px; border-radius: 20px; }
+
+        /* ===== NÍVEIS ===== */
+        .loan-levels { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin: 20px 0; }
+        .level-btn {
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 16px 12px;
+            text-align: center;
+            font-weight: bold;
+            color: #333333;
+            border: 2px solid #e0d0d0;
+            transition: var(--transition);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 4px;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+            user-select: none;
+        }
+        .level-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(226,0,26,0.08) 0%, transparent 60%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+        .level-btn:not(.locked):not(.disabled):hover::before { opacity: 1; }
+        .level-btn:not(.locked):not(.disabled):hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 8px 30px var(--vodacom-red-glow); border-color: var(--vodacom-red); }
+        .level-btn:not(.locked):not(.disabled):active { transform: scale(0.95); }
+        .level-btn.locked { opacity: 0.5; filter: grayscale(0.2); background: #f5f5f5; pointer-events: none; border-color: #e0d0d0; }
+        .level-btn.disabled { opacity: 0.4; filter: grayscale(0.4); background: #f5f5f5; pointer-events: none; border-color: #e0d0d0; }
+        .level-btn .lock-icon { display: inline-block; animation: lockShake 3s ease-in-out infinite; }
+        @keyframes lockShake { 0%, 90%, 100% { transform: rotate(0); } 95% { transform: rotate(15deg); } }
+        .level-btn strong { font-size: 1rem; color: #333333; }
+        .level-btn span { font-size: 0.8rem; color: #888888; }
+        .level-btn .level-amount { font-size: 1.1rem; font-weight: 800; color: var(--vodacom-red); }
+        .level-btn .level-badge { position: absolute; top: 8px; right: 8px; font-size: 0.6rem; padding: 2px 10px; border-radius: 20px; font-weight: 700; }
+        .level-btn .level-badge.locked-badge { background: #e0d0d0; color: #888888; }
+        .level-btn .level-badge.available { background: var(--vodacom-red); color: #fff; }
+
+        /* ===== BADGE ===== */
+        .badge {
+            background: var(--vodacom-gradient);
+            color: var(--white);
+            border-radius: 60px;
+            padding: 4px 16px;
+            font-size: 0.8rem;
+            display: inline-block;
+            font-weight: 700;
+            box-shadow: 0 2px 10px var(--vodacom-red-glow);
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        @keyframes badgePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+
+        /* ===== HR ===== */
+        hr { margin: 16px 0; border: 0; height: 2px; background: linear-gradient(90deg, transparent, var(--vodacom-red), var(--vodacom-red-light), var(--vodacom-red), transparent); background-size: 300% 100%; animation: hrShimmer 4s linear infinite; border-radius: 2px; }
+        @keyframes hrShimmer { 0% { background-position: -300% 0; } 100% { background-position: 300% 0; } }
+
+        /* ===== STATUS ===== */
+        .status-success {
+            background: linear-gradient(135deg, #d4edda, #c3e6cb);
+            color: #155724;
+            padding: 14px 20px;
+            border-radius: 28px;
+            text-align: center;
+            animation: successPop 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 2px solid #28a745;
+            font-weight: 600;
+        }
+        @keyframes successPop { 0% { transform: scale(0.8) rotate(-5deg); opacity: 0; } 50% { transform: scale(1.05) rotate(2deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
+        .hidden { display: none; }
+
+        /* ===== WHATSAPP NOTE ===== */
+        .whatsapp-note {
+            background: linear-gradient(135deg, #25d36615, #25d36608);
+            border-left: 4px solid #25D366;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            animation: slideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(37,211,102,0.2);
+            color: #333333;
+        }
+        @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
+
+        /* ===== WHATSAPP INDICATOR ===== */
+        .whatsapp-indicator {
+            background: linear-gradient(135deg, #25d36615, #25d36608);
+            border-radius: 16px;
+            padding: 12px 16px;
+            font-size: 0.85rem;
+            color: #333333;
+            border: 1px solid #25d36630;
+            margin: 10px 0 15px 0;
+            text-align: center;
+            animation: indicatorPulse 3s ease-in-out infinite;
+            backdrop-filter: blur(5px);
+        }
+        @keyframes indicatorPulse { 0%, 100% { border-color: #25d36630; transform: scale(1); } 50% { border-color: #25d36660; transform: scale(1.01); } }
+        .whatsapp-indicator .numero-dia { color: #25D366; font-weight: bold; font-size: 1.1rem; }
+        .whatsapp-indicator .dia-nome { font-weight: 600; color: #333333; }
+        .whatsapp-indicator .sub-info { font-size: 0.7rem; opacity: 0.7; display: block; margin-top: 2px; }
+
+        /* ===== BLOQUEIO ===== */
+        .blocked-banner {
+            background: var(--vodacom-gradient);
+            color: var(--white);
+            padding: 24px 20px;
+            border-radius: 28px;
+            text-align: center;
+            margin-bottom: 20px;
+            animation: redPulse 2s ease-in-out infinite;
+            border: 2px solid var(--vodacom-red-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .blocked-banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
+            animation: bannerShine 4s ease-in-out infinite;
+        }
+        @keyframes bannerShine { 0%, 100% { transform: translate(-30%, -30%) rotate(0); } 50% { transform: translate(30%, 30%) rotate(180deg); } }
+        .blocked-banner h3 { font-size: 1.4rem; margin-bottom: 8px; position: relative; z-index: 1; color: #fff; }
+        .blocked-banner p { font-size: 0.9rem; opacity: 0.95; position: relative; z-index: 1; color: #fff; }
+        .blocked-banner .block-icon { font-size: 3.5rem; display: block; margin-bottom: 10px; animation: lockShake 2s ease-in-out infinite; position: relative; z-index: 1; }
+        .blocked-banner .contact-info { background: rgba(255,255,255,0.2); padding: 12px 16px; border-radius: 16px; margin-top: 12px; font-size: 0.85rem; position: relative; z-index: 1; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.15); }
+        .blocked-banner .contact-info strong { color: #fff; }
+        .blocked-banner .btn-unblock {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            margin-top: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1;
+            min-height: 44px;
+        }
+        .blocked-banner .btn-unblock:hover { background: #218838; transform: scale(1.02); }
+        @keyframes redPulse { 0%, 100% { box-shadow: 0 0 30px var(--vodacom-red-glow); } 50% { box-shadow: 0 0 60px rgba(226,0,26,0.5); } }
+
+        /* ===== CARTÃO VIRTUAL - TAMANHO REDUZIDO ===== */
+        .visa-card.premium {
+            background: linear-gradient(145deg, #f5f0f0 0%, #ffffff 30%, #faf5f5 60%, #ffffff 100%);
+            border-radius: 20px;
+            padding: 16px 16px 14px;
+            position: relative;
+            overflow: hidden;
+            min-height: 220px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.06), 0 0 0 1px rgba(226,0,26,0.1);
+            transition: var(--transition);
+            border: 1px solid rgba(226,0,26,0.15);
+            animation: cardFloat 4s ease-in-out infinite;
+        }
+        @keyframes cardFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+        .visa-card.premium:hover { transform: translateY(-3px) scale(1.005); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+        
+        .visa-card.premium .card-glow {
+            position: absolute;
+            top: -30%;
+            right: -20%;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(ellipse, rgba(226,0,26,0.04) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: glowMove 6s ease-in-out infinite;
+        }
+        @keyframes glowMove { 0%, 100% { transform: translate(0, 0) scale(1); } 25% { transform: translate(-15px, 15px) scale(1.1); } 75% { transform: translate(15px, -15px) scale(0.9); } }
+        
+        .visa-card.premium .card-shine {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(226,0,26,0.02) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+            animation: shineMove 8s ease-in-out infinite;
+        }
+        @keyframes shineMove { 0%, 100% { transform: translate(0, 0) rotate(0); } 50% { transform: translate(20%, 10%) rotate(5deg); } }
+        
+        .visa-card.premium .card-chip svg { width: 30px; height: 24px; filter: drop-shadow(0 2px 8px rgba(226,0,26,0.15)); }
+        .visa-card.premium .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; position: relative; z-index: 1; }
+        .visa-card.premium .brand-text { font-size: 1rem; font-weight: 800; color: var(--vodacom-red); letter-spacing: 2px; }
+        .visa-card.premium .brand-sub { font-size: 0.45rem; color: rgba(226,0,26,0.4); letter-spacing: 2px; font-weight: 300; }
+        .visa-card.premium .card-type .visa-text { font-size: 0.55rem; color: #999999; letter-spacing: 1px; }
+        
+        .visa-card.premium .card-number-section { margin: 8px 0 10px; position: relative; z-index: 1; }
+        .visa-card.premium .card-number-label { color: #999999; font-size: 0.5rem; letter-spacing: 1px; margin-bottom: 2px; }
+        .visa-card.premium .card-number-display { display: flex; gap: 6px; font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; color: #333; font-weight: 500; }
+        .visa-card.premium .card-number-display span { background: rgba(226,0,26,0.03); padding: 1px 6px; border-radius: 3px; border: 1px solid rgba(226,0,26,0.05); color: #333; }
+        .visa-card.premium .card-number-display #cardLastDigits { color: var(--vodacom-red); border-color: rgba(226,0,26,0.15); }
+        
+        .visa-card.premium .card-details-grid { display: grid; grid-template-columns: 1fr 1fr 1.2fr; gap: 6px; margin: 8px 0 10px; position: relative; z-index: 1; }
+        .visa-card.premium .card-detail-item .detail-label { color: #999999; font-size: 0.45rem; text-transform: uppercase; letter-spacing: 1px; font-weight: 300; }
+        .visa-card.premium .card-detail-item .detail-value { color: #333333; font-size: 0.7rem; font-weight: 500; }
+        .visa-card.premium .card-detail-item.highlight .detail-value { color: var(--vodacom-red); font-size: 0.9rem; font-weight: 700; }
+        .visa-card.premium .card-detail-item .detail-value.overdue { color: var(--red-main) !important; animation: blink 1s ease-in-out infinite; }
+        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        
+        .visa-card.premium .card-footer-premium { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid rgba(226,0,26,0.06); position: relative; z-index: 1; }
+        .visa-card.premium .status-container { display: flex; align-items: center; gap: 4px; }
+        .visa-card.premium .status-indicator { width: 8px; height: 8px; border-radius: 50%; display: inline-block; animation: pulse 1.5s ease-in-out infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } }
+        .visa-card.premium .status-indicator.active { background: #28a745; }
+        .visa-card.premium .status-indicator.warning { background: #ffc107; }
+        .visa-card.premium .status-indicator.danger { background: var(--red-main); }
+        .visa-card.premium .status-text { font-size: 0.6rem; font-weight: 600; letter-spacing: 0.5px; color: #333; }
+        .visa-card.premium .days-container { display: flex; align-items: center; gap: 4px; color: #888888; font-size: 0.6rem; }
+        .visa-card.premium .days-text strong { color: #333; font-weight: 700; }
+        .visa-card.premium .days-text.overdue strong { color: var(--red-main); }
+        
+        .visa-card.premium .loan-progress { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(226,0,26,0.06); position: relative; z-index: 1; }
+        .visa-card.premium .progress-bar-bg { width: 100%; height: 4px; background: #f0e8e8; border-radius: 3px; overflow: hidden; }
+        .visa-card.premium .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--vodacom-red), var(--vodacom-red-light)); border-radius: 3px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .visa-card.premium .progress-bar-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 2s infinite; }
+        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
+        .visa-card.premium .progress-bar-fill.overdue { background: linear-gradient(90deg, var(--red-main), var(--red-light)); }
+        .visa-card.premium .progress-info { display: flex; justify-content: space-between; margin-top: 3px; font-size: 0.5rem; color: #999999; letter-spacing: 0.5px; }
+
+        #lateFeeContainer {
+            margin-top: 6px;
+            padding: 4px 10px;
+            background: rgba(226, 0, 26, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(226, 0, 26, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+        #lateFeeContainer .late-fee-text { font-size: 0.6rem; color: var(--red-main); font-weight: 600; }
+        #lateFeeContainer .late-fee-amount { font-size: 0.7rem; color: var(--red-main); font-weight: 700; }
+        #lateFeeContainer .late-fee-days { font-size: 0.5rem; color: rgba(226, 0, 26, 0.7); }
+
+        .btn-pagar.premium-btn {
+            background: var(--vodacom-gradient);
+            color: var(--white);
+            margin-top: 10px;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.85rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px var(--vodacom-red-glow);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 40px;
+            width: 100%;
+        }
+        .btn-pagar.premium-btn:disabled { opacity: 0.5; cursor: not-allowed; animation: none; pointer-events: none; }
+        .btn-pagar.premium-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 25px rgba(226,0,26,0.35); background: var(--vodacom-gradient-hover); }
+        .btn-pagar.premium-btn:active { transform: scale(0.97); }
+        .btn-pagar.premium-btn.overdue-btn { background: var(--vodacom-gradient); animation: pulse-btn 1.5s ease-in-out infinite; }
+        @keyframes pulse-btn { 0%, 100% { box-shadow: 0 4px 15px var(--vodacom-red-glow); } 50% { box-shadow: 0 4px 25px rgba(226,0,26,0.5); } }
+        .btn-icon { font-size: 1rem; }
+
+        /* ===== MODAIS ===== */
+        #otpModal, #otpConfirmationModal, #loanModal, #paymentModal, #humanSupportModal, #unblockModal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        #otpModal .modal-content, #otpConfirmationModal .modal-content,
+        #loanModal .modal-content, #paymentModal .modal-content,
+        #humanSupportModal .modal-content, #unblockModal .modal-content {
+            background: #ffffff;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(226,0,26,0.15);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.15);
+            animation: modalSlideUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            max-width: 450px;
+            width: 100%;
+            border-radius: 40px;
+            padding: 28px 24px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            color: #333333;
+        }
+        @keyframes modalSlideUp { from { opacity: 0; transform: translateY(40px) scale(0.95) rotate(-2deg); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); } }
+        #otpModal .modal-header, #otpConfirmationModal .modal-header,
+        #loanModal .modal-header, #paymentModal .modal-header,
+        #humanSupportModal .modal-header, #unblockModal .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--vodacom-red);
+            padding-bottom: 15px;
+        }
+        #otpConfirmationModal .modal-header { border-bottom-color: #28a745; }
+        #humanSupportModal .modal-header { border-bottom-color: #25D366; }
+        #unblockModal .modal-header { border-bottom-color: #28a745; }
+        .modal-header h2, .modal-header h3 { color: #333333; font-size: 1.3rem; }
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            cursor: pointer;
+            color: #999999;
+            width: auto;
+            padding: 0 15px;
+            min-height: 44px;
+            transition: 0.3s ease;
+            box-shadow: none;
+        }
+        .close-modal:hover { color: var(--vodacom-red); transform: rotate(90deg); }
+
+        /* ===== OTP ===== */
+        .otp-input-group { display: flex; flex-direction: column; gap: 16px; margin: 20px 0; }
+        .otp-input-group input {
+            text-align: center;
+            font-size: 1.5rem;
+            letter-spacing: 8px;
+            padding: 16px;
+            min-height: 60px;
+            font-weight: 700;
+            border: 2px solid #e0d0d0;
+            border-radius: 28px;
+            background: #ffffff;
+            color: #333333;
+            transition: 0.3s ease;
+        }
+        .otp-input-group input:focus { border-color: var(--vodacom-red); box-shadow: 0 0 0 3px var(--vodacom-red-glow); transform: scale(1.02); }
+        .otp-input-group input.error { border-color: var(--red-main); box-shadow: 0 0 0 3px var(--red-glow); animation: errorShake 0.5s ease; }
+        .otp-error { color: var(--red-main); font-size: 0.85rem; min-height: 24px; }
+        .otp-hint { font-size: 0.8rem; color: #888888; }
+        .btn-cancel-otp { background: #e0d0d0; color: #333333; min-height: 44px; flex: 1; box-shadow: none; }
+        .btn-cancel-otp:hover { background: #d0c0c0; }
+        .btn-verify-otp { background: #28a745; color: white; min-height: 44px; flex: 1; }
+        .btn-verify-otp:hover { background: #218838; }
+        .btn-confirm-ok { background: #28a745; color: white; min-height: 44px; flex: 1; }
+        .btn-confirm-ok:hover { background: #218838; }
+
+        .confirmation-icon { font-size: 4rem; margin: 10px 0; animation: successBounce 0.6s ease; }
+        @keyframes successBounce { 0% { transform: scale(0); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
+        .confirmation-text { font-size: 1.1rem; color: #333333; font-weight: 600; margin: 10px 0; }
+        .confirmation-sub { font-size: 0.9rem; color: #888888; margin-bottom: 20px; }
+
+        /* ===== INFO DETAIL ===== */
+        .info-detail {
+            background: #f8f5f5;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            transition: 0.3s ease;
+            border: 1px solid #f0e8e8;
+        }
+        .info-detail:hover { background: #f5f0f0; transform: translateX(5px); }
+        .info-detail .label { color: #888888; font-weight: 500; }
+        .info-detail .value { color: #333333; font-weight: 700; }
+
+        .loan-summary {
+            background: #f8f5f5;
+            border-radius: 20px;
+            padding: 15px;
+            margin: 15px 0;
+            border: 2px solid var(--vodacom-red);
+            animation: summaryGlow 3s ease-in-out infinite;
+        }
+        @keyframes summaryGlow { 0%, 100% { border-color: var(--vodacom-red); } 50% { border-color: #FF1A33; } }
+        .loan-summary h4 { color: #333333; margin-bottom: 10px; text-align: center; }
+
+        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
+        .btn-group button { flex: 1; min-height: 44px; }
+
+        /* ===== BOTÕES ORGANIZADOS - ESTILOS MELHORADOS ===== */
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .action-buttons .btn-primary {
+            flex: 2;
+            min-width: 120px;
+        }
+        .action-buttons .btn-secondary {
+            flex: 1;
+            min-width: 80px;
+        }
+        .action-buttons .btn-cancel-action {
+            background: #e0d0d0;
+            color: #333333;
+            box-shadow: none;
+            flex: 1;
+            min-width: 80px;
+        }
+        .action-buttons .btn-cancel-action:hover {
+            background: #d0c0c0;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .action-buttons .btn-whatsapp-action {
+            flex: 2;
+            min-width: 120px;
+        }
+
+        /* ===== BANNER DE SEM INTERNET ===== */
+        #noInternetBanner {
+            display: none;
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 28px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            text-align: center;
+            animation: slideInLeft 0.5s ease;
+            color: #856404;
+        }
+        #noInternetBanner .banner-icon {
+            font-size: 2rem;
+            display: block;
+            margin-bottom: 6px;
+        }
+        #noInternetBanner .banner-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #856404;
+        }
+        #noInternetBanner .banner-text {
+            font-size: 0.9rem;
+            color: #856404;
+            margin-top: 4px;
+        }
+        #noInternetBanner .banner-retry {
+            background: #ffc107;
+            color: #333;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: 0.3s ease;
+            min-height: 36px;
+        }
+        #noInternetBanner .banner-retry:hover {
+            background: #e0a800;
+            transform: scale(1.02);
+        }
+
+        /* ===== OVERLAY DE BLOQUEIO POR INTERNET ===== */
+        #internetBlockOverlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 10001;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+            text-align: center;
+        }
+        #internetBlockOverlay .block-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: floatParticle 3s ease-in-out infinite;
+        }
+        #internetBlockOverlay .block-title {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--vodacom-red);
+            margin-bottom: 10px;
+        }
+        #internetBlockOverlay .block-text {
+            font-size: 1rem;
+            color: #666;
+            max-width: 400px;
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+        #internetBlockOverlay .block-spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(226,0,26,0.15);
+            border-top: 4px solid var(--vodacom-red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 15px;
+        }
+        #internetBlockOverlay .retry-btn {
+            background: var(--vodacom-gradient);
+            color: white;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            min-height: 48px;
+        }
+        #internetBlockOverlay .retry-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 25px var(--vodacom-red-glow);
+        }
+
+        /* ===== SUPPORT AGENTS ===== */
+        .support-agent {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: #f8f5f5;
+            border-radius: 16px;
+            margin-bottom: 10px;
+            transition: 0.3s ease;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+        .support-agent:hover { background: #f0e8e8; border-color: #25D366; transform: translateX(5px); }
+        .support-agent .agent-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #25D366, #1da85c);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        .support-agent .agent-info { flex: 1; }
+        .support-agent .agent-name { font-weight: 600; color: #333333; }
+        .support-agent .agent-number { font-size: 0.8rem; color: #888888; }
+        .support-agent .agent-status { font-size: 0.7rem; color: #28a745; display: flex; align-items: center; gap: 4px; }
+        .support-agent .agent-status .dot { width: 8px; height: 8px; border-radius: 50%; background: #28a745; display: inline-block; animation: pulse 1.5s ease-in-out infinite; }
+        .support-note { background: #25d36610; border-left: 4px solid #25D366; padding: 12px; font-size: 0.85rem; border-radius: 12px; margin: 15px 0; color: #333333; }
+
+        /* ===== CHATBOT ===== */
+        .chatbot-fab {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 9998;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--vodacom-gradient);
+            color: var(--white);
+            border: none;
+            box-shadow: 0 4px 30px var(--vodacom-red-glow);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            animation: fabFloat 3s ease-in-out infinite;
+            padding: 0;
+            min-height: auto;
+        }
+        .chatbot-fab::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--vodacom-red), var(--vodacom-red-light), var(--vodacom-red));
+            background-size: 300% 300%;
+            animation: fabBorder 3s ease-in-out infinite;
+            z-index: -1;
+            opacity: 0.4;
+        }
+        @keyframes fabBorder { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        @keyframes fabFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        .chatbot-fab:hover { transform: scale(1.1) translateY(-5px); box-shadow: 0 8px 40px rgba(226,0,26,0.6); }
+        .chatbot-fab:active { transform: scale(0.95); }
+        .chatbot-fab .notification-dot {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 14px;
+            height: 14px;
+            background: var(--red-main);
+            border-radius: 50%;
+            border: 2px solid #ffffff;
+            animation: dotPulse 1.5s ease-in-out infinite;
+        }
+        .chatbot-fab .bot-icon svg {
+            width: 34px;
+            height: 34px;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        .chatbot-widget {
+            position: fixed;
+            bottom: 95px;
+            right: 25px;
+            z-index: 9997;
+            width: 380px;
+            max-width: calc(100vw - 40px);
+            max-height: 550px;
+            background: #ffffff;
+            border-radius: 28px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(226,0,26,0.15);
+            animation: slideUp 0.3s ease;
+        }
+        .chatbot-widget.open { display: flex; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .chatbot-header {
+            background: linear-gradient(135deg, #E2001A, #B30014);
+            color: white;
+            padding: 14px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .chatbot-header h4 { margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 10px; color: #fff; }
+        .chatbot-header h4 .header-icon svg { width: 24px; height: 24px; fill: #fff; }
+        .chatbot-header .close-chat {
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.6);
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: auto;
+            padding: 0 10px;
+            min-height: 36px;
+            box-shadow: none;
+            transition: 0.3s ease;
+        }
+        .chatbot-header .close-chat:hover { color: #fff; transform: rotate(90deg); }
+        .chatbot-messages {
+            flex: 1;
+            padding: 16px 20px;
+            overflow-y: auto;
+            max-height: 350px;
+            background: #faf8f8;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chatbot-messages .message {
+            padding: 10px 16px;
+            border-radius: 18px;
+            max-width: 85%;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            animation: messageIn 0.4s ease;
+            word-break: break-word;
+        }
+        @keyframes messageIn { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .chatbot-messages .message.bot { background: #f0e8e8; color: #333333; border: 1px solid #e8e0e0; align-self: flex-start; border-bottom-left-radius: 4px; }
+        .chatbot-messages .message.user { background: var(--vodacom-red); color: #ffffff; align-self: flex-end; border-bottom-right-radius: 4px; }
+        .chatbot-messages .message .msg-time { font-size: 0.6rem; opacity: 0.6; display: block; margin-top: 4px; }
+        .chatbot-messages .typing-indicator {
+            display: none;
+            align-self: flex-start;
+            background: #f0e8e8;
+            padding: 10px 16px;
+            border-radius: 18px;
+            border-bottom-left-radius: 4px;
+            border: 1px solid #e8e0e0;
+        }
+        .chatbot-messages .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ccc;
+            margin: 0 3px;
+            animation: typing 1.4s infinite both;
+        }
+        .chatbot-messages .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .chatbot-messages .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing { 0%, 60%, 100% { transform: translateY(0); background: #ccc; } 30% { transform: translateY(-6px); background: var(--vodacom-red); } }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px 16px;
+            background: #ffffff;
+            border-top: 1px solid #f0e8e8;
+            gap: 8px;
+        }
+        .chatbot-input input {
+            flex: 1;
+            padding: 10px 16px;
+            border-radius: 28px;
+            border: 1.5px solid #e0d0d0;
+            background: #faf8f8;
+            font-size: 0.9rem;
+            outline: none;
+            transition: 0.3s ease;
+            min-height: 40px;
+            color: #333333;
+        }
+        .chatbot-input input::placeholder { color: #999999; }
+        .chatbot-input input:focus { border-color: var(--vodacom-red); box-shadow: 0 0 0 3px var(--vodacom-red-glow); transform: scale(1.02); }
+        .chatbot-input button {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background: var(--vodacom-red);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            transition: 0.3s ease;
+            flex-shrink: 0;
+            min-height: 44px;
+        }
+        .chatbot-input button:hover { transform: scale(1.05); box-shadow: 0 4px 15px var(--vodacom-red-glow); }
+        .chatbot-input button:active { transform: scale(0.95); }
+
+        .chatbot-quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            padding: 8px 16px 12px;
+            background: #ffffff;
+            border-top: 1px solid #f0e8e8;
+        }
+        .chatbot-quick-actions button {
+            background: #f8f5f5;
+            border: 1.5px solid #e0d0d0;
+            border-radius: 20px;
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            color: #333333;
+            cursor: pointer;
+            transition: 0.3s ease;
+            width: auto;
+            box-shadow: none;
+            min-height: 32px;
+        }
+        .chatbot-quick-actions button:hover { background: var(--vodacom-red); color: #ffffff; border-color: var(--vodacom-red); transform: translateY(-2px); box-shadow: 0 4px 12px var(--vodacom-red-glow); }
+        .chatbot-quick-actions button:active { transform: scale(0.95); }
+        .chatbot-quick-actions .btn-human { background: #25D366; color: white; border-color: #25D366; }
+        .chatbot-quick-actions .btn-human:hover { background: #1da85c; border-color: #1da85c; color: white; }
+
+        /* ===== PROGRESS BAR ===== */
+        .progress-bar-container {
+            background: #f0e8e8;
+            border-radius: 30px;
+            overflow: hidden;
+            margin: 12px 0;
+            height: 14px;
+            position: relative;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .progress-bar-container .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--vodacom-red), var(--vodacom-red-light), var(--vodacom-red));
+            background-size: 200% 100%;
+            border-radius: 30px;
+            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            animation: progressShimmer 2s linear infinite;
+        }
+        .progress-bar-container .progress-fill.red {
+            background: linear-gradient(90deg, var(--red-main), var(--red-light), var(--red-main));
+            background-size: 200% 100%;
+        }
+        @keyframes progressShimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .progress-bar-container .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        .text-red { color: var(--red-main); }
+        .text-red-light { color: var(--red-light); }
+        .bg-red { background: var(--red-main); }
+        .border-red { border-color: var(--red-main); }
+        .red-accent { color: var(--red-main); font-weight: 700; }
+        .status-badge-danger {
+            background: var(--red-main);
+            color: var(--white);
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            animation: badgeDangerPulse 1.5s ease-in-out infinite;
+            display: inline-block;
+        }
+        @keyframes badgeDangerPulse { 0%, 100% { transform: scale(1); background: var(--red-main); } 50% { transform: scale(1.05); background: var(--red-light); } }
+
+        @media (max-width: 480px) {
+            .app-header .logo-text { font-size: 1.2rem; }
+            .app-header .header-badge { font-size: 0.7rem; padding: 6px 14px; }
+            .app-header .logo-icon { font-size: 2rem; }
+            .loan-levels { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .level-btn { padding: 14px 10px; min-height: 70px; }
+            .chatbot-widget { bottom: 80px; right: 10px; max-width: calc(100vw - 20px); max-height: 480px; }
+            .chatbot-fab { width: 54px; height: 54px; bottom: 20px; right: 20px; font-size: 1.6rem; }
+            .chatbot-fab .bot-icon svg { width: 28px; height: 28px; }
+            button { padding: 10px 16px; font-size: 0.9rem; min-height: 40px; }
+            .btn-sm { padding: 6px 12px; font-size: 0.8rem; min-height: 32px; }
+            .card { padding: 20px 16px; }
+            .visa-card.premium { padding: 14px 12px; min-height: 180px; }
+            .visa-card.premium .card-details-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
+            .visa-card.premium .card-detail-item.highlight { grid-column: span 2; }
+            .visa-card.premium .card-number-display { font-size: 0.8rem; gap: 4px; flex-wrap: wrap; }
+            .visa-card.premium .brand-text { font-size: 0.8rem; }
+            .visa-card.premium .card-footer-premium { flex-wrap: wrap; gap: 4px; }
+            #otpModal .modal-content, #otpConfirmationModal .modal-content,
+            #loanModal .modal-content, #paymentModal .modal-content,
+            #humanSupportModal .modal-content, #unblockModal .modal-content { padding: 20px 16px; }
+            .action-buttons { flex-direction: column; }
+            .action-buttons .btn-primary,
+            .action-buttons .btn-secondary,
+            .action-buttons .btn-cancel-action,
+            .action-buttons .btn-whatsapp-action {
+                flex: 1;
+                min-width: auto;
+                width: 100%;
+            }
+        }
+        @media (max-width: 380px) {
+            .loan-levels { grid-template-columns: 1fr 1fr; gap: 6px; }
+            .level-btn { padding: 10px 8px; min-height: 60px; font-size: 0.8rem; }
+            .chatbot-quick-actions button { font-size: 0.7rem; padding: 4px 10px; min-height: 28px; }
+        }
+
+        .app-header * { color: #ffffff; }
+        .app-header .logo-text span { color: rgba(255,255,255,0.85); }
+        .blocked-banner * { color: #ffffff; }
+        .chatbot-header * { color: #ffffff; }
+        .btn-pagar.premium-btn { color: #ffffff; }
+        .btn-pagar.premium-btn .btn-icon { color: #ffffff; }
+        .chatbot-fab { color: #ffffff; }
+        .chatbot-fab .bot-icon svg { stroke: #ffffff; }
+        .chatbot-input button { color: #ffffff; }
+    </style>
+</head>
+<body>
+
+<!-- ===== PARTICLES ===== -->
+<div class="particles" id="particles"></div>
+
+<!-- ===== LOADER ===== -->
+<div id="loader-wrapper">
+    <div class="tako-loader">
+        <div class="spinner"></div>
+        <h1>Tako na hora</h1>
+        <div class="loader-text">Carregando ambiente seguro...</div>
+    </div>
+</div>
+
+<!-- ===== OVERLAY DE BLOQUEIO POR INTERNET ===== -->
+<div id="internetBlockOverlay">
+    <div class="block-icon">📡</div>
+    <div class="block-title">Sem Conexão com a Internet</div>
+    <div class="block-text">
+        A aplicação está temporariamente bloqueada até que a conexão com a internet seja restabelecida.
+        <br><br>
+        Verifique sua rede Wi-Fi ou dados móveis.
+    </div>
+    <div class="block-spinner"></div>
+    <button class="retry-btn" onclick="verificarConexao()">🔄 Tentar novamente</button>
+</div>
+
+<!-- ===== MAIN APP ===== -->
+<div id="main-app">
+    <header class="app-header">
+        <div class="container" style="padding: 0;">
+            <div class="header-content">
+                <div class="logo-area">
+                    <span class="logo-icon">🏦</span>
+                    <div class="logo-text">
+                        Tako na hora
+                        <span>EMPRÉSTIMOS RÁPIDOS</span>
+                    </div>
+                </div>
+                <div class="header-badge">
+                    <span class="dot"></span>
+                    <span id="onlineStatus">Ativo agora</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- ===== BANNER SEM INTERNET ===== -->
+        <div id="noInternetBanner">
+            <span class="banner-icon">📡</span>
+            <div class="banner-title">Sem conexão com a internet</div>
+            <div class="banner-text">Verifique sua rede e tente novamente. Algumas funções podem estar indisponíveis.</div>
+            <button class="banner-retry" onclick="verificarConexao()">🔄 Tentar novamente</button>
+        </div>
+
+        <!-- ===== CADASTRO ===== -->
+        <div id="cadastroSection">
+            <div class="card gold-border">
+                <h2 style="color:#333333; margin-bottom: 4px; font-size: 1.4rem;">📝 Cadastro</h2>
+                <p style="margin-bottom: 20px; font-size: 0.9rem; color: #888888;">Preencha com os seus dados oficiais</p>
+                
+                <div class="whatsapp-indicator">
+                    📱 <strong class="dia-nome" id="diaSemanaNome">Segunda-feira</strong>: 
+                    <span class="numero-dia" id="numeroWhatsAppDia">861234567</span>
+                    <span class="sub-info"></span>
+                </div>
+                
+                <div class="whatsapp-note">
+                    📱 Todas as solicitações serão enviadas para o WhatsApp <strong id="whatsappNumberDisplay">845193471</strong>
+                </div>
+                <form id="cadastroForm" novalidate>
+                    <div class="form-group"><label>Nome completo <span class="required">*</span></label><input type="text" id="nomeCompleto" required placeholder="Insira nome completo"></div>
+                    <div class="form-group"><label>Número do Bilhete <span class="required">*</span></label><input type="text" id="numBilhete" required placeholder="Insira o número do bilhete"></div>
+                    <div class="form-group"><label>Data de Nascimento <span class="required">*</span></label><input type="date" id="dataNasc" required></div>
+                    <div class="form-group"><label>Província <span class="required">*</span></label><select id="provincia" required></select></div>
+                    <div class="form-group"><label>Distrito <span class="required">*</span></label><select id="distrito" required><option value="">Selecione primeiro a província</option></select></div>
+                    <div class="form-group"><label>Bairro <span class="required">*</span></label><input type="text" id="bairro" placeholder="Digite o nome do seu bairro" required></div>
+                    <div class="form-group">
+                        <label>Número do cliente <span class="required">*</span></label>
+                        <input type="tel" id="numeroCliente" required placeholder="84 ou 85" pattern="^(84|85)[0-9]{7}$" maxlength="9">
+                        <div class="validation-error" id="numeroError">⚠️ O número deve começar com 84 ou 85 e ter 9 dígitos</div>
+                    </div>
+                    <div class="form-group"><label>Email <span class="required">*</span></label><input type="email" id="emailCliente" required placeholder="seu@email.com"></div>
+                    <button type="submit" class="btn-full">✅ Finalizar Cadastro</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ===== DASHBOARD ===== -->
+        <div id="dashboardSection" style="display:none;">
+            <div class="whatsapp-indicator">
+                📱 <strong class="dia-nome" id="diaSemanaNomeDash">Segunda-feira</strong>: 
+                <span class="numero-dia" id="numeroWhatsAppDiaDash">845193471</span>
+                <span class="sub-info"></span>
+            </div>
+
+            <div class="card" style="background: linear-gradient(135deg, #fff5f5, #ffffff); border: 1px solid rgba(226,0,26,0.15);">
+                <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+                    <span style="font-size: 2rem;">🔐</span>
+                    <div style="text-align: center;">
+                        <span style="font-size: 0.7rem; color: #888888; display: block;">VERIFICAÇÃO DE SEGURANÇA</span>
+                        <span style="font-size: 1.2rem; font-weight: 700; color: #333333;">
+                            OTP Ativo <span style="color: var(--vodacom-red);">●</span>
+                        </span>
+                    </div>
+                    <span style="font-size: 0.6rem; color: #999999; display: block; text-align: center; margin-left: 4px;">
+                        <span id="otpDiaSemana">Segunda-feira</span>
+                    </span>
+                </div>
+                <div style="text-align: center; font-size: 0.6rem; color: #999999; margin-top: 4px;">
+                    🔑 Código de verificação enviado para o WhatsApp do dia
+                </div>
+            </div>
+
+            <div id="blockedBanner" class="blocked-banner" style="display:none;">
+                <span class="block-icon">🔒</span>
+                <h3>⚠️ CONTA BLOQUEADA</h3>
+                <p>Seu acesso foi bloqueado devido a <strong>10 dias ou mais</strong> de atraso no pagamento do empréstimo.</p>
+                <p style="margin-top: 8px;">Clique no botão abaixo para desbloquear sua conta.</p>
+                <button class="btn-unblock" id="btnUnblockAccount">🔓 Desbloquear Conta com OTP</button>
+                <div class="contact-info">
+                    📞 <strong>Atendimento:</strong> Clique no botão de assistência virtual (🤖) e selecione "👤 Atendimento Humano"
+                </div>
+            </div>
+
+            <div class="card gold-border">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+                    <h2 style="color:#333333;">💰 Olá, <span id="userNameDisplay" style="color:var(--vodacom-red);"></span></h2>
+                    <span class="badge">Nível <span id="nivelAtualSpan">1</span></span>
+                </div>
+                <hr>
+                <p style="color:#888888;"><strong style="color:#333333;">Progresso para próximo nível:</strong> <span id="progressoTexto" style="color:#333333;"></span></p>
+                <div class="progress-bar-container">
+                    <div id="progressBarFill" class="progress-fill" style="width:0%;"></div>
+                </div>
+            </div>
+
+            <div class="card gold-border">
+                <h3 style="color:#333333; margin-bottom: 4px;">📌 Escolha o Nível de Empréstimo</h3>
+                <p style="font-size:0.85rem; color:#888888; margin-bottom: 12px;">Selecione um nível disponível para solicitar</p>
+                <div id="levelsContainer" class="loan-levels"></div>
+                <div id="infoNivelMsg" class="status-success" style="margin-top: 10px; display:none;"></div>
+            </div>
+
+            <div id="successMsg" class="status-success" style="display:none;">
+                ✅ Solicitação enviada com sucesso! Aguarde confirmação no WhatsApp.
+            </div>
+
+            <div id="debtCardPanel" style="display:none;">
+                <!-- CARTÃO VIRTUAL - TAMANHO REDUZIDO -->
+                <div class="visa-card premium">
+                    <div class="card-glow"></div>
+                    <div class="card-shine"></div>
+                    
+                    <div class="card-header">
+                        <div class="card-chip">
+                            <svg viewBox="0 0 45 35">
+                                <rect x="2" y="2" width="41" height="31" rx="4" fill="none" stroke="#E2001A" stroke-width="1.5"/>
+                                <ellipse cx="14" cy="17" rx="7" ry="5" fill="none" stroke="#E2001A" stroke-width="1.2"/>
+                                <ellipse cx="14" cy="17" rx="4" ry="3" fill="none" stroke="#E2001A" stroke-width="1"/>
+                                <line x1="5" y1="10" x2="5" y2="24" stroke="#E2001A" stroke-width="0.8"/>
+                                <line x1="23" y1="10" x2="23" y2="24" stroke="#E2001A" stroke-width="0.8"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <span class="brand-text">TAKO NA HORA</span>
+                            <span class="brand-sub">EMPRÉSTIMO</span>
+                        </div>
+                        <div class="card-type">
+                            <span style="font-size:0.8rem;">💳</span>
+                            <span class="visa-text">CARTÃO</span>
+                        </div>
+                    </div>
+
+                    <div class="card-number-section">
+                        <div class="card-number-label">Número do Cartão</div>
+                        <div class="card-number-display" id="debtCardNumber">
+                            <span>****</span>
+                            <span>****</span>
+                            <span>****</span>
+                            <span id="cardLastDigits">2026</span>
+                        </div>
+                    </div>
+
+                    <div class="card-details-grid">
+                        <div class="card-detail-item">
+                            <div class="detail-label">TITULAR</div>
+                            <div class="detail-value" id="debtCardHolder">---</div>
+                        </div>
+                        <div class="card-detail-item">
+                            <div class="detail-label">VALIDADE</div>
+                            <div class="detail-value" id="debtCardDue">---</div>
+                        </div>
+                        <div class="card-detail-item highlight">
+                            <div class="detail-label">VALOR</div>
+                            <div class="detail-value amount" id="debtCardValue">0 MT</div>
+                        </div>
+                    </div>
+
+                    <div class="card-footer-premium">
+                        <div class="status-container">
+                            <span class="status-indicator active" id="debtCardStatus"></span>
+                            <span class="status-text" id="debtCardStatusText">ATIVO</span>
+                        </div>
+                        <div class="days-container" id="debtDaysContainer">
+                            <span class="days-icon">⏳</span>
+                            <span class="days-text" id="debtCardDays"><strong>0</strong> dias restantes</span>
+                        </div>
+                    </div>
+
+                    <div id="lateFeeContainer" style="display:none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="late-fee-text">⚠️ TAXA DE ATRASO (3.50 MT/dia)</span>
+                            <span class="late-fee-amount" id="lateFeeAmount">+0 MT</span>
+                        </div>
+                        <div class="late-fee-days">
+                            <span id="lateFeeDays">0</span> dias em atraso
+                        </div>
+                    </div>
+
+                    <div class="loan-progress">
+                        <div class="progress-bar-bg">
+                            <div class="progress-bar-fill" id="debtProgressBar" style="width: 0%;"></div>
+                        </div>
+                        <div class="progress-info">
+                            <span>Progresso</span>
+                            <span id="debtProgressPercent">0%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="action-buttons">
+                    <button id="pagarDebtBtn" class="btn-pagar premium-btn btn-primary">
+                        <span class="btn-icon">💸</span>
+                        Fazer Pagamento
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL DE CONFIRMAÇÃO DE EMPRÉSTIMO ===== -->
+<div id="loanModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>📋 Confirmar Empréstimo</h2>
+            <button class="close-modal" id="closeLoanModal">&times;</button>
+        </div>
+        <div class="whatsapp-note">📱 Ao confirmar, será aberto o WhatsApp para <strong id="modalWhatsappNumber">845193471</strong></div>
+        <div class="loan-summary">
+            <h4>📌 Resumo do Empréstimo</h4>
+            <div id="loanSummaryDetails"></div>
+        </div>
+        <div style="margin: 15px 0;">
+            <p style="font-weight:600; color:#333333; margin-bottom:10px;">👤 Dados do Cliente</p>
+            <div class="info-detail"><span class="label">Nome:</span><span class="value" id="modalNome"></span></div>
+            <div class="info-detail"><span class="label">Bilhete:</span><span class="value" id="modalBilhete"></span></div>
+            <div class="info-detail"><span class="label">Nº Cliente:</span><span class="value" id="modalNumero"></span></div>
+            <div class="info-detail"><span class="label">Email:</span><span class="value" id="modalEmail"></span></div>
+            <div class="info-detail"><span class="label">Localização:</span><span class="value" id="modalLocalizacao"></span></div>
+        </div>
+        <div style="background: #f8f5f5; border-radius: 12px; padding: 12px; margin-bottom: 16px; border: 1px solid var(--vodacom-red);">
+            <p style="font-size: 0.8rem; color: #888888; text-align: center; margin: 0;">
+                🔐 Código OTP será enviado para seu WhatsApp
+            </p>
+        </div>
+        <div class="action-buttons">
+            <button class="btn-cancel-action" id="cancelLoanBtn" style="flex:1; background:#e0d0d0; color:#333; box-shadow:none; min-height:44px;">
+                ✖ Cancelar
+            </button>
+            <button class="btn-whatsapp-action" id="confirmLoanBtn" style="flex:2; background:linear-gradient(135deg,#25D366,#1da85c); color:#fff; min-height:44px;">
+                📲 Enviar Solicitação
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL DE PAGAMENTO ===== -->
+<div id="paymentModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>📤 Pagar Empréstimo</h3>
+            <button class="close-modal" id="closePaymentModal">&times;</button>
+        </div>
+        <div class="whatsapp-note">📱 Enviar comprovativo para <strong id="paymentWhatsappNumber">845193471</strong></div>
+        <div style="background: #f8f5f5; border-radius: 12px; padding: 12px; margin-bottom: 16px; border: 1px solid var(--vodacom-red);">
+            <p style="font-size: 0.8rem; color: #888888; text-align: center; margin: 0;">
+                🔐 Código OTP será enviado para seu WhatsApp
+            </p>
+        </div>
+        <form id="pagamentoFormulario">
+            <div class="form-group"><label>Mensagem de pagamento (comprovativo) <span class="required">*</span></label>
+                <textarea id="msgPagamento" rows="3" placeholder="Insira mensagem do pagamento" style="border-radius:20px; min-height:80px;"></textarea>
+            </div>
+            <div class="form-group"><label>Nome do Cliente</label><input id="pagNome" readonly style="background:#f8f5f5; color:#333333; border-color:#e0d0d0;"></div>
+            <div class="form-group"><label>Data/Hora</label><input id="pagHora" readonly style="background:#f8f5f5; color:#333333; border-color:#e0d0d0;"></div>
+            <div class="form-group"><label>Número do cliente</label><input id="pagNumero" readonly style="background:#f8f5f5; color:#333333; border-color:#e0d0d0;"></div>
+            <div class="form-group"><label style="color:var(--red-main);">Valor a pagar (com taxas)</label><input id="pagValor" readonly style="border-color:var(--red-main); color:var(--red-main); font-weight:bold; background:#fff5f5;"></div>
+            <div class="action-buttons">
+                <button type="button" id="closeModalBtn" class="btn-cancel-action" style="flex:1; background:#e0d0d0; color:#333; box-shadow:none; min-height:44px;">
+                    ✖ Cancelar
+                </button>
+                <button type="button" id="sendPaymentWhatsBtn" class="btn-whatsapp-action" style="flex:2; background:linear-gradient(135deg,#25D366,#1da85c); color:#fff; min-height:44px;">
+                    📲 Enviar Pagamento
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ===== MODAL OTP ===== -->
+<div id="otpModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🔐 Verificação OTP</h3>
+            <button class="close-modal" id="closeOtpModal">&times;</button>
+        </div>
+        <div style="margin-bottom:12px;">
+            <p style="font-size:0.95rem; color:#333333; font-weight:500;">Digite o código OTP recebido no WhatsApp</p>
+            <p style="font-size:0.8rem; color:#888888;">Código de 6 dígitos enviado para o número do dia</p>
+            <div style="background: #f8f5f5; border-radius: 10px; padding: 10px; margin-top: 8px; border: 1px dashed var(--vodacom-red);">
+                <p style="font-size: 0.7rem; color: #999999; text-align: center; margin: 0;">
+                    📱 Verifique seu WhatsApp para obter o código
+                </p>
+            </div>
+        </div>
+        <div class="otp-input-group">
+            <input type="password" id="otpInput" placeholder="• • • • • •" maxlength="6" inputmode="numeric" autocomplete="off">
+            <div class="otp-error" id="otpError"></div>
+            <div class="otp-hint"></div>
+        </div>
+        <div class="action-buttons">
+            <button class="btn-cancel-otp" id="cancelOtpBtn" style="flex:1; background:#e0d0d0; color:#333; box-shadow:none; min-height:44px;">
+                Cancelar
+            </button>
+            <button class="btn-verify-otp" id="verifyOtpBtn" style="flex:2; background:#28a745; color:#fff; min-height:44px;">
+                ✅ Verificar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL OTP PARA DESBLOQUEIO ===== -->
+<div id="unblockModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>🔓 Desbloquear Conta</h3>
+            <button class="close-modal" id="closeUnblockModal">&times;</button>
+        </div>
+        <div style="margin-bottom:12px;">
+            <p style="font-size:0.95rem; color:#333333; font-weight:500;">Digite o código OTP de desbloqueio</p>
+            <p style="font-size:0.8rem; color:#888888;">Código de 6 dígitos enviado para seu WhatsApp</p>
+            <div style="background: #f8f5f5; border-radius: 10px; padding: 10px; margin-top: 8px; border: 1px dashed #28a745;">
+                <p style="font-size: 0.7rem; color: #999999; text-align: center; margin: 0;">
+                    📱 Verifique seu WhatsApp para obter o código de desbloqueio
+                </p>
+            </div>
+        </div>
+        <div class="otp-input-group">
+            <input type="password" id="unblockOtpInput" placeholder="• • • • • •" maxlength="6" inputmode="numeric" autocomplete="off">
+            <div class="otp-error" id="unblockOtpError"></div>
+        </div>
+        <div class="action-buttons">
+            <button class="btn-cancel-otp" id="cancelUnblockBtn" style="flex:1; background:#e0d0d0; color:#333; box-shadow:none; min-height:44px;">
+                Cancelar
+            </button>
+            <button class="btn-verify-otp" id="verifyUnblockBtn" style="flex:2; background:#28a745; color:#fff; min-height:44px;">
+                ✅ Desbloquear
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL CONFIRMAÇÃO OTP ===== -->
+<div id="otpConfirmationModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>✅ OTP Verificado</h3>
+            <button class="close-modal" id="closeOtpConfirmationModal">&times;</button>
+        </div>
+        <div class="confirmation-icon">✅</div>
+        <div class="confirmation-text">Código OTP confirmado!</div>
+        <div class="confirmation-sub" id="otpConfirmationMessage">A transação será processada em segurança.</div>
+        <div class="action-buttons">
+            <button class="btn-confirm-ok" id="otpConfirmOkBtn" style="flex:1; background:#28a745; color:#fff; min-height:44px;">
+                📲 Continuar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MODAL ATENDIMENTO HUMANO ===== -->
+<div id="humanSupportModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>👤 Atendimento Humano</h3>
+            <button class="close-modal" id="closeHumanSupport">&times;</button>
+        </div>
+        <div class="support-note">📱 Clique em qualquer atendente para iniciar uma conversa no WhatsApp</div>
+        <div id="supportAgentsList"></div>
+        <div style="margin-top:15px; text-align:center; font-size:0.8rem; color:#999999;">
+            ⏰ Atendimento: Segunda a Sexta, 8h às 18h
+        </div>
+    </div>
+</div>
+
+<!-- ===== CHATBOT ===== -->
+<button class="chatbot-fab" id="chatFab" aria-label="Suporte">
+    <span class="bot-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+            <path d="M8 10h.01"/>
+            <path d="M12 10h.01"/>
+            <path d="M16 10h.01"/>
+        </svg>
+    </span>
+    <span class="notification-dot"></span>
+</button>
+
+<div class="chatbot-widget" id="chatWidget">
+    <div class="chatbot-header">
+        <h4>
+            <span class="header-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                    <path d="M8 10h.01"/>
+                    <path d="M12 10h.01"/>
+                    <path d="M16 10h.01"/>
+                </svg>
+            </span>
+            Suporte Tako na hora 
+        </h4>
+        <button class="close-chat" id="closeChat">&times;</button>
+    </div>
+    <div class="chatbot-messages" id="chatMessages">
+        <div class="message bot">
+            Olá! 👋 Sou o assistente de suporte da Tako na hora Empréstimos.<br>
+            Posso ajudar com:
+            <br>• Informações sobre níveis
+            <br>• Como solicitar um empréstimo
+            <br>• Pagamentos e taxas
+            <br>• Dúvidas gerais
+            <br><br>Como posso ajudá-lo hoje?
+            <span class="msg-time">Agora</span>
+        </div>
+        <div class="typing-indicator" id="typingIndicator">
+            <span></span><span></span><span></span>
+        </div>
+    </div>
+    <div class="chatbot-quick-actions">
+        <button data-msg="Quais são os níveis disponíveis?">📊 Níveis</button>
+        <button data-msg="Como solicitar um empréstimo?">💰 Solicitar</button>
+        <button data-msg="Quais são as taxas de juro?">📈 Juros</button>
+        <button data-msg="Como pagar minha dívida?">💸 Pagar</button>
+        <button data-msg="Qual é a taxa de atraso?">⚠️ Atraso</button>
+        <button data-msg="Como funciona o OTP?">🔐 OTP</button>
+        <button class="btn-human" id="humanSupportBtn">👤 Atendimento</button>
+    </div>
+    <div class="chatbot-input">
+        <input type="text" id="chatInput" placeholder="Digite sua pergunta..." maxlength="200">
+        <button id="sendChatBtn">➤</button>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // ===== PARTICLES =====
+    // ============================================================
+    function createParticles() {
+        const container = document.getElementById('particles');
+        const colors = ['#E2001A', '#FF1A33', '#ff6b6b', '#dc3545'];
+        for (let i = 0; i < 25; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            const size = Math.random() * 4 + 2;
+            p.style.width = size + 'px';
+            p.style.height = size + 'px';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.top = Math.random() * 100 + '%';
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            p.style.animationDuration = (Math.random() * 10 + 6) + 's';
+            p.style.animationDelay = (Math.random() * 5) + 's';
+            p.style.opacity = Math.random() * 0.2 + 0.05;
+            container.appendChild(p);
+        }
+    }
+    createParticles();
+
+    // ============================================================
+    // ===== DETECÇÃO DE INTERNET - COM BLOQUEIO TOTAL =====
+    // ============================================================
+    let internetOnline = false;
+
+    function verificarConexao() {
+        const overlay = document.getElementById('internetBlockOverlay');
+        const banner = document.getElementById('noInternetBanner');
+        const statusEl = document.getElementById('onlineStatus');
+        const mainApp = document.getElementById('main-app');
+        const chatFab = document.getElementById('chatFab');
+        const chatWidget = document.getElementById('chatWidget');
+        
+        if (navigator.onLine) {
+            internetOnline = true;
+            overlay.style.display = 'none';
+            banner.style.display = 'none';
+            statusEl.textContent = 'Ativo agora';
+            statusEl.style.color = '#ffffff';
+            mainApp.style.display = 'block';
+            chatFab.style.display = 'flex';
+            chatWidget.classList.remove('open');
+            return true;
+        } else {
+            internetOnline = false;
+            overlay.style.display = 'flex';
+            banner.style.display = 'block';
+            statusEl.textContent = '⚠️ Offline';
+            statusEl.style.color = '#ffc107';
+            mainApp.style.display = 'none';
+            chatFab.style.display = 'none';
+            chatWidget.classList.remove('open');
+            // Fechar todos os modais abertos
+            document.querySelectorAll('[id$="Modal"]').forEach(m => {
+                m.style.display = 'none';
+            });
+            document.body.style.overflow = 'auto';
+            return false;
+        }
+    }
+
+    // Verifica conexão a cada 3 segundos (mais rápido para melhor UX)
+    setInterval(verificarConexao, 3000);
+
+    // Eventos de conexão
+    window.addEventListener('online', () => {
+        setTimeout(verificarConexao, 500);
+    });
+
+    window.addEventListener('offline', () => {
+        verificarConexao();
+    });
+
+    // Verifica conexão inicial
+    setTimeout(verificarConexao, 1000);
+
+    // Função para verificar internet antes de ações importantes
+    function checkInternetAndProceed(callback) {
+        if (!verificarConexao()) {
+            // O overlay já está mostrando a mensagem
+            return false;
+        }
+        if (callback) callback();
+        return true;
+    }
+
+    // ============================================================
+    // ===== CONFIGURAÇÕES =====
+    // ============================================================
+    // OTPs para cada dia da semana
+    const OTP_DIAS = {
+        'segunda': '581234',
+        'terca': '672345',
+        'quarta': '763456',
+        'quinta': '854567',
+        'sexta': '945678',
+        'sabado': '123456',
+        'domingo': '654321'
+    };
+
+    // OTPs especiais para desbloqueio (diferentes dos normais)
+    const UNBLOCK_OTP_DIAS = {
+        'segunda': '987654',
+        'terca': '876543',
+        'quarta': '765432',
+        'quinta': '654321',
+        'sexta': '543210',
+        'sabado': '321098',
+        'domingo': '210987'
+    };
+
+    function getOtpDoDia() {
+        const dias = ['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
+        const hoje = new Date();
+        const dia = dias[hoje.getDay()];
+        return OTP_DIAS[dia] || OTP_DIAS['segunda'];
+    }
+
+    function getUnblockOtpDoDia() {
+        const dias = ['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
+        const hoje = new Date();
+        const dia = dias[hoje.getDay()];
+        return UNBLOCK_OTP_DIAS[dia] || UNBLOCK_OTP_DIAS['segunda'];
+    }
+
+    let OTP_SECRETO = getOtpDoDia();
+    let UNBLOCK_OTP_SECRETO = getUnblockOtpDoDia();
+
+    setInterval(() => {
+        OTP_SECRETO = getOtpDoDia();
+        UNBLOCK_OTP_SECRETO = getUnblockOtpDoDia();
+    }, 3600000);
+
+    const WHATSAPP_NUMBERS = {
+        'segunda': '845193471',
+        'terca': '867047493',
+        'quarta': '845193471',
+        'quinta': '867047493',
+        'sexta': '845193471',
+        'sabado': '867047493',
+        'domingo': '845193471'
+    };
+
+    const HUMAN_AGENTS = [
+        { id: 1, name: "Filipa", number: "845193471", status: "online" },
+        { id: 2, name: "Miller", number: "867047493", status: "online" },
+        { id: 3, name: "Dulce", number: "845193471", status: "online" },
+        { id: 4, name: "Fátima", number: "867047493", status: "online" },
+        { id: 5, name: "Mauro", number: "845193471", status: "online" },
+        { id: 6, name: "Kaylane", number: "845193471", status: "online" },
+        { id: 7, name: "Mirza", number: "867047493", status: "online" },
+        { id: 8, name: "Gabriel", number: "845193471", status: "online" },
+        { id: 9, name: "Genito", number: "867047493", status: "online" },
+        { id: 10, name: "Kare", number: "867047493", status: "online" }
+    ];
+
+    const niveis = [
+        { id:1, valor:20, pagamento:30, juro:10, duracao:7, qtdParaLiberar:10, nome:"Nível 1", cor:"#E2001A" },
+        { id:2, valor:50, pagamento:70, juro:20, duracao:7, qtdParaLiberar:15, nome:"Nível 2", cor:"#FF1A33" },
+        { id:3, valor:150, pagamento:210, juro:60, duracao:7, qtdParaLiberar:15, nome:"Nível 3", cor:"#ff6b6b" },
+        { id:4, valor:550, pagamento:670, juro:120, duracao:26, qtdParaLiberar:10, nome:"Nível 4", cor:"#dc3545" },
+        { id:5, valor:2500, pagamento:2850, juro:350, duracao:31, qtdParaLiberar:8, nome:"Nível 5", cor:"#c62828" },
+        { id:6, valor:7500, pagamento:9000, juro:1500, duracao:37, qtdParaLiberar:8, nome:"Nível 6", cor:"#b71c1c" },
+        { id:7, valor:15000, pagamento:18000, juro:3000, duracao:40, qtdParaLiberar:9, nome:"Nível 7", cor:"#8b0000" },
+        { id:8, valor:35000, pagamento:41000, juro:6000, duracao:50, qtdParaLiberar:10, nome:"Nível 8", cor:"#5c0000" },
+        { id:9, valor:60000, pagamento:70000, juro:10000, duracao:60, qtdParaLiberar:11, nome:"Nível 9", cor:"#3d0000" },
+        { id:10, valor:100000, pagamento:150000, juro:50000, duracao:70, qtdParaLiberar:12, nome:"Nível 10", cor:"#1a0000" }
+    ];
+
+    const TAXA_ATRASO_DIA = 3.50;
+    const DIAS_BLOQUEIO = 10;
+
+    let usuario = null;
+    let nivelSelecionado = null;
+    let pendingAction = null;
+
+    // ============================================================
+    // ===== UTILIDADES =====
+    // ============================================================
+    function getNumeroWhatsAppDoDia() {
+        const dias = ['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
+        const hoje = new Date();
+        const dia = dias[hoje.getDay()];
+        if (dia === 'sabado' || dia === 'domingo') return WHATSAPP_NUMBERS['sexta'];
+        return WHATSAPP_NUMBERS[dia] || WHATSAPP_NUMBERS['segunda'];
+    }
+
+    function getNomeDiaSemana() {
+        const dias = ['Domingo','Segunda-feira','Terça-feira','Quarta-feira','Quinta-feira','Sexta-feira','Sábado'];
+        return dias[new Date().getDay()];
+    }
+
+    function formatarNumero(n) {
+        if (!n) return '';
+        const str = String(n);
+        if (str.length === 9) return str.substring(0,2) + ' ' + str.substring(2,5) + ' ' + str.substring(5,9);
+        return str;
+    }
+
+    function atualizarNumerosExibidos() {
+        const numero = getNumeroWhatsAppDoDia();
+        const diaNome = getNomeDiaSemana();
+        const formatado = formatarNumero(numero);
+        const elementos = [
+            { id:'numeroWhatsAppDia', text:numero },
+            { id:'numeroWhatsAppDiaDash', text:numero },
+            { id:'whatsappNumberDisplay', text:formatado },
+            { id:'modalWhatsappNumber', text:formatado },
+            { id:'paymentWhatsappNumber', text:formatado }
+        ];
+        elementos.forEach(el => { const elem = document.getElementById(el.id); if(elem) elem.textContent = el.text; });
+        document.querySelectorAll('.dia-nome').forEach(el => { if(el) el.textContent = diaNome; });
+        document.querySelectorAll('#otpDiaSemana').forEach(el => { if(el) el.textContent = diaNome; });
+        return numero;
+    }
+
+    function enviarWhatsApp(msg) {
+        if (!checkInternetAndProceed()) return false;
+        const numero = getNumeroWhatsAppDoDia();
+        window.open(`https://wa.me/${numero}?text=${msg}`, '_blank');
+        return true;
+    }
+
+    function saveUser() { if(usuario) { usuario._lastLogin = new Date().toISOString(); localStorage.setItem('takoUser', JSON.stringify(usuario)); } }
+    function loadUser() { const data = localStorage.getItem('takoUser'); if(data) { usuario = JSON.parse(data); return true; } return false; }
+
+    const provinciasMocambique = ["Maputo Cidade","Maputo Província","Gaza","Inhambane","Manica","Sofala","Tete","Zambézia","Nampula","Cabo Delgado","Niassa"];
+    const distritosPorProvincia = {
+        "Maputo Cidade":["KaMpfumo","Nlhamankulu","KaMaxakeni","KaMavota","KaMubukwana","Katembe"],
+        "Maputo Província":["Matola","Boane","Magude","Manhiça","Marracuene","Moamba","Namaacha"],
+        "Gaza":["Xai-Xai","Chibuto","Chicualacuala","Bilene","Chókwè","Guijá","Mabalane","Manjacaze","Massangena","Massingir"],
+        "Inhambane":["Inhambane","Maxixe","Funhalouro","Govuro","Homoine","Jangamo","Mabote","Massinga","Morrumbene","Panda","Vilanculos","Zavala"],
+        "Manica":["Chimoio","Bárue","Gondola","Guro","Macate","Machaze","Macossa","Manica","Mossurize","Sussundenga","Tambara"],
+        "Sofala":["Beira","Nhamatanda","Buzi","Caia","Chemba","Cheringoma","Chibabava","Dondo","Gorongosa","Marromeu","Muanza"],
+        "Tete":["Tete","Angónia","Cahora-Bassa","Changara","Chifunde","Chiuta","Macanga","Magoé","Marara","Moatize","Mutarara","Tsangano","Zumbo"],
+        "Zambézia":["Quelimane","Alto Molócuè","Chinde","Gile","Gurúè","Ile","Inhassunge","Lugela","Maganja da Costa","Milange","Mocuba","Mocubela","Molumbo","Mopeia","Morrumbala","Namacurra","Namarroi","Nicoadala","Pebane"],
+        "Nampula":["Nampula","Angoche","Eráti","Ilha de Moçambique","Lalaua","Malema","Meconta","Mecubúri","Memba","Mogincual","Mogovolas","Moma","Monapo","Mossuril","Muecate","Murrupula","Nacala-a-Velha","Nacala Porto","Rapale","Ribaué"],
+        "Cabo Delgado":["Pemba","Ancuabe","Balama","Chiúre","Ibo","Macomia","Mecúfi","Meluco","Mocímboa da Praia","Montepuez","Mueda","Muidumbe","Namuno","Nangade","Palma","Quissanga"],
+        "Niassa":["Lichinga","Cuamba","Lago","Majune","Mandimba","Marrupa","Maúa","Mavago","Mecanhelas","Mecula","Metarica","Muembe","N'gauma","Nipepe","Sanga"]
+    };
+
+    function carregarProvincias() {
+        const select = document.getElementById('provincia');
+        select.innerHTML = '<option value="">Selecione</option>';
+        provinciasMocambique.forEach(p => {
+            const opt = document.createElement('option'); opt.value = p; opt.textContent = p;
+            select.appendChild(opt);
+        });
+        select.addEventListener('change', function() {
+            const prov = this.value;
+            const distSelect = document.getElementById('distrito');
+            if(prov && distritosPorProvincia[prov]) {
+                distSelect.innerHTML = '<option value="">Selecione o distrito</option>';
+                distritosPorProvincia[prov].forEach(d => {
+                    const opt = document.createElement('option'); opt.value = d; opt.textContent = d;
+                    distSelect.appendChild(opt);
+                });
+            } else {
+                distSelect.innerHTML = '<option value="">Selecione primeiro a província</option>';
+            }
+        });
+    }
+
+    function calcularTaxaAtraso(divida) {
+        if (!divida) return { diasAtraso: 0, taxa: 0, valorTotal: divida?.valorPagar || 0, estaBloqueado: false };
+        const dataLimite = new Date(divida.dataLimite);
+        const hoje = new Date();
+        const diffDays = Math.ceil((hoje - dataLimite) / (1000 * 60 * 60 * 24));
+        if (diffDays <= 0) return { diasAtraso: 0, taxa: 0, valorTotal: divida.valorPagar, estaBloqueado: false };
+        const taxa = diffDays * TAXA_ATRASO_DIA;
+        return { diasAtraso: diffDays, taxa: taxa, valorTotal: divida.valorPagar + taxa, estaBloqueado: diffDays >= DIAS_BLOQUEIO };
+    }
+
+    function verificarBloqueio() {
+        if (!usuario || !usuario.dividaAtiva) { usuario.bloqueado = false; return false; }
+        const { estaBloqueado } = calcularTaxaAtraso(usuario.dividaAtiva);
+        usuario.bloqueado = estaBloqueado;
+        return estaBloqueado;
+    }
+
+    // ============================================================
+    // ===== RENDERIZAR NÍVEIS =====
+    // ============================================================
+    function renderizarNiveis() {
+        if(!usuario) return;
+        const container = document.getElementById('levelsContainer');
+        container.innerHTML = '';
+        const bloqueado = usuario.bloqueado || false;
+        
+        niveis.forEach(level => {
+            const liberado = level.id <= usuario.nivelAtual;
+            const btn = document.createElement('div');
+            btn.className = `level-btn ${!liberado ? 'locked' : ''} ${bloqueado ? 'disabled' : ''}`;
+            btn.style.borderColor = liberado && !bloqueado ? level.cor : '#e0d0d0';
+            btn.style.background = liberado && !bloqueado ? '#fff5f5' : '#f8f5f5';
+            
+            const badgeText = liberado ? '✅ Disponível' : '🔒 Bloqueado';
+            const badgeClass = liberado ? 'available' : 'locked-badge';
+            
+            btn.innerHTML = `
+                <span class="level-badge ${badgeClass}">${badgeText}</span>
+                <strong>${level.nome}</strong>
+                <span class="level-amount">${level.valor} MT</span>
+                <span style="font-size:11px; color:#888888;">Paga: ${level.pagamento} MT</span>
+                <span style="font-size:10px; color:#999999;">${level.duracao} dias · Juro: ${level.juro} MT</span>
+            `;
+            
+            if(liberado && !bloqueado) {
+                btn.onclick = () => {
+                    if (checkInternetAndProceed()) {
+                        abrirModalConfirmacao(level);
+                    }
+                };
+                btn.style.cursor = 'pointer';
+            } else {
+                btn.style.cursor = 'not-allowed';
+                btn.title = bloqueado ? 'Conta bloqueada! Clique em "Desbloquear Conta".' : 'Complete os empréstimos necessários.';
+            }
+            container.appendChild(btn);
+        });
+        
+        const atual = niveis.find(n => n.id === usuario.nivelAtual);
+        if(atual) {
+            const feitos = usuario.emprestimosFeitosNoNivel || 0;
+            const necessario = atual.qtdParaLiberar;
+            const resto = necessario - feitos;
+            document.getElementById('progressoTexto').textContent = `${feitos}/${necessario} empréstimos concluídos (faltam ${resto>0?resto:0}) para próximo nível.`;
+            const percent = (feitos/necessario)*100;
+            const fill = document.getElementById('progressBarFill');
+            fill.style.width = Math.min(100, percent) + '%';
+            fill.classList.toggle('red', percent >= 80);
+        }
+        document.getElementById('nivelAtualSpan').textContent = usuario.nivelAtual;
+        document.getElementById('userNameDisplay').textContent = usuario.nome.split(' ')[0];
+    }
+
+    // ============================================================
+    // ===== SISTEMA OTP =====
+    // ============================================================
+    function abrirModalOTP(acao) {
+        if (!checkInternetAndProceed()) return;
+        pendingAction = acao;
+        const modal = document.getElementById('otpModal');
+        document.getElementById('otpInput').value = '';
+        document.getElementById('otpError').textContent = '';
+        document.getElementById('otpInput').classList.remove('error');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('otpInput').focus(), 200);
+    }
+
+    function fecharModalOTP() {
+        document.getElementById('otpModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        document.getElementById('otpInput').value = '';
+        document.getElementById('otpError').textContent = '';
+    }
+
+    function abrirModalUnblock() {
+        if (!checkInternetAndProceed()) return;
+        const modal = document.getElementById('unblockModal');
+        document.getElementById('unblockOtpInput').value = '';
+        document.getElementById('unblockOtpError').textContent = '';
+        document.getElementById('unblockOtpInput').classList.remove('error');
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        setTimeout(() => document.getElementById('unblockOtpInput').focus(), 200);
+    }
+
+    function fecharModalUnblock() {
+        document.getElementById('unblockModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        document.getElementById('unblockOtpInput').value = '';
+        document.getElementById('unblockOtpError').textContent = '';
+    }
+
+    function verificarUnblockOTP() {
+        const input = document.getElementById('unblockOtpInput');
+        const error = document.getElementById('unblockOtpError');
+        const codigo = input.value.trim();
+        
+        if (codigo.length !== 6) {
+            error.textContent = '⚠️ O código deve ter exatamente 6 dígitos.';
+            input.classList.add('error');
+            input.focus();
+            return;
+        }
+        
+        const otpValido = getUnblockOtpDoDia();
+        if (codigo !== otpValido) {
+            error.textContent = '❌ Código OTP inválido! Tente novamente.';
+            input.classList.add('error');
+            input.value = '';
+            input.focus();
+            return;
+        }
+        
+        input.classList.remove('error');
+        error.textContent = '✅ Código verificado! Conta desbloqueada!';
+        
+        setTimeout(() => {
+            fecharModalUnblock();
+            usuario.bloqueado = false;
+            usuario.dividaAtiva = null;
+            saveUser();
+            atualizarDividaUI();
+            renderizarNiveis();
+            document.getElementById('blockedBanner').style.display = 'none';
+            document.querySelectorAll('.level-btn').forEach(el => el.classList.remove('disabled'));
+            alert('🔓 Conta desbloqueada com sucesso!');
+            addBotMessage('🔓 Conta desbloqueada! Você já pode solicitar novos empréstimos.');
+        }, 800);
+    }
+
+    function abrirConfirmacaoOTP(mensagem) {
+        const modal = document.getElementById('otpConfirmationModal');
+        document.getElementById('otpConfirmationMessage').textContent = mensagem || 'A transação será processada em segurança.';
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fecharConfirmacaoOTP() {
+        document.getElementById('otpConfirmationModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    function verificarOTP() {
+        const input = document.getElementById('otpInput');
+        const error = document.getElementById('otpError');
+        const codigo = input.value.trim();
+        
+        if (codigo.length !== 6) {
+            error.textContent = '⚠️ O código deve ter exatamente 6 dígitos.';
+            input.classList.add('error');
+            input.focus();
+            return;
+        }
+        
+        const otpValido = getOtpDoDia();
+        if (codigo !== otpValido) {
+            error.textContent = '❌ Código OTP inválido! Tente novamente.';
+            input.classList.add('error');
+            input.value = '';
+            input.focus();
+            return;
+        }
+        
+        input.classList.remove('error');
+        error.textContent = '✅ Código verificado!';
+        
+        setTimeout(() => {
+            fecharModalOTP();
+            document.getElementById('loanModal').style.display = 'none';
+            document.getElementById('paymentModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            const mensagem = pendingAction === 'loan' 
+                ? 'Empréstimo aprovado! Enviando solicitação para o WhatsApp.' 
+                : 'Pagamento aprovado! Enviando comprovativo para o WhatsApp.';
+            abrirConfirmacaoOTP(mensagem);
+        }, 500);
+    }
+
+    function executarAcaoPosConfirmacao() {
+        if (pendingAction === 'loan') enviarEmprestimoWhatsApp();
+        else if (pendingAction === 'payment') enviarPagamentoWhatsApp();
+        fecharConfirmacaoOTP();
+        pendingAction = null;
+    }
+
+    // ============================================================
+    // ===== EMPRÉSTIMO =====
+    // ============================================================
+    function abrirModalConfirmacao(level) {
+        if (!checkInternetAndProceed()) return;
+        if(level.id > usuario.nivelAtual) return alert('Nível bloqueado! Complete os empréstimos necessários.');
+        if(usuario.dividaAtiva) return alert('Você possui uma dívida ativa. Liquide antes de novo empréstimo.');
+        if(usuario.bloqueado) return alert('Conta bloqueada! Clique em "Desbloquear Conta" para regularizar.');
+        
+        nivelSelecionado = level;
+        const modal = document.getElementById('loanModal');
+        document.getElementById('modalWhatsappNumber').textContent = formatarNumero(getNumeroWhatsAppDoDia());
+        document.getElementById('modalNome').textContent = usuario.nome;
+        document.getElementById('modalBilhete').textContent = usuario.bilhete;
+        document.getElementById('modalNumero').textContent = usuario.numero;
+        document.getElementById('modalEmail').textContent = usuario.email;
+        document.getElementById('modalLocalizacao').textContent = `${usuario.provincia}, ${usuario.distrito} - ${usuario.bairro}`;
+        
+        document.getElementById('loanSummaryDetails').innerHTML = `
+            <div class="info-detail"><span class="label">Nível:</span><span class="value">${level.nome}</span></div>
+            <div class="info-detail"><span class="label">💰 Valor solicitado:</span><span class="value">${level.valor} MT</span></div>
+            <div class="info-detail"><span class="label">💸 Total a pagar:</span><span class="value" style="color:var(--vodacom-red);">${level.pagamento} MT</span></div>
+            <div class="info-detail"><span class="label">📈 Juro:</span><span class="value">${level.juro} MT</span></div>
+            <div class="info-detail"><span class="label">⏳ Prazo:</span><span class="value">${level.duracao} dias</span></div>
+            <div class="info-detail" style="background:#fff5f5;border:1px solid #ffc107;"><span class="label" style="color:#ffc107;">⚠️ Taxa de atraso:</span><span class="value" style="color:#ffc107;">${TAXA_ATRASO_DIA} MT/dia</span></div>
+            <div class="info-detail" style="background:#fff5f5;border:1px solid var(--red-main);"><span class="label" style="color:var(--red-main);">🔒 Bloqueio:</span><span class="value" style="color:var(--red-main);">${DIAS_BLOQUEIO} dias</span></div>
+            <div class="info-detail" style="background:#d4edda;border:1px solid #28a745;"><span class="label" style="color:#28a745;">🔐 OTP:</span><span class="value" style="color:#28a745;">Verificação via WhatsApp</span></div>
+        `;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function criarMensagemEmprestimo(level) {
+        const u = usuario;
+        return `*TAKO NA HORA EMPRÉSTIMO - SOLICITAÇÃO*%0A%0A` +
+            `📌 *DADOS PESSOAIS*%0A` +
+            `Nome: ${u.nome}%0A` +
+            `Nº Bilhete: ${u.bilhete}%0A` +
+            `Data Nascimento: ${u.nascimento}%0A` +
+            `Província: ${u.provincia}%0A` +
+            `Distrito: ${u.distrito}%0A` +
+            `Bairro: ${u.bairro || 'Não informado'}%0A` +
+            `Nº Cliente: ${u.numero}%0A` +
+            `Email: ${u.email}%0A%0A` +
+            `📌 *DETALHES DO EMPRÉSTIMO*%0A` +
+            `Nível: ${level.nome} (ID: ${level.id})%0A` +
+            `💰 Valor solicitado: ${level.valor} MT%0A` +
+            `💸 Total a pagar: ${level.pagamento} MT%0A` +
+            `📈 Juro: ${level.juro} MT%0A` +
+            `⏳ Prazo: ${level.duracao} dias%0A` +
+            `⚠️ Taxa de atraso: ${TAXA_ATRASO_DIA} MT/dia após vencimento%0A` +
+            `🔒 Bloqueio: ${DIAS_BLOQUEIO} dias de atraso bloqueiam a conta%0A` +
+            `🔐 OTP Verificado: ✅%0A` +
+            `📅 Data solicitação: ${new Date().toLocaleString()}`;
+    }
+
+    function enviarEmprestimoWhatsApp() {
+        if(!nivelSelecionado || !usuario) return;
+        if (!enviarWhatsApp(criarMensagemEmprestimo(nivelSelecionado))) return;
+        
+        const inicio = new Date();
+        const fim = new Date();
+        fim.setDate(fim.getDate() + nivelSelecionado.duracao);
+        usuario.dividaAtiva = {
+            nivelId: nivelSelecionado.id,
+            valorPagar: nivelSelecionado.pagamento,
+            valorOriginal: nivelSelecionado.valor,
+            juro: nivelSelecionado.juro,
+            dataInicio: inicio.toISOString(),
+            dataLimite: fim.toISOString(),
+            diasRestantes: nivelSelecionado.duracao,
+            taxaAtrasoAcumulada: 0,
+            otpVerificado: true
+        };
+        usuario.bloqueado = false;
+        saveUser();
+        atualizarDividaUI();
+        document.getElementById('successMsg').style.display = 'block';
+        setTimeout(() => document.getElementById('successMsg').style.display = 'none', 8000);
+        nivelSelecionado = null;
+    }
+
+    // ============================================================
+    // ===== PAGAMENTO =====
+    // ============================================================
+    function iniciarPagamento() {
+        if(!usuario || !usuario.dividaAtiva) return alert('Nenhuma dívida ativa.');
+        if(usuario.bloqueado) return alert('🔒 Conta bloqueada! Clique em "Desbloquear Conta" para regularizar.');
+        if (!checkInternetAndProceed()) return;
+        
+        const modal = document.getElementById('paymentModal');
+        document.getElementById('paymentWhatsappNumber').textContent = formatarNumero(getNumeroWhatsAppDoDia());
+        document.getElementById('pagNome').value = usuario.nome;
+        document.getElementById('pagHora').value = new Date().toLocaleString();
+        document.getElementById('pagNumero').value = usuario.numero;
+        const { valorTotal } = calcularTaxaAtraso(usuario.dividaAtiva);
+        document.getElementById('pagValor').value = valorTotal + ' MT';
+        document.getElementById('msgPagamento').value = '';
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+
+    function criarMensagemPagamento() {
+        const msg = document.getElementById('msgPagamento').value.trim();
+        if(!msg) { alert('Por favor, descreva o comprovativo de pagamento.'); return null; }
+        const divida = usuario.dividaAtiva;
+        if(!divida) { alert('Sem dívida ativa.'); return null; }
+        const { valorTotal, diasAtraso, taxa } = calcularTaxaAtraso(divida);
+        let texto = `*TAKO NA HORA - PAGAMENTO DE EMPRÉSTIMO*%0A%0A` +
+            `📌 *DADOS DO CLIENTE*%0A` +
+            `Nome: ${usuario.nome}%0A` +
+            `Nº Bilhete: ${usuario.bilhete}%0A` +
+            `Número: ${usuario.numero}%0A` +
+            `Email: ${usuario.email}%0A%0A` +
+            `📌 *DETALHES DO PAGAMENTO*%0A` +
+            `Data/Hora: ${document.getElementById('pagHora').value}%0A` +
+            `Valor pago: ${valorTotal} MT (Nível ${divida.nivelId})%0A`;
+        if (diasAtraso > 0) texto += `⚠️ Taxa de atraso: ${taxa} MT (${diasAtraso} dias em atraso)%0A`;
+        texto += `Comprovativo: ${msg}%0A%0A✅ Pagamento registado para aprovação.%0A🔐 OTP Verificado: ✅`;
+        return texto;
+    }
+
+    function enviarPagamentoWhatsApp() {
+        const msg = criarMensagemPagamento();
+        if (!msg) return;
+        if (!enviarWhatsApp(msg)) return;
+        
+        const atual = niveis.find(n => n.id === usuario.nivelAtual);
+        if(atual) {
+            usuario.emprestimosFeitosNoNivel = (usuario.emprestimosFeitosNoNivel || 0) + 1;
+            if(usuario.emprestimosFeitosNoNivel >= atual.qtdParaLiberar && usuario.nivelAtual < 10) {
+                usuario.nivelAtual++;
+                usuario.emprestimosFeitosNoNivel = 0;
+                alert(`🎉 Parabéns! Subiu para ${niveis.find(n=>n.id===usuario.nivelAtual)?.nome || 'Nível máximo'}!`);
+            }
+        }
+        usuario.dividaAtiva = null;
+        usuario.bloqueado = false;
+        saveUser();
+        renderizarNiveis();
+        atualizarDividaUI();
+        alert('✅ Comprovativo enviado! Aguarde confirmação do pagamento.');
+        document.getElementById('msgPagamento').value = '';
+    }
+
+    // ============================================================
+    // ===== ATUALIZAR UI DA DÍVIDA =====
+    // ============================================================
+    function atualizarDividaUI() {
+        const divDebt = document.getElementById('debtCardPanel');
+        const late = document.getElementById('lateFeeContainer');
+        const banner = document.getElementById('blockedBanner');
+        const btn = document.getElementById('pagarDebtBtn');
+        
+        const bloqueado = verificarBloqueio();
+        banner.style.display = bloqueado ? 'block' : 'none';
+        document.querySelectorAll('.level-btn').forEach(el => el.classList.toggle('disabled', bloqueado));
+        
+        if(usuario && usuario.dividaAtiva) {
+            divDebt.style.display = 'block';
+            
+            const d = usuario.dividaAtiva;
+            const limite = new Date(d.dataLimite);
+            const hoje = new Date();
+            const { diasAtraso, taxa, valorTotal, estaBloqueado: dividaBloqueada } = calcularTaxaAtraso(d);
+            const diff = Math.ceil((limite - hoje) / (1000*60*60*24));
+            const restantes = diff > 0 ? diff : 0;
+            const total = niveis.find(n => n.id === d.nivelId)?.duracao || 30;
+            const progresso = ((total - restantes) / total) * 100;
+            const atrasado = diasAtraso > 0;
+            
+            document.getElementById('cardLastDigits').textContent = String(2026 + d.nivelId).slice(-4);
+            document.getElementById('debtCardHolder').textContent = usuario.nome.toUpperCase();
+            document.getElementById('debtCardValue').textContent = (atrasado ? valorTotal : d.valorPagar) + ' MT';
+            document.querySelector('.card-detail-item.highlight .detail-value').classList.toggle('overdue', atrasado);
+            document.getElementById('debtCardDue').textContent = limite.toLocaleDateString('pt-PT', { day:'2-digit', month:'short', year:'numeric' });
+            
+            const status = document.getElementById('debtCardStatus');
+            const statusText = document.getElementById('debtCardStatusText');
+            const fill = document.getElementById('debtProgressBar');
+            const percent = document.getElementById('debtProgressPercent');
+            const daysText = document.getElementById('debtCardDays');
+            const daysContainer = document.getElementById('debtDaysContainer');
+            
+            const pct = Math.min(100, progresso);
+            fill.style.width = pct + '%';
+            percent.textContent = Math.round(pct) + '%';
+            
+            if (atrasado) {
+                fill.classList.add('overdue');
+                percent.classList.add('overdue');
+                status.className = 'status-indicator danger';
+                statusText.textContent = 'VENCIDO';
+                statusText.style.color = '#dc3545';
+                daysText.innerHTML = `<strong>${diasAtraso}</strong> dia(s) em atraso`;
+                daysText.classList.add('overdue');
+                daysContainer.querySelector('.days-icon').textContent = '⚠️';
+                late.style.display = 'block';
+                document.getElementById('lateFeeAmount').textContent = `+${taxa.toFixed(2)} MT`;
+                document.getElementById('lateFeeDays').textContent = diasAtraso;
+                
+                if (dividaBloqueada) {
+                    btn.classList.add('overdue-btn');
+                    btn.innerHTML = `<span class="btn-icon">🔒</span> Conta Bloqueada - Desbloquear`;
+                    btn.disabled = false;
+                    btn.onclick = abrirModalUnblock;
+                } else {
+                    btn.classList.add('overdue-btn');
+                    btn.innerHTML = `<span class="btn-icon">⚠️</span> Pagar ${valorTotal.toFixed(2)} MT (com multa)`;
+                    btn.disabled = false;
+                    btn.onclick = iniciarPagamento;
+                }
+            } else if (restantes <= 3 && restantes > 0) {
+                fill.classList.remove('overdue');
+                percent.classList.remove('overdue');
+                status.className = 'status-indicator warning';
+                statusText.textContent = 'PRÓXIMO VENCIMENTO';
+                statusText.style.color = '#ffc107';
+                daysText.innerHTML = `<strong>${restantes}</strong> dias restantes`;
+                daysText.classList.remove('overdue');
+                daysContainer.querySelector('.days-icon').textContent = '⏳';
+                late.style.display = 'none';
+                btn.classList.remove('overdue-btn');
+                btn.innerHTML = `<span class="btn-icon">💸</span> Fazer Pagamento via WhatsApp`;
+                btn.disabled = false;
+                btn.onclick = iniciarPagamento;
+            } else {
+                fill.classList.remove('overdue');
+                percent.classList.remove('overdue');
+                status.className = 'status-indicator active';
+                statusText.textContent = 'ATIVO';
+                statusText.style.color = '#28a745';
+                daysText.innerHTML = `<strong>${restantes}</strong> dias restantes`;
+                daysText.classList.remove('overdue');
+                daysContainer.querySelector('.days-icon').textContent = '⏳';
+                late.style.display = 'none';
+                btn.classList.remove('overdue-btn');
+                btn.innerHTML = `<span class="btn-icon">💸</span> Fazer Pagamento via WhatsApp`;
+                btn.disabled = false;
+                btn.onclick = iniciarPagamento;
+            }
+        } else {
+            divDebt.style.display = 'none';
+        }
+    }
+
+    // ============================================================
+    // ===== CADASTRO =====
+    // ============================================================
+    function validarNumero(n) { return /^(84|85)[0-9]{7}$/.test(n); }
+
+    function handleCadastro(e) {
+        e.preventDefault();
+        
+        if (!checkInternetAndProceed()) return;
+        
+        const nome = document.getElementById('nomeCompleto').value;
+        const bilhete = document.getElementById('numBilhete').value;
+        const nasc = document.getElementById('dataNasc').value;
+        const provincia = document.getElementById('provincia').value;
+        const distrito = document.getElementById('distrito').value;
+        const bairro = document.getElementById('bairro').value;
+        const numero = document.getElementById('numeroCliente').value;
+        const email = document.getElementById('emailCliente').value;
+        const numInput = document.getElementById('numeroCliente');
+        const numError = document.getElementById('numeroError');
+        
+        if (!validarNumero(numero)) {
+            numInput.classList.add('error');
+            numError.classList.add('show');
+            numInput.focus();
+            return;
+        } else {
+            numInput.classList.remove('error');
+            numError.classList.remove('show');
+        }
+        
+        if (!nome || !bilhete || !provincia || !distrito || !bairro || !email) {
+            return alert('Preencha todos os campos');
+        }
+        
+        usuario = {
+            nome, bilhete, nascimento: nasc, provincia, distrito, bairro, numero, email,
+            nivelAtual: 1,
+            emprestimosFeitosNoNivel: 0,
+            dividaAtiva: null,
+            bloqueado: false,
+            _dataCadastro: new Date().toISOString()
+        };
+        saveUser();
+        document.getElementById('cadastroSection').style.display = 'none';
+        document.getElementById('dashboardSection').style.display = 'block';
+        renderizarNiveis();
+        atualizarDividaUI();
+        atualizarNumerosExibidos();
+        alert('✅ Cadastro realizado com sucesso!');
+        setTimeout(() => addBotMessage('🎉 Bem-vindo à Tako Empréstimos!'), 1000);
+    }
+
+    // ============================================================
+    // ===== ATENDIMENTO HUMANO =====
+    // ============================================================
+    function abrirAtendimentoHumano() {
+        if (!checkInternetAndProceed()) return;
+        const modal = document.getElementById('humanSupportModal');
+        const container = document.getElementById('supportAgentsList');
+        container.innerHTML = '';
+        HUMAN_AGENTS.forEach(agent => {
+            const div = document.createElement('div');
+            div.className = 'support-agent';
+            const initials = agent.name.split(' ').map(n => n[0]).join('');
+            div.innerHTML = `
+                <div class="agent-avatar">${initials}</div>
+                <div class="agent-info">
+                    <div class="agent-name">${agent.name}</div>
+                    <div class="agent-number">📱 ${agent.number}</div>
+                    <div class="agent-status"><span class="dot"></span> Online</div>
+                </div>
+            `;
+            div.addEventListener('click', () => {
+                if (checkInternetAndProceed()) {
+                    const msg = `Olá! Preciso de ajuda com minha conta Tako na hora Empréstimos. Meu nome é ${usuario?.nome || 'Cliente'}.`;
+                    window.open(`https://wa.me/${agent.number}?text=${encodeURIComponent(msg)}`, '_blank');
+                }
+            });
+            container.appendChild(div);
+        });
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        document.getElementById('chatWidget').classList.remove('open');
+    }
+
+    // ============================================================
+    // ===== CHATBOT =====
+    // ============================================================
+    const CHAT_RESPONSES = {
+        'níveis': `📊 *Níveis disponíveis:*\n\n${niveis.map(n => `${n.nome}: ${n.valor} MT (paga ${n.pagamento} MT, juro ${n.juro} MT, ${n.duracao} dias)`).join('\n')}`,
+        'solicitar': `💰 *Como solicitar um empréstimo:*\n\n1. Sem dívidas ativas\n2. Escolha um nível disponível\n3. Clique no nível desejado\n4. 🔐 Digite o código OTP recebido no WhatsApp\n5. Confirme e envie para WhatsApp`,
+        'juros': `📈 *Taxas de juro:*\n\n${niveis.map(n => `• ${n.nome}: ${n.juro} MT`).join('\n')}`,
+        'pagar': `💸 *Como pagar:*\n\n1. Clique em "Fazer Pagamento"\n2. Preencha o comprovativo\n3. 🔐 Digite o código OTP recebido no WhatsApp\n4. Envie para WhatsApp`,
+        'atraso': `⚠️ *Taxa de atraso:* ${TAXA_ATRASO_DIA} MT/dia. Bloqueio após ${DIAS_BLOQUEIO} dias.`,
+        'bloqueio': `🔒 *Bloqueio:* Após ${DIAS_BLOQUEIO} dias de atraso, a conta é bloqueada. Para desbloquear, clique em "Desbloquear Conta" e use o OTP de desbloqueio.`,
+        'atendimento': `👤 Clique em "👤 Atendimento Humano" para falar com um agente.`,
+        'otp': `🔐 *OTP:* Código de 6 dígitos enviado para seu WhatsApp. Muda diariamente.\n\n🔓 *OTP de Desbloqueio:* Código especial de 6 dígitos para desbloquear sua conta (diferente do OTP normal).`,
+        'padrao': `🤖 Não entendi. Pergunte sobre: níveis, solicitar, juros, pagar, atraso, bloqueio ou OTP.`
+    };
+
+    function toggleChat() {
+        const widget = document.getElementById('chatWidget');
+        widget.classList.toggle('open');
+        if (widget.classList.contains('open')) {
+            document.getElementById('chatInput').focus();
+            document.querySelector('.chatbot-fab .notification-dot').style.display = 'none';
+        }
+    }
+
+    function addBotMessage(text) {
+        const container = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'message bot';
+        div.innerHTML = text + `<span class="msg-time">${new Date().toLocaleTimeString('pt-PT', {hour:'2-digit',minute:'2-digit'})}</span>`;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function addUserMessage(text) {
+        const container = document.getElementById('chatMessages');
+        const div = document.createElement('div');
+        div.className = 'message user';
+        div.innerHTML = text + `<span class="msg-time">${new Date().toLocaleTimeString('pt-PT', {hour:'2-digit',minute:'2-digit'})}</span>`;
+        container.appendChild(div);
+        container.scrollTop = container.scrollHeight;
+    }
+
+    function showTyping() {
+        document.getElementById('typingIndicator').style.display = 'block';
+        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+    }
+
+    function hideTyping() {
+        document.getElementById('typingIndicator').style.display = 'none';
+    }
+
+    function getResponse(msg) {
+        const lower = msg.toLowerCase();
+        for (const [key, resp] of Object.entries(CHAT_RESPONSES)) {
+            if (lower.includes(key)) return resp;
+        }
+        if (lower.match(/^(oi|olá|ola|eai|ei|hey|hi|hello|bom dia|boa tarde|boa noite)/)) {
+            return 'Olá! 👋 Como posso ajudá-lo?';
+        }
+        return CHAT_RESPONSES['padrao'];
+    }
+
+    function handleChatSend() {
+        if (!checkInternetAndProceed()) return;
+        const input = document.getElementById('chatInput');
+        const msg = input.value.trim();
+        if (!msg) return;
+        addUserMessage(msg);
+        input.value = '';
+        showTyping();
+        setTimeout(() => {
+            hideTyping();
+            addBotMessage(getResponse(msg));
+        }, 800 + Math.random() * 800);
+    }
+
+    // ============================================================
+    // ===== EVENT LISTENERS =====
+    // ============================================================
+    document.getElementById('chatFab').addEventListener('click', toggleChat);
+    document.getElementById('closeChat').addEventListener('click', toggleChat);
+    document.getElementById('sendChatBtn').addEventListener('click', handleChatSend);
+    document.getElementById('chatInput').addEventListener('keypress', e => { if(e.key === 'Enter') handleChatSend(); });
+    document.querySelectorAll('.chatbot-quick-actions button').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const msg = this.getAttribute('data-msg');
+            if (msg) { document.getElementById('chatInput').value = msg; handleChatSend(); }
+        });
+    });
+    document.getElementById('humanSupportBtn').addEventListener('click', abrirAtendimentoHumano);
+
+    document.getElementById('closeHumanSupport').addEventListener('click', () => {
+        document.getElementById('humanSupportModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+    document.getElementById('humanSupportModal').addEventListener('click', e => {
+        if(e.target === e.currentTarget) {
+            document.getElementById('humanSupportModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+
+    document.getElementById('closeOtpModal').addEventListener('click', () => { fecharModalOTP(); pendingAction = null; });
+    document.getElementById('cancelOtpBtn').addEventListener('click', () => { fecharModalOTP(); pendingAction = null; });
+    document.getElementById('verifyOtpBtn').addEventListener('click', verificarOTP);
+    document.getElementById('otpInput').addEventListener('keypress', e => { if(e.key === 'Enter') verificarOTP(); });
+    document.getElementById('otpModal').addEventListener('click', e => {
+        if(e.target === e.currentTarget) { fecharModalOTP(); pendingAction = null; }
+    });
+
+    // UNBLOCK OTP
+    document.getElementById('closeUnblockModal').addEventListener('click', fecharModalUnblock);
+    document.getElementById('cancelUnblockBtn').addEventListener('click', fecharModalUnblock);
+    document.getElementById('verifyUnblockBtn').addEventListener('click', verificarUnblockOTP);
+    document.getElementById('unblockOtpInput').addEventListener('keypress', e => { if(e.key === 'Enter') verificarUnblockOTP(); });
+    document.getElementById('unblockModal').addEventListener('click', e => {
+        if(e.target === e.currentTarget) fecharModalUnblock();
+    });
+    document.getElementById('btnUnblockAccount').addEventListener('click', abrirModalUnblock);
+
+    // OTP input filter
+    document.getElementById('otpInput').addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 6);
+    });
+    document.getElementById('unblockOtpInput').addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g, '').slice(0, 6);
+    });
+
+    document.getElementById('closeOtpConfirmationModal').addEventListener('click', () => { fecharConfirmacaoOTP(); pendingAction = null; });
+    document.getElementById('otpConfirmOkBtn').addEventListener('click', executarAcaoPosConfirmacao);
+    document.getElementById('otpConfirmationModal').addEventListener('click', e => {
+        if(e.target === e.currentTarget) { fecharConfirmacaoOTP(); pendingAction = null; }
+    });
+
+    document.getElementById('numeroCliente')?.addEventListener('input', function() {
+        const error = document.getElementById('numeroError');
+        if (this.value.length >= 2) {
+            if (!validarNumero(this.value)) {
+                this.classList.add('error');
+                error.classList.add('show');
+            } else {
+                this.classList.remove('error');
+                error.classList.remove('show');
+            }
+        } else {
+            this.classList.remove('error');
+            error.classList.remove('show');
+        }
+    });
+
+    document.getElementById('cadastroForm')?.addEventListener('submit', handleCadastro);
+    document.getElementById('sendPaymentWhatsBtn')?.addEventListener('click', function() {
+        if (!document.getElementById('msgPagamento').value.trim()) {
+            alert('Por favor, descreva o comprovativo de pagamento.');
+            return;
+        }
+        abrirModalOTP('payment');
+    });
+    document.getElementById('confirmLoanBtn')?.addEventListener('click', function() {
+        if (!nivelSelecionado || !usuario) return;
+        abrirModalOTP('loan');
+    });
+
+    document.getElementById('closeModalBtn')?.addEventListener('click', () => {
+        document.getElementById('paymentModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+    document.getElementById('closePaymentModal')?.addEventListener('click', () => {
+        document.getElementById('paymentModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+    });
+    document.getElementById('closeLoanModal')?.addEventListener('click', () => {
+        document.getElementById('loanModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        nivelSelecionado = null;
+    });
+    document.getElementById('cancelLoanBtn')?.addEventListener('click', () => {
+        document.getElementById('loanModal').style.display = 'none';
+        document.body.style.overflow = 'auto';
+        nivelSelecionado = null;
+    });
+
+    document.getElementById('paymentModal')?.addEventListener('click', e => {
+        if(e.target === e.currentTarget) {
+            document.getElementById('paymentModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+    });
+    document.getElementById('loanModal')?.addEventListener('click', e => {
+        if(e.target === e.currentTarget) {
+            document.getElementById('loanModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            nivelSelecionado = null;
+        }
+    });
+
+    // ============================================================
+    // ===== INICIALIZAÇÃO =====
+    // ============================================================
+    window.addEventListener('load', () => {
+        carregarProvincias();
+        atualizarNumerosExibidos();
+        verificarConexao();
+        
+        setTimeout(() => {
+            document.getElementById('loader-wrapper').classList.add('hide');
+            setTimeout(() => {
+                document.getElementById('loader-wrapper').style.display = 'none';
+                // Só mostra o app se tiver internet
+                if (navigator.onLine) {
+                    document.getElementById('main-app').style.display = 'block';
+                    document.getElementById('internetBlockOverlay').style.display = 'none';
+                } else {
+                    document.getElementById('main-app').style.display = 'none';
+                    document.getElementById('internetBlockOverlay').style.display = 'flex';
+                }
+                if (loadUser() && usuario) {
+                    document.getElementById('cadastroSection').style.display = 'none';
+                    document.getElementById('dashboardSection').style.display = 'block';
+                    verificarBloqueio();
+                    renderizarNiveis();
+                    atualizarDividaUI();
+                    atualizarNumerosExibidos();
+                } else {
+                    document.getElementById('cadastroSection').style.display = 'block';
+                    document.getElementById('dashboardSection').style.display = 'none';
+                }
+            }, 600);
+        }, 1800);
+    });
+
+    setInterval(() => {
+        if (usuario && usuario.dividaAtiva) {
+            verificarBloqueio();
+            atualizarDividaUI();
+            renderizarNiveis();
+        }
+        // Verifica conexão periodicamente
+        verificarConexao();
+    }, 10000); // A cada 10 segundos
+
+    console.log(`🔐 OTP do dia: ${getOtpDoDia()}`);
+    console.log(`🔓 OTP de desbloqueio: ${getUnblockOtpDoDia()}`);
+    console.log(`📱 WhatsApp: ${getNumeroWhatsAppDoDia()} (${getNomeDiaSemana()})`);
+    console.log(`📡 Status Internet: ${navigator.onLine ? 'Online' : 'Offline'}`);
+</script>
+</body>
+</html>
