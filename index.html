@@ -44,62 +44,480 @@
         body {
             background: #ffffff;
             color: #333333;
+            overflow-x: hidden;
         }
 
-        /* ===== LOADER COM ANIMAÇÃO ===== */
+        /* ============================================================
+           LOADING 1 - NEON GLASS LOADER (NOVO MODERNO)
+           ============================================================ */
+        
         #loader-wrapper {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(145deg, #ffffff 0%, #fff5f5 50%, #ffffff 100%);
+            background: #0a0a0a;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 9999;
-            transition: opacity 0.6s ease, transform 0.6s ease;
+            z-index: 99999;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
             flex-direction: column;
-            gap: 2rem;
+            gap: 3rem;
+            will-change: transform, opacity;
+            overflow: hidden;
         }
         #loader-wrapper.hide {
             opacity: 0;
             transform: scale(1.05);
             pointer-events: none;
         }
-        .tako-loader { text-align: center; color: var(--vodacom-red); }
-        .tako-loader h1 {
-            font-size: 3.5rem;
-            letter-spacing: 6px;
-            margin-bottom: 20px;
-            font-weight: 900;
-            background: linear-gradient(135deg, var(--vodacom-red), var(--vodacom-red-light), var(--vodacom-red));
+
+        /* Background particles */
+        #loader-wrapper .bg-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        #loader-wrapper .bg-particles span {
+            position: absolute;
+            display: block;
+            width: 20px;
+            height: 20px;
+            background: rgba(226, 0, 26, 0.1);
+            border-radius: 50%;
+            animation: floatBg 15s infinite linear;
+            bottom: -20px;
+        }
+        #loader-wrapper .bg-particles span:nth-child(1) { left: 10%; animation-duration: 12s; width: 30px; height: 30px; }
+        #loader-wrapper .bg-particles span:nth-child(2) { left: 25%; animation-duration: 18s; width: 15px; height: 15px; animation-delay: 2s; }
+        #loader-wrapper .bg-particles span:nth-child(3) { left: 40%; animation-duration: 14s; width: 25px; height: 25px; animation-delay: 4s; }
+        #loader-wrapper .bg-particles span:nth-child(4) { left: 55%; animation-duration: 16s; width: 18px; height: 18px; animation-delay: 1s; }
+        #loader-wrapper .bg-particles span:nth-child(5) { left: 70%; animation-duration: 13s; width: 35px; height: 35px; animation-delay: 3s; }
+        #loader-wrapper .bg-particles span:nth-child(6) { left: 85%; animation-duration: 19s; width: 22px; height: 22px; animation-delay: 5s; }
+        #loader-wrapper .bg-particles span:nth-child(7) { left: 50%; animation-duration: 11s; width: 28px; height: 28px; animation-delay: 7s; }
+
+        @keyframes floatBg {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.3; }
+            100% { transform: translateY(-110vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Loader principal */
+        .neon-loader {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2.5rem;
+            z-index: 1;
+            animation: loaderEntrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes loaderEntrance {
+            from { opacity: 0; transform: scale(0.8) rotate(-5deg); }
+            to { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        /* Logo circular com pulso neon - SEM O TH */
+        .neon-logo {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .neon-logo .ring-outer {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-top-color: var(--vodacom-red);
+            border-right-color: var(--vodacom-red-light);
+            animation: spinNeon 1.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            filter: drop-shadow(0 0 20px rgba(226, 0, 26, 0.3));
+        }
+
+        .neon-logo .ring-inner {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            border-bottom-color: var(--vodacom-red-light);
+            border-left-color: var(--vodacom-red);
+            animation: spinNeon 2s cubic-bezier(0.4, 0, 0.2, 1) infinite reverse;
+            filter: drop-shadow(0 0 15px rgba(226, 0, 26, 0.2));
+        }
+
+        .neon-logo .ring-dots {
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            border-radius: 50%;
+            animation: spinNeon 3s linear infinite;
+        }
+
+        .neon-logo .ring-dots::before,
+        .neon-logo .ring-dots::after {
+            content: '';
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: var(--vodacom-red);
+            box-shadow: 0 0 20px var(--vodacom-red-glow);
+        }
+
+        .neon-logo .ring-dots::before {
+            top: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: dotPulseNeon 1.5s ease-in-out infinite;
+        }
+
+        .neon-logo .ring-dots::after {
+            bottom: -6px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: dotPulseNeon 1.5s ease-in-out infinite 0.75s;
+        }
+
+        @keyframes spinNeon {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes dotPulseNeon {
+            0%, 100% { transform: translateX(-50%) scale(1); opacity: 1; }
+            50% { transform: translateX(-50%) scale(0.5); opacity: 0.3; }
+        }
+
+        /* Centro do logo - apenas o ponto de luz */
+        .neon-logo .center-dot-glow {
+            position: relative;
+            z-index: 2;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--vodacom-red);
+            box-shadow: 0 0 40px rgba(226, 0, 26, 0.6), 0 0 80px rgba(226, 0, 26, 0.3), 0 0 120px rgba(226, 0, 26, 0.1);
+            animation: pulseCenterNeon 2s ease-in-out infinite;
+        }
+
+        @keyframes pulseCenterNeon {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 40px rgba(226, 0, 26, 0.6), 0 0 80px rgba(226, 0, 26, 0.3); }
+            50% { transform: scale(1.3); box-shadow: 0 0 60px rgba(226, 0, 26, 0.8), 0 0 100px rgba(226, 0, 26, 0.4); }
+        }
+
+        .neon-logo .center-dot-glow::after {
+            content: '';
+            position: absolute;
+            inset: -8px;
+            border-radius: 50%;
+            border: 2px solid rgba(226, 0, 26, 0.15);
+            animation: ringPulseNeon 2s ease-in-out infinite;
+        }
+
+        @keyframes ringPulseNeon {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.8); opacity: 0; }
+        }
+
+        /* Texto do loader */
+        .loader-text-neon {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .loader-text-neon h1 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #fff 30%, var(--vodacom-red-light) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            animation: textGradient 3s ease-in-out infinite;
             background-size: 200% 200%;
-            animation: gradientShift 3s ease-in-out infinite;
-            filter: drop-shadow(0 0 30px var(--vodacom-red-glow));
         }
-        @keyframes gradientShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-        .spinner {
-            width: 70px;
-            height: 70px;
-            border: 5px solid rgba(226,0,26,0.15);
-            border-top: 5px solid var(--vodacom-red);
+
+        @keyframes textGradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .loader-text-neon .subtitle {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Barra de progresso neon */
+        .progress-neon {
+            width: 280px;
+            max-width: 80vw;
+            position: relative;
+        }
+
+        .progress-neon .track {
+            width: 100%;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .progress-neon .track .fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--vodacom-red), var(--vodacom-red-light), #ff6b6b, var(--vodacom-red-light), var(--vodacom-red));
+            background-size: 300% 100%;
+            border-radius: 4px;
+            animation: progressGlow 1.5s linear infinite;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            will-change: width;
+            box-shadow: 0 0 20px rgba(226, 0, 26, 0.3);
+        }
+
+        @keyframes progressGlow {
+            0% { background-position: 0% 0%; }
+            100% { background-position: 300% 0%; }
+        }
+
+        .progress-neon .track .fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmerNeon 1.5s infinite;
+        }
+
+        @keyframes shimmerNeon {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Status text com dots animados */
+        .loader-status-neon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 300;
+            letter-spacing: 1px;
+            min-height: 24px;
+        }
+
+        .loader-status-neon .dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .loader-status-neon .dots span {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
-            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-            margin: 0 auto 20px;
-            box-shadow: 0 0 40px rgba(226,0,26,0.1);
+            background: var(--vodacom-red);
+            animation: dotBounceNeon 1.4s ease-in-out infinite;
+            opacity: 0.3;
         }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-        .loader-text {
-            font-size: 1.2rem;
-            color: #cc5555;
-            animation: fadeInOut 1.8s ease-in-out infinite;
+
+        .loader-status-neon .dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loader-status-neon .dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes dotBounceNeon {
+            0%, 80%, 100% { transform: scale(0.6); opacity: 0.3; }
+            40% { transform: scale(1.2); opacity: 1; }
+        }
+
+        /* Porcentagem */
+        .progress-percent {
+            text-align: center;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.2);
+            margin-top: 8px;
             font-weight: 300;
             letter-spacing: 2px;
         }
-        @keyframes fadeInOut { 0%, 100% { opacity: 0.5; transform: translateY(0); } 50% { opacity: 1; transform: translateY(-3px); } }
+
+        .progress-percent span {
+            color: var(--vodacom-red-light);
+            font-weight: 600;
+        }
+
+        /* ============================================================
+           LOADING 2 - ACTION LOADER (MODERNO)
+           ============================================================ */
+        
+        #actionLoader {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 99999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeInOverlay 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: opacity, backdrop-filter;
+        }
+
+        @keyframes fadeInOverlay {
+            from { opacity: 0; backdrop-filter: blur(0px); }
+            to { opacity: 1; backdrop-filter: blur(20px); }
+        }
+
+        #actionLoader .loader-box {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 40px 48px 36px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 28px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            min-width: 260px;
+            max-width: 340px;
+            animation: modalSlideNeon 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+        }
+
+        @keyframes modalSlideNeon {
+            from { opacity: 0; transform: translateY(40px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        #actionLoader .loader-box .action-spinner {
+            position: relative;
+            width: 70px;
+            height: 70px;
+        }
+
+        #actionLoader .loader-box .action-spinner .ring {
+            position: absolute;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            animation: spinAction 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        #actionLoader .loader-box .action-spinner .ring:nth-child(1) {
+            width: 100%;
+            height: 100%;
+            border-top-color: var(--vodacom-red);
+            border-right-color: var(--vodacom-red-light);
+            filter: drop-shadow(0 0 20px rgba(226, 0, 26, 0.3));
+        }
+
+        #actionLoader .loader-box .action-spinner .ring:nth-child(2) {
+            width: 75%;
+            height: 75%;
+            top: 12.5%;
+            left: 12.5%;
+            border-bottom-color: var(--vodacom-red-light);
+            border-left-color: var(--vodacom-red);
+            animation-duration: 1.3s;
+            animation-direction: reverse;
+        }
+
+        #actionLoader .loader-box .action-spinner .ring:nth-child(3) {
+            width: 45%;
+            height: 45%;
+            top: 27.5%;
+            left: 27.5%;
+            border-top-color: #ff6b6b;
+            border-bottom-color: #ff6b6b;
+            animation-duration: 1.6s;
+            border-width: 2.5px;
+        }
+
+        @keyframes spinAction {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #actionLoader .loader-box .action-spinner .center-dot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--vodacom-red), var(--vodacom-red-light));
+            animation: pulseDotAction 1.4s ease-in-out infinite;
+            box-shadow: 0 0 30px rgba(226, 0, 26, 0.4);
+        }
+
+        @keyframes pulseDotAction {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+            50% { transform: translate(-50%, -50%) scale(1.3); opacity: 1; }
+        }
+
+        #actionLoader .loader-box .action-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            text-align: center;
+        }
+
+        #actionLoader .loader-box .action-sub {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 300;
+            text-align: center;
+            margin-top: -8px;
+        }
+
+        #actionLoader .loader-box .action-progress {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        #actionLoader .loader-box .action-progress .fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--vodacom-red), var(--vodacom-red-light), #ff6b6b);
+            background-size: 200% 100%;
+            border-radius: 3px;
+            animation: progressGlow 1.2s linear infinite;
+            transition: width 0.3s ease;
+            will-change: width;
+        }
 
         /* ===== PARTICLES ===== */
         .particles {
@@ -119,6 +537,7 @@
             border-radius: 50%;
             animation: floatParticle 8s ease-in-out infinite;
             opacity: 0.3;
+            will-change: transform;
         }
         @keyframes floatParticle {
             0%, 100% { transform: translateY(0) translateX(0) scale(1); opacity: 0.3; }
@@ -161,6 +580,7 @@
             background: radial-gradient(ellipse, rgba(255,255,255,0.15) 0%, transparent 70%);
             pointer-events: none;
             animation: headerGlow 6s ease-in-out infinite;
+            will-change: transform;
         }
         @keyframes headerGlow { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-20px, 20px) scale(1.1); } }
         .app-header .header-content { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
@@ -186,6 +606,7 @@
             border-radius: 50%; 
             background: #ffffff; 
             animation: dotPulse 1.5s ease-in-out infinite; 
+            will-change: transform, opacity;
         }
         @keyframes dotPulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } }
 
@@ -203,6 +624,7 @@
             position: relative;
             overflow: hidden;
             color: #333333;
+            will-change: transform, box-shadow;
         }
         .card::before {
             content: '';
@@ -302,6 +724,7 @@
             background: rgba(255,255,255,0.2);
             transition: width 0.8s ease, height 0.8s ease, top 0.8s ease, left 0.8s ease;
             pointer-events: none;
+            will-change: width, height, top, left;
         }
         button:active::after { width: 300px; height: 300px; top: -100px; left: -100px; }
         button:active { transform: scale(0.96); }
@@ -346,6 +769,7 @@
             -webkit-tap-highlight-color: transparent;
             touch-action: manipulation;
             user-select: none;
+            will-change: transform, box-shadow, border-color;
         }
         .level-btn::before {
             content: '';
@@ -357,6 +781,7 @@
             background: radial-gradient(circle, rgba(226,0,26,0.08) 0%, transparent 60%);
             opacity: 0;
             transition: var(--transition);
+            will-change: opacity;
         }
         .level-btn:not(.locked):not(.disabled):hover::before { opacity: 1; }
         .level-btn:not(.locked):not(.disabled):hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 8px 30px var(--vodacom-red-glow); border-color: var(--vodacom-red); }
@@ -383,6 +808,7 @@
             font-weight: 700;
             box-shadow: 0 2px 10px var(--vodacom-red-glow);
             animation: badgePulse 2s ease-in-out infinite;
+            will-change: transform;
         }
         @keyframes badgePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.03); } }
 
@@ -400,6 +826,7 @@
             animation: successPop 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid #28a745;
             font-weight: 600;
+            will-change: transform, opacity;
         }
         @keyframes successPop { 0% { transform: scale(0.8) rotate(-5deg); opacity: 0; } 50% { transform: scale(1.05) rotate(2deg); } 100% { transform: scale(1) rotate(0); opacity: 1; } }
         .hidden { display: none; }
@@ -415,6 +842,7 @@
             animation: slideInLeft 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             border: 1px solid rgba(37,211,102,0.2);
             color: #333333;
+            will-change: transform, opacity;
         }
         @keyframes slideInLeft { from { opacity: 0; transform: translateX(-30px) scale(0.95); } to { opacity: 1; transform: translateX(0) scale(1); } }
 
@@ -430,6 +858,7 @@
             text-align: center;
             animation: indicatorPulse 3s ease-in-out infinite;
             backdrop-filter: blur(5px);
+            will-change: transform, border-color;
         }
         @keyframes indicatorPulse { 0%, 100% { border-color: #25d36630; transform: scale(1); } 50% { border-color: #25d36660; transform: scale(1.01); } }
         .whatsapp-indicator .numero-dia { color: #25D366; font-weight: bold; font-size: 1.1rem; }
@@ -448,6 +877,7 @@
             border: 2px solid var(--vodacom-red-light);
             position: relative;
             overflow: hidden;
+            will-change: box-shadow;
         }
         .blocked-banner::before {
             content: '';
@@ -458,6 +888,7 @@
             height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%);
             animation: bannerShine 4s ease-in-out infinite;
+            will-change: transform;
         }
         @keyframes bannerShine { 0%, 100% { transform: translate(-30%, -30%) rotate(0); } 50% { transform: translate(30%, 30%) rotate(180deg); } }
         .blocked-banner h3 { font-size: 1.4rem; margin-bottom: 8px; position: relative; z-index: 1; color: #fff; }
@@ -494,6 +925,7 @@
             transition: var(--transition);
             border: 1px solid rgba(226,0,26,0.15);
             animation: cardFloat 4s ease-in-out infinite;
+            will-change: transform;
         }
         @keyframes cardFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
         .visa-card.premium:hover { transform: translateY(-3px) scale(1.005); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
@@ -508,6 +940,7 @@
             pointer-events: none;
             z-index: 0;
             animation: glowMove 6s ease-in-out infinite;
+            will-change: transform;
         }
         @keyframes glowMove { 0%, 100% { transform: translate(0, 0) scale(1); } 25% { transform: translate(-15px, 15px) scale(1.1); } 75% { transform: translate(15px, -15px) scale(0.9); } }
         
@@ -521,6 +954,7 @@
             pointer-events: none;
             z-index: 0;
             animation: shineMove 8s ease-in-out infinite;
+            will-change: transform;
         }
         @keyframes shineMove { 0%, 100% { transform: translate(0, 0) rotate(0); } 50% { transform: translate(20%, 10%) rotate(5deg); } }
         
@@ -545,7 +979,7 @@
         
         .visa-card.premium .card-footer-premium { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid rgba(226,0,26,0.06); position: relative; z-index: 1; }
         .visa-card.premium .status-container { display: flex; align-items: center; gap: 4px; }
-        .visa-card.premium .status-indicator { width: 8px; height: 8px; border-radius: 50%; display: inline-block; animation: pulse 1.5s ease-in-out infinite; }
+        .visa-card.premium .status-indicator { width: 8px; height: 8px; border-radius: 50%; display: inline-block; animation: pulse 1.5s ease-in-out infinite; will-change: transform, opacity; }
         @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.3; transform: scale(0.8); } }
         .visa-card.premium .status-indicator.active { background: #28a745; }
         .visa-card.premium .status-indicator.warning { background: #ffc107; }
@@ -557,7 +991,7 @@
         
         .visa-card.premium .loan-progress { margin-top: 8px; padding-top: 8px; border-top: 1px solid rgba(226,0,26,0.06); position: relative; z-index: 1; }
         .visa-card.premium .progress-bar-bg { width: 100%; height: 4px; background: #f0e8e8; border-radius: 3px; overflow: hidden; }
-        .visa-card.premium .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--vodacom-red), var(--vodacom-red-light)); border-radius: 3px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); position: relative; }
+        .visa-card.premium .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--vodacom-red), var(--vodacom-red-light)); border-radius: 3px; transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1); position: relative; will-change: width; }
         .visa-card.premium .progress-bar-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 2s infinite; }
         @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
         .visa-card.premium .progress-bar-fill.overdue { background: linear-gradient(90deg, var(--red-main), var(--red-light)); }
@@ -614,7 +1048,7 @@
             backdrop-filter: blur(4px);
             justify-content: center;
             align-items: center;
-            z-index: 10000;
+            z-index: 50000;
             padding: 20px;
             overflow-y: auto;
         }
@@ -634,6 +1068,7 @@
             overflow-y: auto;
             position: relative;
             color: #333333;
+            will-change: transform, opacity;
         }
         @keyframes modalSlideUp { from { opacity: 0; transform: translateY(40px) scale(0.95) rotate(-2deg); } to { opacity: 1; transform: translateY(0) scale(1) rotate(0); } }
         #otpModal .modal-header, #otpConfirmationModal .modal-header,
@@ -690,7 +1125,7 @@
         .btn-confirm-ok { background: #28a745; color: white; min-height: 44px; flex: 1; }
         .btn-confirm-ok:hover { background: #218838; }
 
-        .confirmation-icon { font-size: 4rem; margin: 10px 0; animation: successBounce 0.6s ease; }
+        .confirmation-icon { font-size: 4rem; margin: 10px 0; animation: successBounce 0.6s ease; will-change: transform; }
         @keyframes successBounce { 0% { transform: scale(0); } 50% { transform: scale(1.3); } 100% { transform: scale(1); } }
         .confirmation-text { font-size: 1.1rem; color: #333333; font-weight: 600; margin: 10px 0; }
         .confirmation-sub { font-size: 0.9rem; color: #888888; margin-bottom: 20px; }
@@ -705,6 +1140,7 @@
             justify-content: space-between;
             transition: 0.3s ease;
             border: 1px solid #f0e8e8;
+            will-change: transform, background;
         }
         .info-detail:hover { background: #f5f0f0; transform: translateX(5px); }
         .info-detail .label { color: #888888; font-weight: 500; }
@@ -717,6 +1153,7 @@
             margin: 15px 0;
             border: 2px solid var(--vodacom-red);
             animation: summaryGlow 3s ease-in-out infinite;
+            will-change: border-color;
         }
         @keyframes summaryGlow { 0%, 100% { border-color: var(--vodacom-red); } 50% { border-color: #FF1A33; } }
         .loan-summary h4 { color: #333333; margin-bottom: 10px; text-align: center; }
@@ -724,7 +1161,7 @@
         .btn-group { display: flex; gap: 10px; margin-top: 20px; }
         .btn-group button { flex: 1; min-height: 44px; }
 
-        /* ===== BOTÕES ORGANIZADOS - ESTILOS MELHORADOS ===== */
+        /* ===== BOTÕES ORGANIZADOS ===== */
         .action-buttons {
             display: flex;
             gap: 10px;
@@ -767,6 +1204,7 @@
             text-align: center;
             animation: slideInLeft 0.5s ease;
             color: #856404;
+            will-change: transform, opacity;
         }
         #noInternetBanner .banner-icon {
             font-size: 2rem;
@@ -810,7 +1248,7 @@
             height: 100%;
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
-            z-index: 10001;
+            z-index: 99998;
             justify-content: center;
             align-items: center;
             flex-direction: column;
@@ -843,6 +1281,7 @@
             border-radius: 50%;
             animation: spin 1s linear infinite;
             margin-bottom: 15px;
+            will-change: transform;
         }
         #internetBlockOverlay .retry-btn {
             background: var(--vodacom-gradient);
@@ -873,6 +1312,7 @@
             transition: 0.3s ease;
             cursor: pointer;
             border: 2px solid transparent;
+            will-change: transform, background, border-color;
         }
         .support-agent:hover { background: #f0e8e8; border-color: #25D366; transform: translateX(5px); }
         .support-agent .agent-avatar {
@@ -900,7 +1340,7 @@
             position: fixed;
             bottom: 25px;
             right: 25px;
-            z-index: 9998;
+            z-index: 9999;
             width: 60px;
             height: 60px;
             border-radius: 50%;
@@ -917,6 +1357,8 @@
             animation: fabFloat 3s ease-in-out infinite;
             padding: 0;
             min-height: auto;
+            will-change: transform, box-shadow;
+            pointer-events: auto !important;
         }
         .chatbot-fab::before {
             content: '';
@@ -928,6 +1370,7 @@
             animation: fabBorder 3s ease-in-out infinite;
             z-index: -1;
             opacity: 0.4;
+            will-change: background-position;
         }
         @keyframes fabBorder { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
         @keyframes fabFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
@@ -954,7 +1397,7 @@
             position: fixed;
             bottom: 95px;
             right: 25px;
-            z-index: 9997;
+            z-index: 9998;
             width: 380px;
             max-width: calc(100vw - 40px);
             max-height: 550px;
@@ -966,6 +1409,7 @@
             overflow: hidden;
             border: 1px solid rgba(226,0,26,0.15);
             animation: slideUp 0.3s ease;
+            will-change: transform, opacity;
         }
         .chatbot-widget.open { display: flex; }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
@@ -1011,32 +1455,63 @@
             line-height: 1.4;
             animation: messageIn 0.4s ease;
             word-break: break-word;
+            will-change: transform, opacity;
         }
         @keyframes messageIn { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
         .chatbot-messages .message.bot { background: #f0e8e8; color: #333333; border: 1px solid #e8e0e0; align-self: flex-start; border-bottom-left-radius: 4px; }
         .chatbot-messages .message.user { background: var(--vodacom-red); color: #ffffff; align-self: flex-end; border-bottom-right-radius: 4px; }
         .chatbot-messages .message .msg-time { font-size: 0.6rem; opacity: 0.6; display: block; margin-top: 4px; }
+
+        /* ===== TYPING INDICATOR ===== */
         .chatbot-messages .typing-indicator {
             display: none;
             align-self: flex-start;
             background: #f0e8e8;
-            padding: 10px 16px;
+            padding: 12px 18px;
             border-radius: 18px;
             border-bottom-left-radius: 4px;
             border: 1px solid #e8e0e0;
+            gap: 6px;
+            align-items: center;
         }
-        .chatbot-messages .typing-indicator span {
+
+        .chatbot-messages .typing-indicator .typing-dots {
+            display: flex;
+            gap: 5px;
+            align-items: center;
+        }
+
+        .chatbot-messages .typing-indicator .typing-dots span {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: #ccc;
-            margin: 0 3px;
-            animation: typing 1.4s infinite both;
+            background: #bbb;
+            animation: typingBounce 1.4s ease-in-out infinite both;
+            will-change: transform, background;
         }
-        .chatbot-messages .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-        .chatbot-messages .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes typing { 0%, 60%, 100% { transform: translateY(0); background: #ccc; } 30% { transform: translateY(-6px); background: var(--vodacom-red); } }
+
+        .chatbot-messages .typing-indicator .typing-dots span:nth-child(1) { animation-delay: 0s; }
+        .chatbot-messages .typing-indicator .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .chatbot-messages .typing-indicator .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typingBounce {
+            0%, 60%, 100% { transform: translateY(0); background: #bbb; }
+            30% { transform: translateY(-8px); background: var(--vodacom-red); }
+        }
+
+        .chatbot-messages .typing-indicator .typing-text {
+            font-size: 0.75rem;
+            color: #999;
+            font-weight: 300;
+            margin-left: 4px;
+            animation: typingPulse 1.2s ease-in-out infinite;
+        }
+
+        @keyframes typingPulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
 
         .chatbot-input {
             display: flex;
@@ -1123,6 +1598,7 @@
             transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             animation: progressShimmer 2s linear infinite;
+            will-change: width;
         }
         .progress-bar-container .progress-fill.red {
             background: linear-gradient(90deg, var(--red-main), var(--red-light), var(--red-main));
@@ -1154,6 +1630,7 @@
             font-weight: 700;
             animation: badgeDangerPulse 1.5s ease-in-out infinite;
             display: inline-block;
+            will-change: transform, background;
         }
         @keyframes badgeDangerPulse { 0%, 100% { transform: scale(1); background: var(--red-main); } 50% { transform: scale(1.05); background: var(--red-light); } }
 
@@ -1187,6 +1664,10 @@
                 min-width: auto;
                 width: 100%;
             }
+            .neon-logo { width: 100px; height: 100px; }
+            .loader-text-neon h1 { font-size: 1.6rem; }
+            .progress-neon { width: 200px; }
+            #actionLoader .loader-box { padding: 28px 24px 24px; min-width: auto; }
         }
         @media (max-width: 380px) {
             .loan-levels { grid-template-columns: 1fr 1fr; gap: 6px; }
@@ -1203,6 +1684,12 @@
         .chatbot-fab { color: #ffffff; }
         .chatbot-fab .bot-icon svg { stroke: #ffffff; }
         .chatbot-input button { color: #ffffff; }
+        
+        /* ===== KEYFRAMES GLOBAIS ===== */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
@@ -1210,12 +1697,60 @@
 <!-- ===== PARTICLES ===== -->
 <div class="particles" id="particles"></div>
 
-<!-- ===== LOADER ===== -->
+<!-- ===== LOADER INICIAL NEON GLASS ===== -->
 <div id="loader-wrapper">
-    <div class="tako-loader">
-        <div class="spinner"></div>
-        <h1>Tako na hora</h1>
-        <div class="loader-text">Carregando ambiente seguro...</div>
+    <div class="bg-particles">
+        <span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+    </div>
+    
+    <div class="neon-loader">
+        <div class="neon-logo">
+            <div class="ring-outer"></div>
+            <div class="ring-inner"></div>
+            <div class="ring-dots"></div>
+            <div class="center-dot-glow"></div>
+        </div>
+        
+        <div class="loader-text-neon">
+            <h1>Tako na hora</h1>
+            <span class="subtitle">Empréstimos Rápidos</span>
+        </div>
+        
+        <div class="progress-neon">
+            <div class="track">
+                <div class="fill" id="initialProgress"></div>
+            </div>
+            <div class="progress-percent">
+                <span id="progressPercent">0</span>%
+            </div>
+        </div>
+        
+        <div class="loader-status-neon" id="loaderStatus">
+            Carregando ambiente seguro
+            <span class="dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- ===== LOADING DE AÇÃO ===== -->
+<div id="actionLoader">
+    <div class="loader-box">
+        <div class="action-spinner">
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="center-dot"></div>
+        </div>
+        <div class="action-title" id="actionLoaderTitle">Processando...</div>
+        <div class="action-sub" id="actionLoaderSub">Aguarde um momento</div>
+        <div class="action-progress">
+            <div class="fill" id="actionProgressFill"></div>
+        </div>
     </div>
 </div>
 
@@ -1253,7 +1788,6 @@
     </header>
 
     <div class="container">
-        <!-- ===== BANNER SEM INTERNET ===== -->
         <div id="noInternetBanner">
             <span class="banner-icon">📡</span>
             <div class="banner-title">Sem conexão com a internet</div>
@@ -1261,7 +1795,7 @@
             <button class="banner-retry" onclick="verificarConexao()">🔄 Tentar novamente</button>
         </div>
 
-        <!-- ===== CADASTRO ===== -->
+        <!-- CADASTRO -->
         <div id="cadastroSection">
             <div class="card gold-border">
                 <h2 style="color:#333333; margin-bottom: 4px; font-size: 1.4rem;">📝 Cadastro</h2>
@@ -1294,7 +1828,7 @@
             </div>
         </div>
 
-        <!-- ===== DASHBOARD ===== -->
+        <!-- DASHBOARD -->
         <div id="dashboardSection" style="display:none;">
             <div class="whatsapp-indicator">
                 📱 <strong class="dia-nome" id="diaSemanaNomeDash">Segunda-feira</strong>: 
@@ -1355,7 +1889,6 @@
             </div>
 
             <div id="debtCardPanel" style="display:none;">
-                <!-- CARTÃO VIRTUAL - TAMANHO REDUZIDO -->
                 <div class="visa-card premium">
                     <div class="card-glow"></div>
                     <div class="card-shine"></div>
@@ -1448,7 +1981,7 @@
     </div>
 </div>
 
-<!-- ===== MODAL DE CONFIRMAÇÃO DE EMPRÉSTIMO ===== -->
+<!-- ===== MODAIS ===== -->
 <div id="loanModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1484,7 +2017,6 @@
     </div>
 </div>
 
-<!-- ===== MODAL DE PAGAMENTO ===== -->
 <div id="paymentModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1517,7 +2049,6 @@
     </div>
 </div>
 
-<!-- ===== MODAL OTP ===== -->
 <div id="otpModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1549,7 +2080,6 @@
     </div>
 </div>
 
-<!-- ===== MODAL OTP PARA DESBLOQUEIO ===== -->
 <div id="unblockModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1580,7 +2110,6 @@
     </div>
 </div>
 
-<!-- ===== MODAL CONFIRMAÇÃO OTP ===== -->
 <div id="otpConfirmationModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1598,7 +2127,6 @@
     </div>
 </div>
 
-<!-- ===== MODAL ATENDIMENTO HUMANO ===== -->
 <div id="humanSupportModal">
     <div class="modal-content">
         <div class="modal-header">
@@ -1653,7 +2181,12 @@
             <span class="msg-time">Agora</span>
         </div>
         <div class="typing-indicator" id="typingIndicator">
-            <span></span><span></span><span></span>
+            <div class="typing-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <span class="typing-text">Digitando...</span>
         </div>
     </div>
     <div class="chatbot-quick-actions">
@@ -1672,6 +2205,110 @@
 </div>
 
 <script>
+    // ============================================================
+    // ===== LOADING INICIAL NEON =====
+    // ============================================================
+    let initialLoadComplete = false;
+
+    function updateInitialLoader(progress, text) {
+        const fill = document.getElementById('initialProgress');
+        const status = document.getElementById('loaderStatus');
+        const percent = document.getElementById('progressPercent');
+        if (fill) fill.style.width = progress + '%';
+        if (percent) percent.textContent = Math.round(progress);
+        if (status && text) {
+            status.innerHTML = text + ' <span class="dots"><span></span><span></span><span></span></span>';
+        }
+    }
+
+    function startInitialLoader() {
+        let progress = 0;
+        const steps = [
+            { p: 5, msg: 'Inicializando sistema' },
+            { p: 15, msg: 'Carregando módulos de segurança' },
+            { p: 28, msg: 'Conectando ao servidor' },
+            { p: 42, msg: 'Verificando credenciais' },
+            { p: 58, msg: 'Preparando ambiente' },
+            { p: 72, msg: 'Configurando sua conta' },
+            { p: 85, msg: 'Quase pronto' },
+            { p: 95, msg: 'Finalizando' },
+            { p: 100, msg: 'Pronto! Bem-vindo' }
+        ];
+
+        let stepIndex = 0;
+        const interval = setInterval(() => {
+            if (stepIndex < steps.length) {
+                const step = steps[stepIndex];
+                progress = step.p;
+                updateInitialLoader(progress, step.msg);
+                stepIndex++;
+            } else {
+                clearInterval(interval);
+                initialLoadComplete = true;
+                setTimeout(() => {
+                    document.getElementById('loader-wrapper').classList.add('hide');
+                    setTimeout(() => {
+                        document.getElementById('loader-wrapper').style.display = 'none';
+                        if (navigator.onLine) {
+                            document.getElementById('main-app').style.display = 'block';
+                            document.getElementById('internetBlockOverlay').style.display = 'none';
+                        } else {
+                            document.getElementById('main-app').style.display = 'none';
+                            document.getElementById('internetBlockOverlay').style.display = 'flex';
+                        }
+                        if (loadUser() && usuario) {
+                            document.getElementById('cadastroSection').style.display = 'none';
+                            document.getElementById('dashboardSection').style.display = 'block';
+                            verificarBloqueio();
+                            renderizarNiveis();
+                            atualizarDividaUI();
+                            atualizarNumerosExibidos();
+                        } else {
+                            document.getElementById('cadastroSection').style.display = 'block';
+                            document.getElementById('dashboardSection').style.display = 'none';
+                        }
+                    }, 400);
+                }, 500);
+            }
+        }, 280);
+    }
+
+    // ============================================================
+    // ===== ACTION LOADER =====
+    // ============================================================
+    function showActionLoader(title, subtitle) {
+        return new Promise((resolve) => {
+            const overlay = document.getElementById('actionLoader');
+            const titleEl = document.getElementById('actionLoaderTitle');
+            const subEl = document.getElementById('actionLoaderSub');
+            const progressFill = document.getElementById('actionProgressFill');
+            
+            if (titleEl) titleEl.textContent = title || 'Processando...';
+            if (subEl) subEl.textContent = subtitle || 'Aguarde um momento';
+            
+            overlay.style.display = 'flex';
+            void overlay.offsetHeight;
+            progressFill.style.width = '0%';
+            
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 2;
+                if (progress <= 100) {
+                    progressFill.style.width = progress + '%';
+                }
+            }, 100);
+            
+            setTimeout(() => {
+                clearInterval(interval);
+                progressFill.style.width = '100%';
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                    resolve();
+                }, 300);
+            }, 5000);
+        });
+    }
+
     // ============================================================
     // ===== PARTICLES =====
     // ============================================================
@@ -1696,7 +2333,7 @@
     createParticles();
 
     // ============================================================
-    // ===== DETECÇÃO DE INTERNET - COM BLOQUEIO TOTAL =====
+    // ===== DETECÇÃO DE INTERNET =====
     // ============================================================
     let internetOnline = false;
 
@@ -1727,7 +2364,6 @@
             mainApp.style.display = 'none';
             chatFab.style.display = 'none';
             chatWidget.classList.remove('open');
-            // Fechar todos os modais abertos
             document.querySelectorAll('[id$="Modal"]').forEach(m => {
                 m.style.display = 'none';
             });
@@ -1736,68 +2372,85 @@
         }
     }
 
-    // Verifica conexão a cada 3 segundos (mais rápido para melhor UX)
     setInterval(verificarConexao, 3000);
+    window.addEventListener('online', () => { setTimeout(verificarConexao, 500); });
+    window.addEventListener('offline', () => { verificarConexao(); });
 
-    // Eventos de conexão
-    window.addEventListener('online', () => {
-        setTimeout(verificarConexao, 500);
-    });
-
-    window.addEventListener('offline', () => {
-        verificarConexao();
-    });
-
-    // Verifica conexão inicial
-    setTimeout(verificarConexao, 1000);
-
-    // Função para verificar internet antes de ações importantes
     function checkInternetAndProceed(callback) {
-        if (!verificarConexao()) {
-            // O overlay já está mostrando a mensagem
-            return false;
-        }
+        if (!verificarConexao()) return false;
         if (callback) callback();
         return true;
     }
 
     // ============================================================
-    // ===== CONFIGURAÇÕES =====
+    // ===== SISTEMA OTP POR HORA (SEGUNDA A SEXTA) =====
     // ============================================================
-    // OTPs para cada dia da semana
-    const OTP_DIAS = {
-        'segunda': '581234',
-        'terca': '672345',
-        'quarta': '763456',
-        'quinta': '854567',
-        'sexta': '945678',
-        'sabado': '123456',
-        'domingo': '654321'
-    };
+    function isDiaUtil() {
+        const hoje = new Date();
+        const diaSemana = hoje.getDay();
+        return diaSemana >= 1 && diaSemana <= 5;
+    }
 
-    // OTPs especiais para desbloqueio (diferentes dos normais)
-    const UNBLOCK_OTP_DIAS = {
-        'segunda': '987654',
-        'terca': '876543',
-        'quarta': '765432',
-        'quinta': '654321',
-        'sexta': '543210',
-        'sabado': '321098',
-        'domingo': '210987'
-    };
+    function getOTPBase() {
+        const hoje = new Date();
+        const hora = hoje.getHours();
+        const dia = hoje.getDate();
+        const mes = hoje.getMonth() + 1;
+        const ano = hoje.getFullYear();
+        
+        let base = (dia * 7 + mes * 13 + ano * 3) % 1000000;
+        base = String(base).padStart(6, '0');
+        
+        if (isDiaUtil()) {
+            let horaBase = 0;
+            if (hora >= 0 && hora < 10) horaBase = 1;
+            else if (hora >= 10 && hora < 13) horaBase = 2;
+            else if (hora >= 13 && hora < 17) horaBase = 3;
+            else if (hora >= 17 && hora < 21) horaBase = 4;
+            else if (hora >= 21) horaBase = 5;
+            
+            const offset = horaBase * 123456;
+            let result = (parseInt(base) + offset) % 1000000;
+            result = String(result).padStart(6, '0');
+            return result;
+        }
+        
+        return base;
+    }
+
+    function getUnblockOTPBase() {
+        const hoje = new Date();
+        const hora = hoje.getHours();
+        const dia = hoje.getDate();
+        const mes = hoje.getMonth() + 1;
+        const ano = hoje.getFullYear();
+        
+        let base = (dia * 11 + mes * 17 + ano * 5 + 999999) % 1000000;
+        base = String(base).padStart(6, '0');
+        
+        if (isDiaUtil()) {
+            let horaBase = 0;
+            if (hora >= 0 && hora < 10) horaBase = 1;
+            else if (hora >= 10 && hora < 13) horaBase = 2;
+            else if (hora >= 13 && hora < 17) horaBase = 3;
+            else if (hora >= 17 && hora < 21) horaBase = 4;
+            else if (hora >= 21) horaBase = 5;
+            
+            const offset = horaBase * 987654;
+            let result = (parseInt(base) + offset) % 1000000;
+            result = String(result).padStart(6, '0');
+            return result;
+        }
+        
+        return base;
+    }
 
     function getOtpDoDia() {
-        const dias = ['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
-        const hoje = new Date();
-        const dia = dias[hoje.getDay()];
-        return OTP_DIAS[dia] || OTP_DIAS['segunda'];
+        return getOTPBase();
     }
 
     function getUnblockOtpDoDia() {
-        const dias = ['domingo','segunda','terca','quarta','quinta','sexta','sabado'];
-        const hoje = new Date();
-        const dia = dias[hoje.getDay()];
-        return UNBLOCK_OTP_DIAS[dia] || UNBLOCK_OTP_DIAS['segunda'];
+        return getUnblockOTPBase();
     }
 
     let OTP_SECRETO = getOtpDoDia();
@@ -1806,8 +2459,11 @@
     setInterval(() => {
         OTP_SECRETO = getOtpDoDia();
         UNBLOCK_OTP_SECRETO = getUnblockOtpDoDia();
-    }, 3600000);
+    }, 60000);
 
+    // ============================================================
+    // ===== WHATSAPP NUMBERS =====
+    // ============================================================
     const WHATSAPP_NUMBERS = {
         'segunda': '845193471',
         'terca': '867047493',
@@ -1983,8 +2639,9 @@
             `;
             
             if(liberado && !bloqueado) {
-                btn.onclick = () => {
+                btn.onclick = async () => {
                     if (checkInternetAndProceed()) {
+                        await showActionLoader('Carregando...', 'Preparando solicitação de empréstimo');
                         abrirModalConfirmacao(level);
                     }
                 };
@@ -2396,10 +3053,12 @@
     // ============================================================
     function validarNumero(n) { return /^(84|85)[0-9]{7}$/.test(n); }
 
-    function handleCadastro(e) {
+    async function handleCadastro(e) {
         e.preventDefault();
         
         if (!checkInternetAndProceed()) return;
+        
+        await showActionLoader('Validando dados...', 'Por favor, aguarde');
         
         const nome = document.getElementById('nomeCompleto').value;
         const bilhete = document.getElementById('numBilhete').value;
@@ -2464,8 +3123,9 @@
                     <div class="agent-status"><span class="dot"></span> Online</div>
                 </div>
             `;
-            div.addEventListener('click', () => {
+            div.addEventListener('click', async () => {
                 if (checkInternetAndProceed()) {
+                    await showActionLoader('Abrindo WhatsApp...', 'Conectando com o atendente');
                     const msg = `Olá! Preciso de ajuda com minha conta Tako na hora Empréstimos. Meu nome é ${usuario?.nome || 'Cliente'}.`;
                     window.open(`https://wa.me/${agent.number}?text=${encodeURIComponent(msg)}`, '_blank');
                 }
@@ -2488,7 +3148,7 @@
         'atraso': `⚠️ *Taxa de atraso:* ${TAXA_ATRASO_DIA} MT/dia. Bloqueio após ${DIAS_BLOQUEIO} dias.`,
         'bloqueio': `🔒 *Bloqueio:* Após ${DIAS_BLOQUEIO} dias de atraso, a conta é bloqueada. Para desbloquear, clique em "Desbloquear Conta" e use o OTP de desbloqueio.`,
         'atendimento': `👤 Clique em "👤 Atendimento Humano" para falar com um agente.`,
-        'otp': `🔐 *OTP:* Código de 6 dígitos enviado para seu WhatsApp. Muda diariamente.\n\n🔓 *OTP de Desbloqueio:* Código especial de 6 dígitos para desbloquear sua conta (diferente do OTP normal).`,
+        'otp': `🔐 *OTP:* Código de 6 dígitos enviado para seu WhatsApp. Muda a cada hora (10h, 13h, 17h, 21h, 00h) de Segunda a Sexta.\n\n🔓 *OTP de Desbloqueio:* Código especial de 6 dígitos para desbloquear sua conta (diferente do OTP normal).`,
         'padrao': `🤖 Não entendi. Pergunte sobre: níveis, solicitar, juros, pagar, atraso, bloqueio ou OTP.`
     };
 
@@ -2496,7 +3156,7 @@
         const widget = document.getElementById('chatWidget');
         widget.classList.toggle('open');
         if (widget.classList.contains('open')) {
-            document.getElementById('chatInput').focus();
+            setTimeout(() => document.getElementById('chatInput').focus(), 300);
             document.querySelector('.chatbot-fab .notification-dot').style.display = 'none';
         }
     }
@@ -2520,7 +3180,8 @@
     }
 
     function showTyping() {
-        document.getElementById('typingIndicator').style.display = 'block';
+        const indicator = document.getElementById('typingIndicator');
+        indicator.style.display = 'flex';
         document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
     }
 
@@ -2539,33 +3200,72 @@
         return CHAT_RESPONSES['padrao'];
     }
 
-    function handleChatSend() {
+    async function handleChatSend() {
         if (!checkInternetAndProceed()) return;
         const input = document.getElementById('chatInput');
         const msg = input.value.trim();
         if (!msg) return;
+        
         addUserMessage(msg);
         input.value = '';
+        
         showTyping();
-        setTimeout(() => {
-            hideTyping();
-            addBotMessage(getResponse(msg));
-        }, 800 + Math.random() * 800);
+        
+        const delay = 1000 + Math.random() * 1000;
+        await new Promise(resolve => setTimeout(resolve, delay));
+        
+        hideTyping();
+        addBotMessage(getResponse(msg));
     }
 
     // ============================================================
     // ===== EVENT LISTENERS =====
     // ============================================================
-    document.getElementById('chatFab').addEventListener('click', toggleChat);
-    document.getElementById('closeChat').addEventListener('click', toggleChat);
-    document.getElementById('sendChatBtn').addEventListener('click', handleChatSend);
-    document.getElementById('chatInput').addEventListener('keypress', e => { if(e.key === 'Enter') handleChatSend(); });
+    // Chatbot - usando addEventListener para garantir funcionamento
+    const chatFab = document.getElementById('chatFab');
+    const closeChat = document.getElementById('closeChat');
+    const sendChatBtn = document.getElementById('sendChatBtn');
+    const chatInput = document.getElementById('chatInput');
+
+    if (chatFab) {
+        chatFab.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            toggleChat();
+        });
+    }
+
+    if (closeChat) {
+        closeChat.addEventListener('click', function(e) {
+            e.preventDefault();
+            document.getElementById('chatWidget').classList.remove('open');
+        });
+    }
+
+    if (sendChatBtn) {
+        sendChatBtn.addEventListener('click', handleChatSend);
+    }
+
+    if (chatInput) {
+        chatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                handleChatSend();
+            }
+        });
+    }
+    
     document.querySelectorAll('.chatbot-quick-actions button').forEach(btn => {
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', async function(e) {
+            e.preventDefault();
             const msg = this.getAttribute('data-msg');
-            if (msg) { document.getElementById('chatInput').value = msg; handleChatSend(); }
+            if (msg) {
+                document.getElementById('chatInput').value = msg;
+                await handleChatSend();
+            }
         });
     });
+    
     document.getElementById('humanSupportBtn').addEventListener('click', abrirAtendimentoHumano);
 
     document.getElementById('closeHumanSupport').addEventListener('click', () => {
@@ -2587,7 +3287,6 @@
         if(e.target === e.currentTarget) { fecharModalOTP(); pendingAction = null; }
     });
 
-    // UNBLOCK OTP
     document.getElementById('closeUnblockModal').addEventListener('click', fecharModalUnblock);
     document.getElementById('cancelUnblockBtn').addEventListener('click', fecharModalUnblock);
     document.getElementById('verifyUnblockBtn').addEventListener('click', verificarUnblockOTP);
@@ -2597,7 +3296,6 @@
     });
     document.getElementById('btnUnblockAccount').addEventListener('click', abrirModalUnblock);
 
-    // OTP input filter
     document.getElementById('otpInput').addEventListener('input', function() {
         this.value = this.value.replace(/\D/g, '').slice(0, 6);
     });
@@ -2628,15 +3326,19 @@
     });
 
     document.getElementById('cadastroForm')?.addEventListener('submit', handleCadastro);
-    document.getElementById('sendPaymentWhatsBtn')?.addEventListener('click', function() {
+    
+    document.getElementById('sendPaymentWhatsBtn')?.addEventListener('click', async function() {
         if (!document.getElementById('msgPagamento').value.trim()) {
             alert('Por favor, descreva o comprovativo de pagamento.');
             return;
         }
+        await showActionLoader('Preparando pagamento...', 'Verificando dados');
         abrirModalOTP('payment');
     });
-    document.getElementById('confirmLoanBtn')?.addEventListener('click', function() {
+    
+    document.getElementById('confirmLoanBtn')?.addEventListener('click', async function() {
         if (!nivelSelecionado || !usuario) return;
+        await showActionLoader('Preparando solicitação...', 'Verificando dados do empréstimo');
         abrirModalOTP('loan');
     });
 
@@ -2673,6 +3375,16 @@
         }
     });
 
+    document.getElementById('pagarDebtBtn')?.addEventListener('click', async function() {
+        if (this.textContent.includes('Desbloquear')) {
+            await showActionLoader('Preparando desbloqueio...', 'Aguarde');
+            abrirModalUnblock();
+        } else {
+            await showActionLoader('Preparando pagamento...', 'Carregando dados da dívida');
+            iniciarPagamento();
+        }
+    });
+
     // ============================================================
     // ===== INICIALIZAÇÃO =====
     // ============================================================
@@ -2680,32 +3392,7 @@
         carregarProvincias();
         atualizarNumerosExibidos();
         verificarConexao();
-        
-        setTimeout(() => {
-            document.getElementById('loader-wrapper').classList.add('hide');
-            setTimeout(() => {
-                document.getElementById('loader-wrapper').style.display = 'none';
-                // Só mostra o app se tiver internet
-                if (navigator.onLine) {
-                    document.getElementById('main-app').style.display = 'block';
-                    document.getElementById('internetBlockOverlay').style.display = 'none';
-                } else {
-                    document.getElementById('main-app').style.display = 'none';
-                    document.getElementById('internetBlockOverlay').style.display = 'flex';
-                }
-                if (loadUser() && usuario) {
-                    document.getElementById('cadastroSection').style.display = 'none';
-                    document.getElementById('dashboardSection').style.display = 'block';
-                    verificarBloqueio();
-                    renderizarNiveis();
-                    atualizarDividaUI();
-                    atualizarNumerosExibidos();
-                } else {
-                    document.getElementById('cadastroSection').style.display = 'block';
-                    document.getElementById('dashboardSection').style.display = 'none';
-                }
-            }, 600);
-        }, 1800);
+        startInitialLoader();
     });
 
     setInterval(() => {
@@ -2714,14 +3401,14 @@
             atualizarDividaUI();
             renderizarNiveis();
         }
-        // Verifica conexão periodicamente
         verificarConexao();
-    }, 10000); // A cada 10 segundos
+    }, 10000);
 
-    console.log(`🔐 OTP do dia: ${getOtpDoDia()}`);
+    console.log(`🔐 OTP do dia/hora: ${getOtpDoDia()}`);
     console.log(`🔓 OTP de desbloqueio: ${getUnblockOtpDoDia()}`);
     console.log(`📱 WhatsApp: ${getNumeroWhatsAppDoDia()} (${getNomeDiaSemana()})`);
     console.log(`📡 Status Internet: ${navigator.onLine ? 'Online' : 'Offline'}`);
+    console.log(`🕐 OTP muda em: 10h, 13h, 17h, 21h, 00h (Segunda a Sexta)`);
 </script>
 </body>
 </html>
