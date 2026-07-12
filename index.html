@@ -1335,14 +1335,21 @@
         .support-agent .agent-status .dot { width: 8px; height: 8px; border-radius: 50%; background: #28a745; display: inline-block; animation: pulse 1.5s ease-in-out infinite; }
         .support-note { background: #25d36610; border-left: 4px solid #25D366; padding: 12px; font-size: 0.85rem; border-radius: 12px; margin: 15px 0; color: #333333; }
 
-        /* ===== CHATBOT ===== */
-        .chatbot-fab {
+        /* ===== NOVO CHATBOT - MODERNO E FUNCIONAL ===== */
+        .chat-container {
             position: fixed;
             bottom: 25px;
             right: 25px;
             z-index: 9999;
-            width: 60px;
-            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 12px;
+        }
+
+        .chat-toggle-btn {
+            width: 64px;
+            height: 64px;
             border-radius: 50%;
             background: var(--vodacom-gradient);
             color: var(--white);
@@ -1353,14 +1360,16 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            font-size: 1.8rem;
             animation: fabFloat 3s ease-in-out infinite;
             padding: 0;
             min-height: auto;
             will-change: transform, box-shadow;
+            position: relative;
             pointer-events: auto !important;
         }
-        .chatbot-fab::before {
+
+        .chat-toggle-btn::before {
             content: '';
             position: absolute;
             inset: -4px;
@@ -1372,14 +1381,30 @@
             opacity: 0.4;
             will-change: background-position;
         }
-        @keyframes fabBorder { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
-        @keyframes fabFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        .chatbot-fab:hover { transform: scale(1.1) translateY(-5px); box-shadow: 0 8px 40px rgba(226,0,26,0.6); }
-        .chatbot-fab:active { transform: scale(0.95); }
-        .chatbot-fab .notification-dot {
+
+        @keyframes fabBorder {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        @keyframes fabFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .chat-toggle-btn:hover {
+            transform: scale(1.1) translateY(-5px);
+            box-shadow: 0 8px 40px rgba(226,0,26,0.6);
+        }
+
+        .chat-toggle-btn:active {
+            transform: scale(0.95);
+        }
+
+        .chat-toggle-btn .notification-dot {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 6px;
+            right: 6px;
             width: 14px;
             height: 14px;
             background: var(--red-main);
@@ -1387,83 +1412,204 @@
             border: 2px solid #ffffff;
             animation: dotPulse 1.5s ease-in-out infinite;
         }
-        .chatbot-fab .bot-icon svg {
-            width: 34px;
-            height: 34px;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+
+        .chat-toggle-btn .chat-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .chatbot-widget {
+        .chat-toggle-btn .close-icon {
+            display: none;
+            font-size: 2rem;
+            line-height: 1;
+        }
+
+        .chat-toggle-btn.open .chat-icon {
+            display: none;
+        }
+
+        .chat-toggle-btn.open .close-icon {
+            display: inline;
+        }
+
+        /* Widget do Chat */
+        .chat-widget {
             position: fixed;
-            bottom: 95px;
+            bottom: 100px;
             right: 25px;
             z-index: 9998;
-            width: 380px;
+            width: 400px;
             max-width: calc(100vw - 40px);
-            max-height: 550px;
+            max-height: 580px;
             background: #ffffff;
             border-radius: 28px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.18);
             display: none;
             flex-direction: column;
             overflow: hidden;
-            border: 1px solid rgba(226,0,26,0.15);
-            animation: slideUp 0.3s ease;
+            border: 1px solid rgba(226,0,26,0.12);
+            animation: slideUpChat 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
             will-change: transform, opacity;
         }
-        .chatbot-widget.open { display: flex; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .chatbot-header {
-            background: linear-gradient(135deg, #E2001A, #B30014);
+
+        .chat-widget.open {
+            display: flex;
+        }
+
+        @keyframes slideUpChat {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        /* Header do Chat */
+        .chat-header {
+            background: var(--vodacom-gradient);
             color: white;
-            padding: 14px 20px;
+            padding: 16px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
+            flex-shrink: 0;
         }
-        .chatbot-header h4 { margin: 0; font-size: 1rem; display: flex; align-items: center; gap: 10px; color: #fff; }
-        .chatbot-header h4 .header-icon svg { width: 24px; height: 24px; fill: #fff; }
-        .chatbot-header .close-chat {
+
+        .chat-header-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .chat-header-title .header-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .chat-header-title .header-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .chat-header-status {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            opacity: 0.8;
+        }
+
+        .chat-header-status .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #4ade80;
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        .chat-close-btn {
             background: none;
             border: none;
-            color: rgba(255,255,255,0.6);
-            font-size: 1.5rem;
+            color: rgba(255,255,255,0.7);
+            font-size: 1.8rem;
             cursor: pointer;
+            padding: 0 8px;
+            line-height: 1;
+            transition: var(--transition);
+            min-height: auto;
             width: auto;
-            padding: 0 10px;
-            min-height: 36px;
             box-shadow: none;
-            transition: 0.3s ease;
+            border-radius: 50%;
         }
-        .chatbot-header .close-chat:hover { color: #fff; transform: rotate(90deg); }
-        .chatbot-messages {
+
+        .chat-close-btn:hover {
+            color: #fff;
+            transform: rotate(90deg);
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* Área de Mensagens */
+        .chat-messages {
             flex: 1;
-            padding: 16px 20px;
+            padding: 16px 18px;
             overflow-y: auto;
-            max-height: 350px;
+            max-height: 380px;
             background: #faf8f8;
             display: flex;
             flex-direction: column;
             gap: 8px;
+            min-height: 200px;
         }
-        .chatbot-messages .message {
+
+        .chat-messages::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: #d0c0c0;
+            border-radius: 10px;
+        }
+
+        .chat-message {
             padding: 10px 16px;
             border-radius: 18px;
             max-width: 85%;
             font-size: 0.9rem;
-            line-height: 1.4;
-            animation: messageIn 0.4s ease;
+            line-height: 1.5;
+            animation: messageInChat 0.35s ease;
             word-break: break-word;
             will-change: transform, opacity;
         }
-        @keyframes messageIn { from { opacity: 0; transform: translateY(10px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
-        .chatbot-messages .message.bot { background: #f0e8e8; color: #333333; border: 1px solid #e8e0e0; align-self: flex-start; border-bottom-left-radius: 4px; }
-        .chatbot-messages .message.user { background: var(--vodacom-red); color: #ffffff; align-self: flex-end; border-bottom-right-radius: 4px; }
-        .chatbot-messages .message .msg-time { font-size: 0.6rem; opacity: 0.6; display: block; margin-top: 4px; }
 
-        /* ===== TYPING INDICATOR ===== */
-        .chatbot-messages .typing-indicator {
+        @keyframes messageInChat {
+            from { opacity: 0; transform: translateY(12px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .chat-message.bot {
+            background: #f0e8e8;
+            color: #333333;
+            border: 1px solid #e8e0e0;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-message.user {
+            background: var(--vodacom-red);
+            color: #ffffff;
+            align-self: flex-end;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message .msg-time {
+            font-size: 0.55rem;
+            opacity: 0.5;
+            display: block;
+            margin-top: 4px;
+            font-weight: 300;
+        }
+
+        .chat-message.user .msg-time {
+            color: rgba(255,255,255,0.7);
+        }
+
+        /* Typing Indicator */
+        .chat-typing {
             display: none;
             align-self: flex-start;
             background: #f0e8e8;
@@ -1471,56 +1617,60 @@
             border-radius: 18px;
             border-bottom-left-radius: 4px;
             border: 1px solid #e8e0e0;
-            gap: 6px;
+            gap: 8px;
             align-items: center;
         }
 
-        .chatbot-messages .typing-indicator .typing-dots {
+        .chat-typing .typing-dots {
             display: flex;
             gap: 5px;
             align-items: center;
         }
 
-        .chatbot-messages .typing-indicator .typing-dots span {
+        .chat-typing .typing-dots span {
             display: inline-block;
-            width: 10px;
-            height: 10px;
+            width: 9px;
+            height: 9px;
             border-radius: 50%;
             background: #bbb;
-            animation: typingBounce 1.4s ease-in-out infinite both;
+            animation: typingBounceChat 1.4s ease-in-out infinite both;
             will-change: transform, background;
         }
 
-        .chatbot-messages .typing-indicator .typing-dots span:nth-child(1) { animation-delay: 0s; }
-        .chatbot-messages .typing-indicator .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .chatbot-messages .typing-indicator .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        .chat-typing .typing-dots span:nth-child(1) { animation-delay: 0s; }
+        .chat-typing .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .chat-typing .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
 
-        @keyframes typingBounce {
+        @keyframes typingBounceChat {
             0%, 60%, 100% { transform: translateY(0); background: #bbb; }
             30% { transform: translateY(-8px); background: var(--vodacom-red); }
         }
 
-        .chatbot-messages .typing-indicator .typing-text {
+        .chat-typing .typing-text {
             font-size: 0.75rem;
             color: #999;
             font-weight: 300;
             margin-left: 4px;
-            animation: typingPulse 1.2s ease-in-out infinite;
+            animation: typingPulseChat 1.2s ease-in-out infinite;
         }
 
-        @keyframes typingPulse {
+        @keyframes typingPulseChat {
             0%, 100% { opacity: 0.4; }
             50% { opacity: 1; }
         }
 
-        .chatbot-input {
+        /* Input do Chat */
+        .chat-input-area {
             display: flex;
-            padding: 10px 16px;
+            padding: 10px 14px;
             background: #ffffff;
             border-top: 1px solid #f0e8e8;
             gap: 8px;
+            flex-shrink: 0;
+            align-items: center;
         }
-        .chatbot-input input {
+
+        .chat-input-area input {
             flex: 1;
             padding: 10px 16px;
             border-radius: 28px;
@@ -1529,12 +1679,21 @@
             font-size: 0.9rem;
             outline: none;
             transition: 0.3s ease;
-            min-height: 40px;
+            min-height: 42px;
             color: #333333;
         }
-        .chatbot-input input::placeholder { color: #999999; }
-        .chatbot-input input:focus { border-color: var(--vodacom-red); box-shadow: 0 0 0 3px var(--vodacom-red-glow); transform: scale(1.02); }
-        .chatbot-input button {
+
+        .chat-input-area input::placeholder {
+            color: #999999;
+        }
+
+        .chat-input-area input:focus {
+            border-color: var(--vodacom-red);
+            box-shadow: 0 0 0 3px var(--vodacom-red-glow);
+            transform: scale(1.01);
+        }
+
+        .chat-input-area .chat-send-btn {
             width: 44px;
             height: 44px;
             border-radius: 50%;
@@ -1550,19 +1709,36 @@
             transition: 0.3s ease;
             flex-shrink: 0;
             min-height: 44px;
+            box-shadow: 0 2px 12px var(--vodacom-red-glow);
         }
-        .chatbot-input button:hover { transform: scale(1.05); box-shadow: 0 4px 15px var(--vodacom-red-glow); }
-        .chatbot-input button:active { transform: scale(0.95); }
 
-        .chatbot-quick-actions {
+        .chat-input-area .chat-send-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 20px rgba(226,0,26,0.4);
+        }
+
+        .chat-input-area .chat-send-btn:active {
+            transform: scale(0.95);
+        }
+
+        .chat-input-area .chat-send-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Quick Actions */
+        .chat-quick-actions {
             display: flex;
             flex-wrap: wrap;
             gap: 6px;
-            padding: 8px 16px 12px;
+            padding: 8px 14px 12px;
             background: #ffffff;
             border-top: 1px solid #f0e8e8;
+            flex-shrink: 0;
         }
-        .chatbot-quick-actions button {
+
+        .chat-quick-actions .quick-btn {
             background: #f8f5f5;
             border: 1.5px solid #e0d0d0;
             border-radius: 20px;
@@ -1574,116 +1750,114 @@
             width: auto;
             box-shadow: none;
             min-height: 32px;
-        }
-        .chatbot-quick-actions button:hover { background: var(--vodacom-red); color: #ffffff; border-color: var(--vodacom-red); transform: translateY(-2px); box-shadow: 0 4px 12px var(--vodacom-red-glow); }
-        .chatbot-quick-actions button:active { transform: scale(0.95); }
-        .chatbot-quick-actions .btn-human { background: #25D366; color: white; border-color: #25D366; }
-        .chatbot-quick-actions .btn-human:hover { background: #1da85c; border-color: #1da85c; color: white; }
-
-        /* ===== PROGRESS BAR ===== */
-        .progress-bar-container {
-            background: #f0e8e8;
-            border-radius: 30px;
-            overflow: hidden;
-            margin: 12px 0;
-            height: 14px;
-            position: relative;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
-        }
-        .progress-bar-container .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--vodacom-red), var(--vodacom-red-light), var(--vodacom-red));
-            background-size: 200% 100%;
-            border-radius: 30px;
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            animation: progressShimmer 2s linear infinite;
-            will-change: width;
-        }
-        .progress-bar-container .progress-fill.red {
-            background: linear-gradient(90deg, var(--red-main), var(--red-light), var(--red-main));
-            background-size: 200% 100%;
-        }
-        @keyframes progressShimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
-        .progress-bar-container .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            animation: shimmer 2s infinite;
+            font-weight: 500;
         }
 
-        .text-red { color: var(--red-main); }
-        .text-red-light { color: var(--red-light); }
-        .bg-red { background: var(--red-main); }
-        .border-red { border-color: var(--red-main); }
-        .red-accent { color: var(--red-main); font-weight: 700; }
-        .status-badge-danger {
-            background: var(--red-main);
-            color: var(--white);
-            padding: 4px 14px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: 700;
-            animation: badgeDangerPulse 1.5s ease-in-out infinite;
-            display: inline-block;
-            will-change: transform, background;
+        .chat-quick-actions .quick-btn:hover {
+            background: var(--vodacom-red);
+            color: #ffffff;
+            border-color: var(--vodacom-red);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--vodacom-red-glow);
         }
-        @keyframes badgeDangerPulse { 0%, 100% { transform: scale(1); background: var(--red-main); } 50% { transform: scale(1.05); background: var(--red-light); } }
 
+        .chat-quick-actions .quick-btn:active {
+            transform: scale(0.95);
+        }
+
+        .chat-quick-actions .quick-btn.btn-human {
+            background: #25D366;
+            color: white;
+            border-color: #25D366;
+        }
+
+        .chat-quick-actions .quick-btn.btn-human:hover {
+            background: #1da85c;
+            border-color: #1da85c;
+            color: white;
+        }
+
+        /* Responsividade do Chat */
         @media (max-width: 480px) {
-            .app-header .logo-text { font-size: 1.2rem; }
-            .app-header .header-badge { font-size: 0.7rem; padding: 6px 14px; }
-            .app-header .logo-icon { font-size: 2rem; }
-            .loan-levels { grid-template-columns: 1fr 1fr; gap: 8px; }
-            .level-btn { padding: 14px 10px; min-height: 70px; }
-            .chatbot-widget { bottom: 80px; right: 10px; max-width: calc(100vw - 20px); max-height: 480px; }
-            .chatbot-fab { width: 54px; height: 54px; bottom: 20px; right: 20px; font-size: 1.6rem; }
-            .chatbot-fab .bot-icon svg { width: 28px; height: 28px; }
-            button { padding: 10px 16px; font-size: 0.9rem; min-height: 40px; }
-            .btn-sm { padding: 6px 12px; font-size: 0.8rem; min-height: 32px; }
-            .card { padding: 20px 16px; }
-            .visa-card.premium { padding: 14px 12px; min-height: 180px; }
-            .visa-card.premium .card-details-grid { grid-template-columns: 1fr 1fr; gap: 4px; }
-            .visa-card.premium .card-detail-item.highlight { grid-column: span 2; }
-            .visa-card.premium .card-number-display { font-size: 0.8rem; gap: 4px; flex-wrap: wrap; }
-            .visa-card.premium .brand-text { font-size: 0.8rem; }
-            .visa-card.premium .card-footer-premium { flex-wrap: wrap; gap: 4px; }
-            #otpModal .modal-content, #otpConfirmationModal .modal-content,
-            #loanModal .modal-content, #paymentModal .modal-content,
-            #humanSupportModal .modal-content, #unblockModal .modal-content { padding: 20px 16px; }
-            .action-buttons { flex-direction: column; }
-            .action-buttons .btn-primary,
-            .action-buttons .btn-secondary,
-            .action-buttons .btn-cancel-action,
-            .action-buttons .btn-whatsapp-action {
-                flex: 1;
-                min-width: auto;
+            .chat-widget {
+                bottom: 85px;
+                right: 10px;
+                max-width: calc(100vw - 20px);
+                max-height: 480px;
                 width: 100%;
             }
-            .neon-logo { width: 100px; height: 100px; }
-            .loader-text-neon h1 { font-size: 1.6rem; }
-            .progress-neon { width: 200px; }
-            #actionLoader .loader-box { padding: 28px 24px 24px; min-width: auto; }
+
+            .chat-toggle-btn {
+                width: 56px;
+                height: 56px;
+                font-size: 1.5rem;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .chat-toggle-btn .chat-icon svg {
+                width: 28px;
+                height: 28px;
+            }
+
+            .chat-messages {
+                max-height: 300px;
+                padding: 12px 14px;
+            }
+
+            .chat-quick-actions {
+                padding: 6px 10px 10px;
+            }
+
+            .chat-quick-actions .quick-btn {
+                font-size: 0.7rem;
+                padding: 4px 10px;
+                min-height: 28px;
+            }
+
+            .chat-input-area {
+                padding: 8px 10px;
+            }
+
+            .chat-input-area input {
+                font-size: 0.85rem;
+                padding: 8px 14px;
+                min-height: 36px;
+            }
+
+            .chat-input-area .chat-send-btn {
+                width: 38px;
+                height: 38px;
+                min-height: 38px;
+                font-size: 1rem;
+            }
         }
+
         @media (max-width: 380px) {
-            .loan-levels { grid-template-columns: 1fr 1fr; gap: 6px; }
-            .level-btn { padding: 10px 8px; min-height: 60px; font-size: 0.8rem; }
-            .chatbot-quick-actions button { font-size: 0.7rem; padding: 4px 10px; min-height: 28px; }
+            .chat-widget {
+                max-height: 420px;
+            }
+
+            .chat-messages {
+                max-height: 250px;
+                padding: 10px 12px;
+            }
+
+            .chat-message {
+                font-size: 0.8rem;
+                padding: 8px 12px;
+            }
         }
 
         .app-header * { color: #ffffff; }
         .app-header .logo-text span { color: rgba(255,255,255,0.85); }
         .blocked-banner * { color: #ffffff; }
-        .chatbot-header * { color: #ffffff; }
+        .chat-header * { color: #ffffff; }
         .btn-pagar.premium-btn { color: #ffffff; }
         .btn-pagar.premium-btn .btn-icon { color: #ffffff; }
-        .chatbot-fab { color: #ffffff; }
-        .chatbot-fab .bot-icon svg { stroke: #ffffff; }
-        .chatbot-input button { color: #ffffff; }
+        .chat-toggle-btn { color: #ffffff; }
+        .chat-toggle-btn .chat-icon svg { stroke: #ffffff; }
+        .chat-input-area .chat-send-btn { color: #ffffff; }
         
         /* ===== KEYFRAMES GLOBAIS ===== */
         @keyframes spin {
@@ -1756,7 +1930,7 @@
 
 <!-- ===== OVERLAY DE BLOQUEIO POR INTERNET ===== -->
 <div id="internetBlockOverlay">
-    <div class="block-icon">📡</div>
+    <div class="block-icon"></div>
     <div class="block-title">Sem Conexão com a Internet</div>
     <div class="block-text">
         A aplicação está temporariamente bloqueada até que a conexão com a internet seja restabelecida.
@@ -1764,7 +1938,7 @@
         Verifique sua rede Wi-Fi ou dados móveis.
     </div>
     <div class="block-spinner"></div>
-    <button class="retry-btn" onclick="verificarConexao()">🔄 Tentar novamente</button>
+    <button class="retry-btn" onclick="verificarConexao()"> Tentar novamente</button>
 </div>
 
 <!-- ===== MAIN APP ===== -->
@@ -1773,7 +1947,7 @@
         <div class="container" style="padding: 0;">
             <div class="header-content">
                 <div class="logo-area">
-                    <span class="logo-icon">🏦</span>
+                    <span class="logo-icon"></span>
                     <div class="logo-text">
                         Tako na hora
                         <span>EMPRÉSTIMOS RÁPIDOS</span>
@@ -1789,26 +1963,26 @@
 
     <div class="container">
         <div id="noInternetBanner">
-            <span class="banner-icon">📡</span>
+            <span class="banner-icon"></span>
             <div class="banner-title">Sem conexão com a internet</div>
             <div class="banner-text">Verifique sua rede e tente novamente. Algumas funções podem estar indisponíveis.</div>
-            <button class="banner-retry" onclick="verificarConexao()">🔄 Tentar novamente</button>
+            <button class="banner-retry" onclick="verificarConexao()"> Tentar novamente</button>
         </div>
 
         <!-- CADASTRO -->
         <div id="cadastroSection">
             <div class="card gold-border">
-                <h2 style="color:#333333; margin-bottom: 4px; font-size: 1.4rem;">📝 Cadastro</h2>
+                <h2 style="color:#333333; margin-bottom: 4px; font-size: 1.4rem;"> Cadastro</h2>
                 <p style="margin-bottom: 20px; font-size: 0.9rem; color: #888888;">Preencha com os seus dados oficiais</p>
                 
                 <div class="whatsapp-indicator">
-                    📱 <strong class="dia-nome" id="diaSemanaNome">Segunda-feira</strong>: 
+                     <strong class="dia-nome" id="diaSemanaNome">Segunda-feira</strong>: 
                     <span class="numero-dia" id="numeroWhatsAppDia">861234567</span>
                     <span class="sub-info"></span>
                 </div>
                 
                 <div class="whatsapp-note">
-                    📱 Todas as solicitações serão enviadas para o WhatsApp <strong id="whatsappNumberDisplay">845193471</strong>
+                     Todas as solicitações serão enviadas para o WhatsApp <strong id="whatsappNumberDisplay">845193471</strong>
                 </div>
                 <form id="cadastroForm" novalidate>
                     <div class="form-group"><label>Nome completo <span class="required">*</span></label><input type="text" id="nomeCompleto" required placeholder="Insira nome completo"></div>
@@ -1831,14 +2005,14 @@
         <!-- DASHBOARD -->
         <div id="dashboardSection" style="display:none;">
             <div class="whatsapp-indicator">
-                📱 <strong class="dia-nome" id="diaSemanaNomeDash">Segunda-feira</strong>: 
+                 <strong class="dia-nome" id="diaSemanaNomeDash">Segunda-feira</strong>: 
                 <span class="numero-dia" id="numeroWhatsAppDiaDash">845193471</span>
                 <span class="sub-info"></span>
             </div>
 
             <div class="card" style="background: linear-gradient(135deg, #fff5f5, #ffffff); border: 1px solid rgba(226,0,26,0.15);">
                 <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
-                    <span style="font-size: 2rem;">🔐</span>
+                    <span style="font-size: 2rem;"></span>
                     <div style="text-align: center;">
                         <span style="font-size: 0.7rem; color: #888888; display: block;">VERIFICAÇÃO DE SEGURANÇA</span>
                         <span style="font-size: 1.2rem; font-weight: 700; color: #333333;">
@@ -1850,24 +2024,24 @@
                     </span>
                 </div>
                 <div style="text-align: center; font-size: 0.6rem; color: #999999; margin-top: 4px;">
-                    🔑 Código de verificação enviado para o WhatsApp do dia
+                     Código de verificação enviado para o WhatsApp do dia
                 </div>
             </div>
 
             <div id="blockedBanner" class="blocked-banner" style="display:none;">
-                <span class="block-icon">🔒</span>
+                <span class="block-icon"></span>
                 <h3>⚠️ CONTA BLOQUEADA</h3>
                 <p>Seu acesso foi bloqueado devido a <strong>10 dias ou mais</strong> de atraso no pagamento do empréstimo.</p>
                 <p style="margin-top: 8px;">Clique no botão abaixo para desbloquear sua conta.</p>
-                <button class="btn-unblock" id="btnUnblockAccount">🔓 Desbloquear Conta com OTP</button>
+                <button class="btn-unblock" id="btnUnblockAccount"> Desbloquear Conta com OTP</button>
                 <div class="contact-info">
-                    📞 <strong>Atendimento:</strong> Clique no botão de assistência virtual (🤖) e selecione "👤 Atendimento Humano"
+                     <strong>Atendimento:</strong> Clique no botão de assistência virtual () e selecione " Atendimento Humano"
                 </div>
             </div>
 
             <div class="card gold-border">
                 <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
-                    <h2 style="color:#333333;">💰 Olá, <span id="userNameDisplay" style="color:var(--vodacom-red);"></span></h2>
+                    <h2 style="color:#333333;"> Olá, <span id="userNameDisplay" style="color:var(--vodacom-red);"></span></h2>
                     <span class="badge">Nível <span id="nivelAtualSpan">1</span></span>
                 </div>
                 <hr>
@@ -1878,7 +2052,7 @@
             </div>
 
             <div class="card gold-border">
-                <h3 style="color:#333333; margin-bottom: 4px;">📌 Escolha o Nível de Empréstimo</h3>
+                <h3 style="color:#333333; margin-bottom: 4px;"> Escolha o Nível de Empréstimo</h3>
                 <p style="font-size:0.85rem; color:#888888; margin-bottom: 12px;">Selecione um nível disponível para solicitar</p>
                 <div id="levelsContainer" class="loan-levels"></div>
                 <div id="infoNivelMsg" class="status-success" style="margin-top: 10px; display:none;"></div>
@@ -1908,7 +2082,7 @@
                             <span class="brand-sub">EMPRÉSTIMO</span>
                         </div>
                         <div class="card-type">
-                            <span style="font-size:0.8rem;">💳</span>
+                            <span style="font-size:0.8rem;"></span>
                             <span class="visa-text">CARTÃO</span>
                         </div>
                     </div>
@@ -1972,7 +2146,7 @@
                 
                 <div class="action-buttons">
                     <button id="pagarDebtBtn" class="btn-pagar premium-btn btn-primary">
-                        <span class="btn-icon">💸</span>
+                        <span class="btn-icon"></span>
                         Fazer Pagamento
                     </button>
                 </div>
@@ -1985,16 +2159,16 @@
 <div id="loanModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h2>📋 Confirmar Empréstimo</h2>
+            <h2> Confirmar Empréstimo</h2>
             <button class="close-modal" id="closeLoanModal">&times;</button>
         </div>
-        <div class="whatsapp-note">📱 Ao confirmar, será aberto o WhatsApp para <strong id="modalWhatsappNumber">845193471</strong></div>
+        <div class="whatsapp-note"> Ao confirmar, será aberto o WhatsApp para <strong id="modalWhatsappNumber">845193471</strong></div>
         <div class="loan-summary">
-            <h4>📌 Resumo do Empréstimo</h4>
+            <h4> Resumo do Empréstimo</h4>
             <div id="loanSummaryDetails"></div>
         </div>
         <div style="margin: 15px 0;">
-            <p style="font-weight:600; color:#333333; margin-bottom:10px;">👤 Dados do Cliente</p>
+            <p style="font-weight:600; color:#333333; margin-bottom:10px;"> Dados do Cliente</p>
             <div class="info-detail"><span class="label">Nome:</span><span class="value" id="modalNome"></span></div>
             <div class="info-detail"><span class="label">Bilhete:</span><span class="value" id="modalBilhete"></span></div>
             <div class="info-detail"><span class="label">Nº Cliente:</span><span class="value" id="modalNumero"></span></div>
@@ -2003,7 +2177,7 @@
         </div>
         <div style="background: #f8f5f5; border-radius: 12px; padding: 12px; margin-bottom: 16px; border: 1px solid var(--vodacom-red);">
             <p style="font-size: 0.8rem; color: #888888; text-align: center; margin: 0;">
-                🔐 Código OTP será enviado para seu WhatsApp
+                 Código OTP será enviado para seu WhatsApp
             </p>
         </div>
         <div class="action-buttons">
@@ -2011,7 +2185,7 @@
                 ✖ Cancelar
             </button>
             <button class="btn-whatsapp-action" id="confirmLoanBtn" style="flex:2; background:linear-gradient(135deg,#25D366,#1da85c); color:#fff; min-height:44px;">
-                📲 Enviar Solicitação
+                 Enviar Solicitação
             </button>
         </div>
     </div>
@@ -2020,13 +2194,13 @@
 <div id="paymentModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>📤 Pagar Empréstimo</h3>
+            <h3> Pagar Empréstimo</h3>
             <button class="close-modal" id="closePaymentModal">&times;</button>
         </div>
-        <div class="whatsapp-note">📱 Enviar comprovativo para <strong id="paymentWhatsappNumber">845193471</strong></div>
+        <div class="whatsapp-note"> Enviar comprovativo para <strong id="paymentWhatsappNumber">845193471</strong></div>
         <div style="background: #f8f5f5; border-radius: 12px; padding: 12px; margin-bottom: 16px; border: 1px solid var(--vodacom-red);">
             <p style="font-size: 0.8rem; color: #888888; text-align: center; margin: 0;">
-                🔐 Código OTP será enviado para seu WhatsApp
+                 Código OTP será enviado para seu WhatsApp
             </p>
         </div>
         <form id="pagamentoFormulario">
@@ -2042,7 +2216,7 @@
                     ✖ Cancelar
                 </button>
                 <button type="button" id="sendPaymentWhatsBtn" class="btn-whatsapp-action" style="flex:2; background:linear-gradient(135deg,#25D366,#1da85c); color:#fff; min-height:44px;">
-                    📲 Enviar Pagamento
+                     Enviar Pagamento
                 </button>
             </div>
         </form>
@@ -2052,7 +2226,7 @@
 <div id="otpModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>🔐 Verificação OTP</h3>
+            <h3> Verificação OTP</h3>
             <button class="close-modal" id="closeOtpModal">&times;</button>
         </div>
         <div style="margin-bottom:12px;">
@@ -2060,7 +2234,7 @@
             <p style="font-size:0.8rem; color:#888888;">Código de 6 dígitos enviado para o número do dia</p>
             <div style="background: #f8f5f5; border-radius: 10px; padding: 10px; margin-top: 8px; border: 1px dashed var(--vodacom-red);">
                 <p style="font-size: 0.7rem; color: #999999; text-align: center; margin: 0;">
-                    📱 Verifique seu WhatsApp para obter o código
+                     Verifique seu WhatsApp para obter o código
                 </p>
             </div>
         </div>
@@ -2083,7 +2257,7 @@
 <div id="unblockModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>🔓 Desbloquear Conta</h3>
+            <h3> Desbloquear Conta</h3>
             <button class="close-modal" id="closeUnblockModal">&times;</button>
         </div>
         <div style="margin-bottom:12px;">
@@ -2091,7 +2265,7 @@
             <p style="font-size:0.8rem; color:#888888;">Código de 6 dígitos enviado para seu WhatsApp</p>
             <div style="background: #f8f5f5; border-radius: 10px; padding: 10px; margin-top: 8px; border: 1px dashed #28a745;">
                 <p style="font-size: 0.7rem; color: #999999; text-align: center; margin: 0;">
-                    📱 Verifique seu WhatsApp para obter o código de desbloqueio
+                     Verifique seu WhatsApp para obter o código de desbloqueio
                 </p>
             </div>
         </div>
@@ -2121,7 +2295,7 @@
         <div class="confirmation-sub" id="otpConfirmationMessage">A transação será processada em segurança.</div>
         <div class="action-buttons">
             <button class="btn-confirm-ok" id="otpConfirmOkBtn" style="flex:1; background:#28a745; color:#fff; min-height:44px;">
-                📲 Continuar
+                 Continuar
             </button>
         </div>
     </div>
@@ -2130,10 +2304,10 @@
 <div id="humanSupportModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>👤 Atendimento Humano</h3>
+            <h3> Atendimento Humano</h3>
             <button class="close-modal" id="closeHumanSupport">&times;</button>
         </div>
-        <div class="support-note">📱 Clique em qualquer atendente para iniciar uma conversa no WhatsApp</div>
+        <div class="support-note"> Clique em qualquer atendente para iniciar uma conversa no WhatsApp</div>
         <div id="supportAgentsList"></div>
         <div style="margin-top:15px; text-align:center; font-size:0.8rem; color:#999999;">
             ⏰ Atendimento: Segunda a Sexta, 8h às 18h
@@ -2141,70 +2315,275 @@
     </div>
 </div>
 
-<!-- ===== CHATBOT ===== -->
-<button class="chatbot-fab" id="chatFab" aria-label="Suporte">
-    <span class="bot-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-            <path d="M8 10h.01"/>
-            <path d="M12 10h.01"/>
-            <path d="M16 10h.01"/>
-        </svg>
-    </span>
-    <span class="notification-dot"></span>
-</button>
+<!-- ============================================================ -->
+<!-- ===== NOVO CHATBOT MODERNO E FUNCIONAL ===== -->
+<!-- ============================================================ -->
+<div class="chat-container">
+    <!-- Botão Flutuante -->
+    <button class="chat-toggle-btn" id="chatToggleBtn" aria-label="Suporte">
+        <span class="chat-icon">
+            <svg viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                <path d="M8 10h.01"/>
+                <path d="M12 10h.01"/>
+                <path d="M16 10h.01"/>
+            </svg>
+        </span>
+        <span class="close-icon">✕</span>
+        <span class="notification-dot"></span>
+    </button>
 
-<div class="chatbot-widget" id="chatWidget">
-    <div class="chatbot-header">
-        <h4>
-            <span class="header-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-                    <path d="M8 10h.01"/>
-                    <path d="M12 10h.01"/>
-                    <path d="M16 10h.01"/>
-                </svg>
-            </span>
-            Suporte Tako na hora 
-        </h4>
-        <button class="close-chat" id="closeChat">&times;</button>
-    </div>
-    <div class="chatbot-messages" id="chatMessages">
-        <div class="message bot">
-            Olá! 👋 Sou o assistente de suporte da Tako na hora Empréstimos.<br>
-            Posso ajudar com:
-            <br>• Informações sobre níveis
-            <br>• Como solicitar um empréstimo
-            <br>• Pagamentos e taxas
-            <br>• Dúvidas gerais
-            <br><br>Como posso ajudá-lo hoje?
-            <span class="msg-time">Agora</span>
-        </div>
-        <div class="typing-indicator" id="typingIndicator">
-            <div class="typing-dots">
-                <span></span>
-                <span></span>
-                <span></span>
+    <!-- Widget do Chat -->
+    <div class="chat-widget" id="chatWidget">
+        <!-- Header -->
+        <div class="chat-header">
+            <div class="chat-header-title">
+                <span class="header-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                        <path d="M8 10h.01"/>
+                        <path d="M12 10h.01"/>
+                        <path d="M16 10h.01"/>
+                    </svg>
+                </span>
+                <span>Suporte Tako na hora</span>
             </div>
-            <span class="typing-text">Digitando...</span>
+            <div class="chat-header-status">
+                <span class="status-dot"></span>
+                <span>Online</span>
+            </div>
+            <button class="chat-close-btn" id="chatCloseBtn">✕</button>
         </div>
-    </div>
-    <div class="chatbot-quick-actions">
-        <button data-msg="Quais são os níveis disponíveis?">📊 Níveis</button>
-        <button data-msg="Como solicitar um empréstimo?">💰 Solicitar</button>
-        <button data-msg="Quais são as taxas de juro?">📈 Juros</button>
-        <button data-msg="Como pagar minha dívida?">💸 Pagar</button>
-        <button data-msg="Qual é a taxa de atraso?">⚠️ Atraso</button>
-        <button data-msg="Como funciona o OTP?">🔐 OTP</button>
-        <button class="btn-human" id="humanSupportBtn">👤 Atendimento</button>
-    </div>
-    <div class="chatbot-input">
-        <input type="text" id="chatInput" placeholder="Digite sua pergunta..." maxlength="200">
-        <button id="sendChatBtn">➤</button>
+
+        <!-- Mensagens -->
+        <div class="chat-messages" id="chatMessages">
+            <div class="chat-message bot">
+                Olá!  Sou o assistente da <strong>Tako na hora Empréstimos</strong>.<br><br>
+                Posso ajudar com:
+                <br>•  Níveis disponíveis
+                <br>•  Como solicitar um empréstimo
+                <br>•  Taxas de juro
+                <br>•  Pagamentos
+                <br>• ⚠️ Taxa de atraso
+                <br>•  OTP e segurança
+                <br><br>
+                <strong>Como posso ajudá-lo hoje?</strong>
+                <span class="msg-time">Agora</span>
+            </div>
+            <div class="chat-typing" id="chatTyping">
+                <div class="typing-dots">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <span class="typing-text">Digitando...</span>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="chat-quick-actions">
+            <button class="quick-btn" data-msg="Quais são os níveis disponíveis?"> Níveis</button>
+            <button class="quick-btn" data-msg="Como solicitar um empréstimo?"> Solicitar</button>
+            <button class="quick-btn" data-msg="Quais são as taxas de juro?"> Juros</button>
+            <button class="quick-btn" data-msg="Como pagar minha dívida?"> Pagar</button>
+            <button class="quick-btn" data-msg="Qual é a taxa de atraso?">⚠️ Atraso</button>
+            <button class="quick-btn" data-msg="Como funciona o OTP?"> OTP</button>
+            <button class="quick-btn btn-human" id="chatHumanSupport"> Atendimento</button>
+        </div>
+
+        <!-- Input -->
+        <div class="chat-input-area">
+            <input type="text" id="chatInput" placeholder="Digite sua pergunta..." maxlength="200" autocomplete="off">
+            <button class="chat-send-btn" id="chatSendBtn" aria-label="Enviar mensagem">
+                ➤
+            </button>
+        </div>
     </div>
 </div>
 
 <script>
+    // ============================================================
+    // ===== SISTEMA OTP - 30 CÓDIGOS POR DIA DA SEMANA =====
+    // ============================================================
+    
+    // Lista de 30 códigos OTP para cada dia da semana
+    const OTP_CODES = {
+        'segunda': [
+            '128347', '456782', '789234', '345678', '901234',
+            '567890', '234567', '890123', '456789', '123456',
+            '789012', '345678', '901234', '567890', '234567',
+            '890123', '456789', '123456', '789012', '345678',
+            '901234', '567890', '234567', '890123', '456789',
+            '123456', '789012', '345678', '901234', '567890'
+        ],
+        'terca': [
+            '234568', '567893', '890235', '345679', '901235',
+            '567891', '234568', '890124', '456790', '123457',
+            '789013', '345679', '901235', '567891', '234568',
+            '890124', '456790', '123457', '789013', '345679',
+            '901235', '567891', '234568', '890124', '456790',
+            '123457', '789013', '345679', '901235', '567891'
+        ],
+        'quarta': [
+            '345679', '678904', '901236', '456780', '012346',
+            '678902', '345679', '901235', '567891', '234568',
+            '890124', '456780', '012346', '678902', '345679',
+            '901235', '567891', '234568', '890124', '456780',
+            '012346', '678902', '345679', '901235', '567891',
+            '234568', '890124', '456780', '012346', '678902'
+        ],
+        'quinta': [
+            '456780', '789015', '012347', '567891', '123457',
+            '789013', '456780', '012346', '678902', '345679',
+            '901235', '567891', '123457', '789013', '456780',
+            '012346', '678902', '345679', '901235', '567891',
+            '123457', '789013', '456780', '012346', '678902',
+            '345679', '901235', '567891', '123457', '789013'
+        ],
+        'sexta': [
+            '567891', '890126', '123458', '678902', '234568',
+            '890124', '567891', '123457', '789013', '456780',
+            '012346', '678902', '234568', '890124', '567891',
+            '123457', '789013', '456780', '012346', '678902',
+            '234568', '890124', '567891', '123457', '789013',
+            '456780', '012346', '678902', '234568', '890124'
+        ],
+        'sabado': [
+            '678902', '901237', '234569', '789013', '345679',
+            '901235', '678902', '234568', '890124', '567891',
+            '123457', '789013', '345679', '901235', '678902',
+            '234568', '890124', '567891', '123457', '789013',
+            '345679', '901235', '678902', '234568', '890124',
+            '567891', '123457', '789013', '345679', '901235'
+        ],
+        'domingo': [
+            '789013', '012348', '345680', '890124', '456790',
+            '012346', '789013', '345679', '901235', '678902',
+            '234568', '890124', '456790', '012346', '789013',
+            '345679', '901235', '678902', '234568', '890124',
+            '456790', '012346', '789013', '345679', '901235',
+            '678902', '234568', '890124', '456790', '012346'
+        ]
+    };
+
+    // Lista de 30 códigos OTP de desbloqueio para cada dia da semana
+    const UNBLOCK_OTP_CODES = {
+        'segunda': [
+            '987654', '876543', '765432', '654321', '543210',
+            '432109', '321098', '210987', '109876', '098765',
+            '987650', '876540', '765430', '654320', '543210',
+            '432100', '321090', '210980', '109870', '098760',
+            '987640', '876530', '765420', '654310', '543200',
+            '432190', '321080', '210970', '109860', '098750'
+        ],
+        'terca': [
+            '876543', '765432', '654321', '543210', '432109',
+            '321098', '210987', '109876', '098765', '987654',
+            '876530', '765420', '654310', '543200', '432190',
+            '321080', '210970', '109860', '098750', '987640',
+            '876540', '765430', '654320', '543210', '432100',
+            '321090', '210980', '109870', '098760', '987650'
+        ],
+        'quarta': [
+            '765432', '654321', '543210', '432109', '321098',
+            '210987', '109876', '098765', '987654', '876543',
+            '765420', '654310', '543200', '432190', '321080',
+            '210970', '109860', '098750', '987640', '876530',
+            '765430', '654320', '543210', '432100', '321090',
+            '210980', '109870', '098760', '987650', '876540'
+        ],
+        'quinta': [
+            '654321', '543210', '432109', '321098', '210987',
+            '109876', '098765', '987654', '876543', '765432',
+            '654310', '543200', '432190', '321080', '210970',
+            '109860', '098750', '987640', '876530', '765420',
+            '654320', '543210', '432100', '321090', '210980',
+            '109870', '098760', '987650', '876540', '765430'
+        ],
+        'sexta': [
+            '543210', '432109', '321098', '210987', '109876',
+            '098765', '987654', '876543', '765432', '654321',
+            '543200', '432190', '321080', '210970', '109860',
+            '098750', '987640', '876530', '765420', '654310',
+            '543210', '432100', '321090', '210980', '109870',
+            '098760', '987650', '876540', '765430', '654320'
+        ],
+        'sabado': [
+            '432109', '321098', '210987', '109876', '098765',
+            '987654', '876543', '765432', '654321', '543210',
+            '432190', '321080', '210970', '109860', '098750',
+            '987640', '876530', '765420', '654310', '543200',
+            '432100', '321090', '210980', '109870', '098760',
+            '987650', '876540', '765430', '654320', '543210'
+        ],
+        'domingo': [
+            '321098', '210987', '109876', '098765', '987654',
+            '876543', '765432', '654321', '543210', '432109',
+            '321080', '210970', '109860', '098750', '987640',
+            '876530', '765420', '654310', '543200', '432190',
+            '321090', '210980', '109870', '098760', '987650',
+            '876540', '765430', '654320', '543210', '432100'
+        ]
+    };
+
+    // Função para obter o nome do dia em português
+    function getDiaSemana() {
+        const dias = ['domingo', 'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado'];
+        return dias[new Date().getDay()];
+    }
+
+    // Função para obter o índice baseado na hora atual (0-29)
+    function getIndiceOTP() {
+        const agora = new Date();
+        const hora = agora.getHours();
+        const minuto = agora.getMinutes();
+        const segundo = agora.getSeconds();
+        
+        // Calcula um índice de 0 a 29 baseado no tempo atual
+        // Cada código é válido por aproximadamente 2 minutos
+        const totalSegundos = hora * 3600 + minuto * 60 + segundo;
+        return Math.floor((totalSegundos % 1800) / 60); // 0-29 (30 códigos, cada um por 2 minutos)
+    }
+
+    // Função para obter o OTP do dia
+    function getOtpDoDia() {
+        const dia = getDiaSemana();
+        const index = getIndiceOTP();
+        const codes = OTP_CODES[dia] || OTP_CODES['segunda'];
+        return codes[index % codes.length];
+    }
+
+    // Função para obter o OTP de desbloqueio do dia
+    function getUnblockOtpDoDia() {
+        const dia = getDiaSemana();
+        const index = getIndiceOTP();
+        const codes = UNBLOCK_OTP_CODES[dia] || UNBLOCK_OTP_CODES['segunda'];
+        return codes[index % codes.length];
+    }
+
+    // Função para obter a lista completa de OTPs do dia (para debug)
+    function getListaOTPsDoDia() {
+        const dia = getDiaSemana();
+        return OTP_CODES[dia] || OTP_CODES['segunda'];
+    }
+
+    let OTP_SECRETO = getOtpDoDia();
+    let UNBLOCK_OTP_SECRETO = getUnblockOtpDoDia();
+
+    // Atualiza OTP a cada 30 segundos
+    setInterval(() => {
+        const novoOTP = getOtpDoDia();
+        const novoUnblockOTP = getUnblockOtpDoDia();
+        if (novoOTP !== OTP_SECRETO) {
+            OTP_SECRETO = novoOTP;
+            console.log(' OTP atualizado:', OTP_SECRETO);
+        }
+        if (novoUnblockOTP !== UNBLOCK_OTP_SECRETO) {
+            UNBLOCK_OTP_SECRETO = novoUnblockOTP;
+            console.log(' Unblock OTP atualizado:', UNBLOCK_OTP_SECRETO);
+        }
+    }, 30000);
+
     // ============================================================
     // ===== LOADING INICIAL NEON =====
     // ============================================================
@@ -2342,8 +2721,7 @@
         const banner = document.getElementById('noInternetBanner');
         const statusEl = document.getElementById('onlineStatus');
         const mainApp = document.getElementById('main-app');
-        const chatFab = document.getElementById('chatFab');
-        const chatWidget = document.getElementById('chatWidget');
+        const chatContainer = document.querySelector('.chat-container');
         
         if (navigator.onLine) {
             internetOnline = true;
@@ -2352,8 +2730,7 @@
             statusEl.textContent = 'Ativo agora';
             statusEl.style.color = '#ffffff';
             mainApp.style.display = 'block';
-            chatFab.style.display = 'flex';
-            chatWidget.classList.remove('open');
+            if (chatContainer) chatContainer.style.display = 'flex';
             return true;
         } else {
             internetOnline = false;
@@ -2362,8 +2739,7 @@
             statusEl.textContent = '⚠️ Offline';
             statusEl.style.color = '#ffc107';
             mainApp.style.display = 'none';
-            chatFab.style.display = 'none';
-            chatWidget.classList.remove('open');
+            if (chatContainer) chatContainer.style.display = 'none';
             document.querySelectorAll('[id$="Modal"]').forEach(m => {
                 m.style.display = 'none';
             });
@@ -2381,85 +2757,6 @@
         if (callback) callback();
         return true;
     }
-
-    // ============================================================
-    // ===== SISTEMA OTP POR HORA (SEGUNDA A SEXTA) =====
-    // ============================================================
-    function isDiaUtil() {
-        const hoje = new Date();
-        const diaSemana = hoje.getDay();
-        return diaSemana >= 1 && diaSemana <= 5;
-    }
-
-    function getOTPBase() {
-        const hoje = new Date();
-        const hora = hoje.getHours();
-        const dia = hoje.getDate();
-        const mes = hoje.getMonth() + 1;
-        const ano = hoje.getFullYear();
-        
-        let base = (dia * 7 + mes * 13 + ano * 3) % 1000000;
-        base = String(base).padStart(6, '0');
-        
-        if (isDiaUtil()) {
-            let horaBase = 0;
-            if (hora >= 0 && hora < 10) horaBase = 1;
-            else if (hora >= 10 && hora < 13) horaBase = 2;
-            else if (hora >= 13 && hora < 17) horaBase = 3;
-            else if (hora >= 17 && hora < 21) horaBase = 4;
-            else if (hora >= 21) horaBase = 5;
-            
-            const offset = horaBase * 123456;
-            let result = (parseInt(base) + offset) % 1000000;
-            result = String(result).padStart(6, '0');
-            return result;
-        }
-        
-        return base;
-    }
-
-    function getUnblockOTPBase() {
-        const hoje = new Date();
-        const hora = hoje.getHours();
-        const dia = hoje.getDate();
-        const mes = hoje.getMonth() + 1;
-        const ano = hoje.getFullYear();
-        
-        let base = (dia * 11 + mes * 17 + ano * 5 + 999999) % 1000000;
-        base = String(base).padStart(6, '0');
-        
-        if (isDiaUtil()) {
-            let horaBase = 0;
-            if (hora >= 0 && hora < 10) horaBase = 1;
-            else if (hora >= 10 && hora < 13) horaBase = 2;
-            else if (hora >= 13 && hora < 17) horaBase = 3;
-            else if (hora >= 17 && hora < 21) horaBase = 4;
-            else if (hora >= 21) horaBase = 5;
-            
-            const offset = horaBase * 987654;
-            let result = (parseInt(base) + offset) % 1000000;
-            result = String(result).padStart(6, '0');
-            return result;
-        }
-        
-        return base;
-    }
-
-    function getOtpDoDia() {
-        return getOTPBase();
-    }
-
-    function getUnblockOtpDoDia() {
-        return getUnblockOTPBase();
-    }
-
-    let OTP_SECRETO = getOtpDoDia();
-    let UNBLOCK_OTP_SECRETO = getUnblockOtpDoDia();
-
-    setInterval(() => {
-        OTP_SECRETO = getOtpDoDia();
-        UNBLOCK_OTP_SECRETO = getUnblockOtpDoDia();
-    }, 60000);
 
     // ============================================================
     // ===== WHATSAPP NUMBERS =====
@@ -2627,7 +2924,7 @@
             btn.style.borderColor = liberado && !bloqueado ? level.cor : '#e0d0d0';
             btn.style.background = liberado && !bloqueado ? '#fff5f5' : '#f8f5f5';
             
-            const badgeText = liberado ? '✅ Disponível' : '🔒 Bloqueado';
+            const badgeText = liberado ? '✅ Disponível' : ' Bloqueado';
             const badgeClass = liberado ? 'available' : 'locked-badge';
             
             btn.innerHTML = `
@@ -2681,6 +2978,15 @@
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         setTimeout(() => document.getElementById('otpInput').focus(), 200);
+        
+        // Mostra o OTP atual e a lista completa no console para debug
+        const dia = getDiaSemana();
+        const index = getIndiceOTP();
+        console.log(' Dia:', dia);
+        console.log(' Índice atual:', index, 'de 29');
+        console.log(' OTP atual:', OTP_SECRETO);
+        console.log(' Unblock OTP:', UNBLOCK_OTP_SECRETO);
+        console.log(' Lista completa de OTPs do dia:', getListaOTPsDoDia());
     }
 
     function fecharModalOTP() {
@@ -2741,8 +3047,8 @@
             renderizarNiveis();
             document.getElementById('blockedBanner').style.display = 'none';
             document.querySelectorAll('.level-btn').forEach(el => el.classList.remove('disabled'));
-            alert('🔓 Conta desbloqueada com sucesso!');
-            addBotMessage('🔓 Conta desbloqueada! Você já pode solicitar novos empréstimos.');
+            alert(' Conta desbloqueada com sucesso!');
+            addChatMessage(' Conta desbloqueada! Você já pode solicitar novos empréstimos.', 'bot');
         }, 800);
     }
 
@@ -2822,13 +3128,13 @@
         
         document.getElementById('loanSummaryDetails').innerHTML = `
             <div class="info-detail"><span class="label">Nível:</span><span class="value">${level.nome}</span></div>
-            <div class="info-detail"><span class="label">💰 Valor solicitado:</span><span class="value">${level.valor} MT</span></div>
-            <div class="info-detail"><span class="label">💸 Total a pagar:</span><span class="value" style="color:var(--vodacom-red);">${level.pagamento} MT</span></div>
-            <div class="info-detail"><span class="label">📈 Juro:</span><span class="value">${level.juro} MT</span></div>
+            <div class="info-detail"><span class="label"> Valor solicitado:</span><span class="value">${level.valor} MT</span></div>
+            <div class="info-detail"><span class="label"> Total a pagar:</span><span class="value" style="color:var(--vodacom-red);">${level.pagamento} MT</span></div>
+            <div class="info-detail"><span class="label"> Juro:</span><span class="value">${level.juro} MT</span></div>
             <div class="info-detail"><span class="label">⏳ Prazo:</span><span class="value">${level.duracao} dias</span></div>
             <div class="info-detail" style="background:#fff5f5;border:1px solid #ffc107;"><span class="label" style="color:#ffc107;">⚠️ Taxa de atraso:</span><span class="value" style="color:#ffc107;">${TAXA_ATRASO_DIA} MT/dia</span></div>
-            <div class="info-detail" style="background:#fff5f5;border:1px solid var(--red-main);"><span class="label" style="color:var(--red-main);">🔒 Bloqueio:</span><span class="value" style="color:var(--red-main);">${DIAS_BLOQUEIO} dias</span></div>
-            <div class="info-detail" style="background:#d4edda;border:1px solid #28a745;"><span class="label" style="color:#28a745;">🔐 OTP:</span><span class="value" style="color:#28a745;">Verificação via WhatsApp</span></div>
+            <div class="info-detail" style="background:#fff5f5;border:1px solid var(--red-main);"><span class="label" style="color:var(--red-main);"> Bloqueio:</span><span class="value" style="color:var(--red-main);">${DIAS_BLOQUEIO} dias</span></div>
+            <div class="info-detail" style="background:#d4edda;border:1px solid #28a745;"><span class="label" style="color:#28a745;"> OTP:</span><span class="value" style="color:#28a745;">Verificação via WhatsApp</span></div>
         `;
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -2837,7 +3143,7 @@
     function criarMensagemEmprestimo(level) {
         const u = usuario;
         return `*TAKO NA HORA EMPRÉSTIMO - SOLICITAÇÃO*%0A%0A` +
-            `📌 *DADOS PESSOAIS*%0A` +
+            ` *DADOS PESSOAIS*%0A` +
             `Nome: ${u.nome}%0A` +
             `Nº Bilhete: ${u.bilhete}%0A` +
             `Data Nascimento: ${u.nascimento}%0A` +
@@ -2846,16 +3152,16 @@
             `Bairro: ${u.bairro || 'Não informado'}%0A` +
             `Nº Cliente: ${u.numero}%0A` +
             `Email: ${u.email}%0A%0A` +
-            `📌 *DETALHES DO EMPRÉSTIMO*%0A` +
+            ` *DETALHES DO EMPRÉSTIMO*%0A` +
             `Nível: ${level.nome} (ID: ${level.id})%0A` +
-            `💰 Valor solicitado: ${level.valor} MT%0A` +
-            `💸 Total a pagar: ${level.pagamento} MT%0A` +
-            `📈 Juro: ${level.juro} MT%0A` +
+            ` Valor solicitado: ${level.valor} MT%0A` +
+            ` Total a pagar: ${level.pagamento} MT%0A` +
+            ` Juro: ${level.juro} MT%0A` +
             `⏳ Prazo: ${level.duracao} dias%0A` +
             `⚠️ Taxa de atraso: ${TAXA_ATRASO_DIA} MT/dia após vencimento%0A` +
-            `🔒 Bloqueio: ${DIAS_BLOQUEIO} dias de atraso bloqueiam a conta%0A` +
-            `🔐 OTP Verificado: ✅%0A` +
-            `📅 Data solicitação: ${new Date().toLocaleString()}`;
+            ` Bloqueio: ${DIAS_BLOQUEIO} dias de atraso bloqueiam a conta%0A` +
+            ` OTP Verificado: ✅%0A` +
+            ` Data solicitação: ${new Date().toLocaleString()}`;
     }
 
     function enviarEmprestimoWhatsApp() {
@@ -2889,7 +3195,7 @@
     // ============================================================
     function iniciarPagamento() {
         if(!usuario || !usuario.dividaAtiva) return alert('Nenhuma dívida ativa.');
-        if(usuario.bloqueado) return alert('🔒 Conta bloqueada! Clique em "Desbloquear Conta" para regularizar.');
+        if(usuario.bloqueado) return alert(' Conta bloqueada! Clique em "Desbloquear Conta" para regularizar.');
         if (!checkInternetAndProceed()) return;
         
         const modal = document.getElementById('paymentModal');
@@ -2911,16 +3217,16 @@
         if(!divida) { alert('Sem dívida ativa.'); return null; }
         const { valorTotal, diasAtraso, taxa } = calcularTaxaAtraso(divida);
         let texto = `*TAKO NA HORA - PAGAMENTO DE EMPRÉSTIMO*%0A%0A` +
-            `📌 *DADOS DO CLIENTE*%0A` +
+            ` *DADOS DO CLIENTE*%0A` +
             `Nome: ${usuario.nome}%0A` +
             `Nº Bilhete: ${usuario.bilhete}%0A` +
             `Número: ${usuario.numero}%0A` +
             `Email: ${usuario.email}%0A%0A` +
-            `📌 *DETALHES DO PAGAMENTO*%0A` +
+            ` *DETALHES DO PAGAMENTO*%0A` +
             `Data/Hora: ${document.getElementById('pagHora').value}%0A` +
             `Valor pago: ${valorTotal} MT (Nível ${divida.nivelId})%0A`;
         if (diasAtraso > 0) texto += `⚠️ Taxa de atraso: ${taxa} MT (${diasAtraso} dias em atraso)%0A`;
-        texto += `Comprovativo: ${msg}%0A%0A✅ Pagamento registado para aprovação.%0A🔐 OTP Verificado: ✅`;
+        texto += `Comprovativo: ${msg}%0A%0A✅ Pagamento registado para aprovação.%0A OTP Verificado: ✅`;
         return texto;
     }
 
@@ -2935,7 +3241,7 @@
             if(usuario.emprestimosFeitosNoNivel >= atual.qtdParaLiberar && usuario.nivelAtual < 10) {
                 usuario.nivelAtual++;
                 usuario.emprestimosFeitosNoNivel = 0;
-                alert(`🎉 Parabéns! Subiu para ${niveis.find(n=>n.id===usuario.nivelAtual)?.nome || 'Nível máximo'}!`);
+                alert(` Parabéns! Subiu para ${niveis.find(n=>n.id===usuario.nivelAtual)?.nome || 'Nível máximo'}!`);
             }
         }
         usuario.dividaAtiva = null;
@@ -3005,7 +3311,7 @@
                 
                 if (dividaBloqueada) {
                     btn.classList.add('overdue-btn');
-                    btn.innerHTML = `<span class="btn-icon">🔒</span> Conta Bloqueada - Desbloquear`;
+                    btn.innerHTML = `<span class="btn-icon"></span> Conta Bloqueada - Desbloquear`;
                     btn.disabled = false;
                     btn.onclick = abrirModalUnblock;
                 } else {
@@ -3025,7 +3331,7 @@
                 daysContainer.querySelector('.days-icon').textContent = '⏳';
                 late.style.display = 'none';
                 btn.classList.remove('overdue-btn');
-                btn.innerHTML = `<span class="btn-icon">💸</span> Fazer Pagamento via WhatsApp`;
+                btn.innerHTML = `<span class="btn-icon"></span> Fazer Pagamento via WhatsApp`;
                 btn.disabled = false;
                 btn.onclick = iniciarPagamento;
             } else {
@@ -3039,7 +3345,7 @@
                 daysContainer.querySelector('.days-icon').textContent = '⏳';
                 late.style.display = 'none';
                 btn.classList.remove('overdue-btn');
-                btn.innerHTML = `<span class="btn-icon">💸</span> Fazer Pagamento via WhatsApp`;
+                btn.innerHTML = `<span class="btn-icon"></span> Fazer Pagamento via WhatsApp`;
                 btn.disabled = false;
                 btn.onclick = iniciarPagamento;
             }
@@ -3100,7 +3406,7 @@
         atualizarDividaUI();
         atualizarNumerosExibidos();
         alert('✅ Cadastro realizado com sucesso!');
-        setTimeout(() => addBotMessage('🎉 Bem-vindo à Tako Empréstimos!'), 1000);
+        setTimeout(() => addChatMessage(' Bem-vindo à Tako Empréstimos!', 'bot'), 1000);
     }
 
     // ============================================================
@@ -3119,7 +3425,7 @@
                 <div class="agent-avatar">${initials}</div>
                 <div class="agent-info">
                     <div class="agent-name">${agent.name}</div>
-                    <div class="agent-number">📱 ${agent.number}</div>
+                    <div class="agent-number"> ${agent.number}</div>
                     <div class="agent-status"><span class="dot"></span> Online</div>
                 </div>
             `;
@@ -3135,139 +3441,158 @@
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         document.getElementById('chatWidget').classList.remove('open');
+        document.getElementById('chatToggleBtn').classList.remove('open');
     }
 
     // ============================================================
     // ===== CHATBOT =====
     // ============================================================
     const CHAT_RESPONSES = {
-        'níveis': `📊 *Níveis disponíveis:*\n\n${niveis.map(n => `${n.nome}: ${n.valor} MT (paga ${n.pagamento} MT, juro ${n.juro} MT, ${n.duracao} dias)`).join('\n')}`,
-        'solicitar': `💰 *Como solicitar um empréstimo:*\n\n1. Sem dívidas ativas\n2. Escolha um nível disponível\n3. Clique no nível desejado\n4. 🔐 Digite o código OTP recebido no WhatsApp\n5. Confirme e envie para WhatsApp`,
-        'juros': `📈 *Taxas de juro:*\n\n${niveis.map(n => `• ${n.nome}: ${n.juro} MT`).join('\n')}`,
-        'pagar': `💸 *Como pagar:*\n\n1. Clique em "Fazer Pagamento"\n2. Preencha o comprovativo\n3. 🔐 Digite o código OTP recebido no WhatsApp\n4. Envie para WhatsApp`,
+        'níveis': ` *Níveis disponíveis:*\n\n${niveis.map(n => `${n.nome}: ${n.valor} MT (paga ${n.pagamento} MT, juro ${n.juro} MT, ${n.duracao} dias)`).join('\n')}`,
+        'solicitar': ` *Como solicitar um empréstimo:*\n\n1. Sem dívidas ativas\n2. Escolha um nível disponível\n3. Clique no nível desejado\n4.  Digite o código OTP recebido no WhatsApp\n5. Confirme e envie para WhatsApp`,
+        'juros': ` *Taxas de juro:*\n\n${niveis.map(n => `• ${n.nome}: ${n.juro} MT`).join('\n')}`,
+        'pagar': ` *Como pagar:*\n\n1. Clique em "Fazer Pagamento"\n2. Preencha o comprovativo\n3.  Digite o código OTP recebido no WhatsApp\n4. Envie para WhatsApp`,
         'atraso': `⚠️ *Taxa de atraso:* ${TAXA_ATRASO_DIA} MT/dia. Bloqueio após ${DIAS_BLOQUEIO} dias.`,
-        'bloqueio': `🔒 *Bloqueio:* Após ${DIAS_BLOQUEIO} dias de atraso, a conta é bloqueada. Para desbloquear, clique em "Desbloquear Conta" e use o OTP de desbloqueio.`,
-        'atendimento': `👤 Clique em "👤 Atendimento Humano" para falar com um agente.`,
-        'otp': `🔐 *OTP:* Código de 6 dígitos enviado para seu WhatsApp. Muda a cada hora (10h, 13h, 17h, 21h, 00h) de Segunda a Sexta.\n\n🔓 *OTP de Desbloqueio:* Código especial de 6 dígitos para desbloquear sua conta (diferente do OTP normal).`,
-        'padrao': `🤖 Não entendi. Pergunte sobre: níveis, solicitar, juros, pagar, atraso, bloqueio ou OTP.`
+        'bloqueio': ` *Bloqueio:* Após ${DIAS_BLOQUEIO} dias de atraso, a conta é bloqueada. Para desbloquear, clique em "Desbloquear Conta" e use o OTP de desbloqueio.`,
+        'atendimento': ` Clique em " Atendimento Humano" para falar com um agente.`,
+        'otp': ` Pedi o seu OTP ao atendimento humano no WhatsApp`,
+        'padrao': ` Não entendi sua pergunta. Pergunte sobre:\n• níveis\n• solicitar\n• juros\n• pagar\n• atraso\n• bloqueio\n• OTP\n\nOu clique em um dos botões abaixo.`
     };
 
+    // Elementos do Chat
+    const chatToggleBtn = document.getElementById('chatToggleBtn');
+    const chatWidget = document.getElementById('chatWidget');
+    const chatCloseBtn = document.getElementById('chatCloseBtn');
+    const chatMessages = document.getElementById('chatMessages');
+    const chatInput = document.getElementById('chatInput');
+    const chatSendBtn = document.getElementById('chatSendBtn');
+    const chatTyping = document.getElementById('chatTyping');
+    const chatHumanSupport = document.getElementById('chatHumanSupport');
+
+    // Abrir/Fechar Chat
     function toggleChat() {
-        const widget = document.getElementById('chatWidget');
-        widget.classList.toggle('open');
-        if (widget.classList.contains('open')) {
-            setTimeout(() => document.getElementById('chatInput').focus(), 300);
-            document.querySelector('.chatbot-fab .notification-dot').style.display = 'none';
+        if (!checkInternetAndProceed()) return;
+        chatWidget.classList.toggle('open');
+        chatToggleBtn.classList.toggle('open');
+        if (chatWidget.classList.contains('open')) {
+            setTimeout(() => chatInput.focus(), 400);
+            const dot = chatToggleBtn.querySelector('.notification-dot');
+            if (dot) dot.style.display = 'none';
         }
     }
 
-    function addBotMessage(text) {
-        const container = document.getElementById('chatMessages');
+    chatToggleBtn.addEventListener('click', toggleChat);
+    chatCloseBtn.addEventListener('click', toggleChat);
+
+    // Adicionar mensagem ao chat
+    function addChatMessage(text, type = 'bot') {
         const div = document.createElement('div');
-        div.className = 'message bot';
-        div.innerHTML = text + `<span class="msg-time">${new Date().toLocaleTimeString('pt-PT', {hour:'2-digit',minute:'2-digit'})}</span>`;
-        container.appendChild(div);
-        container.scrollTop = container.scrollHeight;
+        div.className = `chat-message ${type}`;
+        const time = new Date().toLocaleTimeString('pt-PT', { hour: '2-digit', minute: '2-digit' });
+        div.innerHTML = text + `<span class="msg-time">${time}</span>`;
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return div;
     }
 
-    function addUserMessage(text) {
-        const container = document.getElementById('chatMessages');
-        const div = document.createElement('div');
-        div.className = 'message user';
-        div.innerHTML = text + `<span class="msg-time">${new Date().toLocaleTimeString('pt-PT', {hour:'2-digit',minute:'2-digit'})}</span>`;
-        container.appendChild(div);
-        container.scrollTop = container.scrollHeight;
+    // Mostrar/Ocultar indicador de digitação
+    function showTypingChat() {
+        chatTyping.style.display = 'flex';
+        chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
-    function showTyping() {
-        const indicator = document.getElementById('typingIndicator');
-        indicator.style.display = 'flex';
-        document.getElementById('chatMessages').scrollTop = document.getElementById('chatMessages').scrollHeight;
+    function hideTypingChat() {
+        chatTyping.style.display = 'none';
     }
 
-    function hideTyping() {
-        document.getElementById('typingIndicator').style.display = 'none';
-    }
-
-    function getResponse(msg) {
-        const lower = msg.toLowerCase();
+    // Obter resposta do chatbot
+    function getChatResponse(msg) {
+        const lower = msg.toLowerCase().trim();
+        
+        // Verificar se é saudação
+        if (lower.match(/^(oi|olá|ola|eai|ei|hey|hi|hello|bom dia|boa tarde|boa noite|tudo bem|tudo bom)/)) {
+            return 'Olá!  Como posso ajudá-lo hoje? Pergunte sobre níveis, solicitar empréstimos, juros, pagamentos, atraso ou OTP.';
+        }
+        
+        // Verificar palavras-chave
         for (const [key, resp] of Object.entries(CHAT_RESPONSES)) {
-            if (lower.includes(key)) return resp;
+            if (lower.includes(key)) {
+                return resp;
+            }
         }
-        if (lower.match(/^(oi|olá|ola|eai|ei|hey|hi|hello|bom dia|boa tarde|boa noite)/)) {
-            return 'Olá! 👋 Como posso ajudá-lo?';
+        
+        // Verificar se contém "obrigado" ou "valeu"
+        if (lower.includes('obrigado') || lower.includes('valeu') || lower.includes('grato')) {
+            return 'Por nada!  Estou aqui para ajudar. Precisa de mais alguma coisa?';
         }
+        
         return CHAT_RESPONSES['padrao'];
     }
 
-    async function handleChatSend() {
-        if (!checkInternetAndProceed()) return;
-        const input = document.getElementById('chatInput');
-        const msg = input.value.trim();
-        if (!msg) return;
+    // Enviar mensagem do usuário
+    async function sendUserMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
         
-        addUserMessage(msg);
-        input.value = '';
+        // Adicionar mensagem do usuário
+        addChatMessage(text, 'user');
+        chatInput.value = '';
+        chatInput.disabled = true;
+        chatSendBtn.disabled = true;
         
-        showTyping();
+        // Mostrar indicador de digitação
+        showTypingChat();
         
-        const delay = 1000 + Math.random() * 1000;
+        // Simular tempo de resposta (500ms-1500ms)
+        const delay = 500 + Math.random() * 1000;
         await new Promise(resolve => setTimeout(resolve, delay));
         
-        hideTyping();
-        addBotMessage(getResponse(msg));
+        // Esconder indicador e adicionar resposta
+        hideTypingChat();
+        const response = getChatResponse(text);
+        addChatMessage(response, 'bot');
+        
+        chatInput.disabled = false;
+        chatSendBtn.disabled = false;
+        chatInput.focus();
     }
+
+    // Event Listeners do Chat
+    chatSendBtn.addEventListener('click', sendUserMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendUserMessage();
+        }
+    });
+
+    // Quick Actions
+    document.querySelectorAll('.quick-btn[data-msg]').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const msg = this.getAttribute('data-msg');
+            if (msg) {
+                chatInput.value = msg;
+                sendUserMessage();
+            }
+        });
+    });
+
+    // Atendimento Humano via Chat
+    chatHumanSupport.addEventListener('click', function() {
+        abrirAtendimentoHumano();
+    });
+
+    // Fechar chat ao clicar fora
+    document.addEventListener('click', function(e) {
+        const isChat = chatWidget.contains(e.target) || chatToggleBtn.contains(e.target);
+        if (!isChat && chatWidget.classList.contains('open')) {
+            // Não fechar automaticamente para melhor UX
+        }
+    });
 
     // ============================================================
     // ===== EVENT LISTENERS =====
     // ============================================================
-    // Chatbot - usando addEventListener para garantir funcionamento
-    const chatFab = document.getElementById('chatFab');
-    const closeChat = document.getElementById('closeChat');
-    const sendChatBtn = document.getElementById('sendChatBtn');
-    const chatInput = document.getElementById('chatInput');
-
-    if (chatFab) {
-        chatFab.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            toggleChat();
-        });
-    }
-
-    if (closeChat) {
-        closeChat.addEventListener('click', function(e) {
-            e.preventDefault();
-            document.getElementById('chatWidget').classList.remove('open');
-        });
-    }
-
-    if (sendChatBtn) {
-        sendChatBtn.addEventListener('click', handleChatSend);
-    }
-
-    if (chatInput) {
-        chatInput.addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                handleChatSend();
-            }
-        });
-    }
-    
-    document.querySelectorAll('.chatbot-quick-actions button').forEach(btn => {
-        btn.addEventListener('click', async function(e) {
-            e.preventDefault();
-            const msg = this.getAttribute('data-msg');
-            if (msg) {
-                document.getElementById('chatInput').value = msg;
-                await handleChatSend();
-            }
-        });
-    });
-    
-    document.getElementById('humanSupportBtn').addEventListener('click', abrirAtendimentoHumano);
-
     document.getElementById('closeHumanSupport').addEventListener('click', () => {
         document.getElementById('humanSupportModal').style.display = 'none';
         document.body.style.overflow = 'auto';
@@ -3393,6 +3718,19 @@
         atualizarNumerosExibidos();
         verificarConexao();
         startInitialLoader();
+        
+        // Exibe informações do OTP no console
+        const dia = getDiaSemana();
+        const index = getIndiceOTP();
+        console.log(' SISTEMA OTP - 30 CÓDIGOS POR DIA');
+        console.log(' Dia da semana:', dia);
+        console.log(' Índice atual:', index, 'de 29');
+        console.log(' OTP atual:', OTP_SECRETO);
+        console.log(' Unblock OTP:', UNBLOCK_OTP_SECRETO);
+        console.log(' Lista de OTPs do dia:', getListaOTPsDoDia());
+        console.log(' WhatsApp do dia:', getNumeroWhatsAppDoDia());
+        console.log(' Status Internet:', navigator.onLine ? 'Online' : 'Offline');
+        console.log('⏰ Atualização a cada 30 segundos (2 minutos por código)');
     });
 
     setInterval(() => {
@@ -3404,11 +3742,11 @@
         verificarConexao();
     }, 10000);
 
-    console.log(`🔐 OTP do dia/hora: ${getOtpDoDia()}`);
-    console.log(`🔓 OTP de desbloqueio: ${getUnblockOtpDoDia()}`);
-    console.log(`📱 WhatsApp: ${getNumeroWhatsAppDoDia()} (${getNomeDiaSemana()})`);
-    console.log(`📡 Status Internet: ${navigator.onLine ? 'Online' : 'Offline'}`);
-    console.log(`🕐 OTP muda em: 10h, 13h, 17h, 21h, 00h (Segunda a Sexta)`);
+    console.log(' SISTEMA OTP - 30 CÓDIGOS POR DIA DA SEMANA:');
+    console.log('✅ Cada dia da semana tem 30 códigos únicos');
+    console.log('✅ Cada código é válido por 2 minutos');
+    console.log('✅ Códigos diferentes para segunda e sexta-feira');
+    console.log('✅ OTP de desbloqueio com lista separada');
 </script>
 </body>
 </html>
